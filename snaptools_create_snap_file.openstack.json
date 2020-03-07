@@ -1,0 +1,18 @@
+{
+  "input_reference_genome": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/Homo_sapiens_assembly38.fasta"
+  },
+  "input_fastq1": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/BUKMAP_20190529I.BUKMAP_2019529_SPL-AC_P10_N511_S10_R1.fastq"
+  },
+  "input_fastq2": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/BUKMAP_20190529I.BUKMAP_2019529_SPL-AC_P10_N511_S10_R2.fastq"
+  },
+  "reference_genome_index": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/hg38_index.tar.gz"
+  }
+}

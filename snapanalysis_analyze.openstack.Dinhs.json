@@ -1,0 +1,18 @@
+{
+  "input_snap": {
+        "class": "File",
+        "path": "/mnt/gitroot/SnapATAC/test_dir/snaptools.snap"
+  },
+  "encode_blacklist": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/Dinhs_files/hg38.blacklist.bed"
+    },
+  "gene_track": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/gencode.v32.annotation.bed"
+    },
+  "promoters": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/Dinhs_files/hg38.promoters.bed"
+    }
+}

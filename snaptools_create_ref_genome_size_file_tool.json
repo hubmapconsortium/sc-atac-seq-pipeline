@@ -1,0 +1,6 @@
+{
+  "ref_genome": {
+        "class": "File",
+        "path": "/Users/waltershands/Documents/UCSC/gitroot/SnapTools/20.fa.gz"
+    }
+}
