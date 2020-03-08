@@ -35,6 +35,6 @@
     },
   "promoters": {
         "class": "File",
-        "path": "/mnt/huBMAP_snapATAC_testing/Dihns_files/Dinhs_files/hg38.promoters.bed"
+        "path": "/mnt/huBMAP_snapATAC_testing/Dinhs_files/hg38.promoters.bed"
     }
 }
