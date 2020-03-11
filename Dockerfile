@@ -44,23 +44,18 @@ RUN apt install libcurl4 libcurl4-openssl-dev -y
 # https://stackoverflow.com/questions/41986507/unable-to-set-default-python-version-to-python3-in-ubuntu/41986843 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
-# Install R 3.5 so we can use newer version of BioConductor
-# https://bioconductor.org/install/ 
-# https://www.r-bloggers.com/installation-of-r-3-5-on-ubuntu-18-04-lts-and-tips-for-spatial-packages/
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 51716619E084DAB9
-RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
-
 # Install libpng12 which is no longer available in Ubuntu package archive
 # but is needed by other software that we will install
 RUN wget https://launchpad.net/~ubuntu-security/+archive/ubuntu/ppa/+build/15108504/+files/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb 
 RUN dpkg -i libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
 
-# Install R 
-# https://www.r-bloggers.com/installation-of-r-3-5-on-ubuntu-18-04-lts-and-tips-for-spatial-packages/
 RUN apt install libreadline-dev
-RUN apt install -y r-base-core r-base-dev r-base r-recommended
 
-WORKDIR install
+# https://www.digitalocean.com/community/tutorials/how-to-install-r-on-ubuntu-18-04-quickstart
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
+RUN apt update
+RUN apt install -y r-base
 
 RUN pip3 install Cython --install-option="--no-cython-compile"
 
