@@ -1,7 +1,7 @@
 {
   "input_snap": {
         "class": "File",
-        "path": "/mnt/gitroot/SnapATAC/test_dir/snaptools.snap"
+        "path": "/mnt/huBMAP_snapATAC_testing/BUKMAP_20190529I.BUKMAP_2019529_SPL-AC_P10_N511_S10.snap"
   },
   "encode_blacklist": {
         "class": "File",
