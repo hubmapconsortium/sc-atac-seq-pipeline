@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "snapanalysis:1.0.0"
+    dockerPull: "sc-atac-seq:1.0.0"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
