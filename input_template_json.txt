@@ -1,0 +1,40 @@
+{
+  "input_reference_genome": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/Homo_sapiens_assembly38.fasta"
+  },
+  "input_fastq1": {
+        "class": "File",
+        "path": "$fastq1"
+  },
+  "input_fastq2": {
+        "class": "File",
+        "path": "$fastq2"
+  },
+  "input_barcode_fastq": {
+        "class": "File",
+        "path": "$fastq3"
+  },
+  "reference_genome_index": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/hg38_index.tar.gz"
+  },
+  "blacklist_bed": {
+         "class": "File",
+         "path": "/mnt/huBMAP_snapATAC_testing/Dinhs_files/hg38.blacklist.bed"
+  },
+
+      
+  "encode_blacklist": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/Dinhs_files/hg38.blacklist.bed"
+    },
+  "gene_track": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/gencode.v32.annotation.bed"
+    },
+  "promoters": {
+        "class": "File",
+        "path": "/mnt/huBMAP_snapATAC_testing/Dinhs_files/hg38.promoters.bed"
+    }
+}
