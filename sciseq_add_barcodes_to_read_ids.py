@@ -27,8 +27,13 @@ def attach_barcode_umi_read2_id(
     filtered_line = 0
 
     while line1:
-        line1 = f1.readline().lstrip('@')
-        # print("read1: ", line1)
+        line1test = f1.readline()
+        linewo = line1test.lstrip(b'@')
+        #print("line 1 is:", line1test)
+        #print("line 1 stripped is:", linewo)
+
+        line1 = f1.readline().decode('utf8').lstrip('@')
+        #print("read1: ", line1)
         # first check if the ligation barcode match with the barcode
 
         ligation_barcode = line1[LIGATION_BARCODE_START:LIGATION_BARCODE_START + BARCODE_LENGTH]
@@ -40,7 +45,7 @@ def attach_barcode_umi_read2_id(
             umi=umi,
             previous_read_id=line1,
         )
-        f3.write(new_read_id)
+        f3.write(new_read_id.encode())
 
         second_line = f2.readline()
         f3.write(second_line)
@@ -68,4 +73,4 @@ if __name__ == "__main__":
     p.add_argument('output_file', type=Path)
     args = p.parse_args()
 
-    attach_barcode_umi_read2_id(args.fastq_r1, args.fastq_r2, args.output_path)
+    attach_barcode_umi_read2_id(args.fastq_r1, args.fastq_r2, args.output_file)
