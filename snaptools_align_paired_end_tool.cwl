@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "sc-atac-seq:1.0.0"
+    dockerPull: "quay.io/wshands/sc-atac-seq:feature_initial-pipeline"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
