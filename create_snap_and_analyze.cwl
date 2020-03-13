@@ -88,7 +88,7 @@ requirements:
 steps:
 
   snaptools_create_snap_file:
-    run: snaptools_create_snap_file.cwl
+    run: steps/snaptools_create_snap_file.cwl
     in:
      input_reference_genome: input_reference_genome
      reference_genome_index: reference_genome_index
@@ -104,7 +104,7 @@ steps:
 
 
   snapanalysis_setup_and_analyze:
-    run: snapanalysis_setup_and_analyze.cwl
+    run: steps/snapanalysis_setup_and_analyze.cwl
     in:
       input_snap: snaptools_create_snap_file/snap_file
       preferred_barcodes: preferred_barcodes

@@ -68,7 +68,7 @@ outputs:
 steps:
 
   snapanalysis_select_barcode:
-    run: snapanalysis_select_barcode.cwl
+    run: analyze_snap_steps/snapanalysis_select_barcode.cwl
     in:
       preferred_barcodes: preferred_barcodes
 
@@ -77,7 +77,7 @@ steps:
 
 
   snapanalysis_analyze:
-    run: snapanalysis_analyze.cwl
+    run: analyze_snap_steps/snapanalysis_analyze.cwl
     in:
       input_snap: input_snap
       selected_barcodes: snapanalysis_select_barcode/selected_barcodes

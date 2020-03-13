@@ -46,7 +46,7 @@ outputs:
 
 steps:
   snaptools_index_ref_genome:
-    run: snaptools_index_ref_genome_tool.cwl
+    run: create_snap_steps/snaptools_index_ref_genome_tool.cwl
     in:
       input_fasta: input_reference_genome
       reference_genome_index: reference_genome_index
@@ -55,14 +55,14 @@ steps:
       [output]
 
   snaptools_create_ref_genome_size_file:
-    run: snaptools_create_ref_genome_size_file_tool.cwl
+    run: create_snap_steps/snaptools_create_ref_genome_size_file_tool.cwl
     in:
       ref_genome: input_reference_genome
 
     out: [output]
 
   snaptools_add_barcodes_to_reads_tool:
-    run: snaptools_add_barcodes_to_reads_tool.cwl
+    run: create_snap_steps/snaptools_add_barcodes_to_reads_tool.cwl
     in:
       input_fastq1: input_fastq1
       input_fastq2: input_fastq2
@@ -71,7 +71,7 @@ steps:
     out: [barcode_added_fastq1, barcode_added_fastq2]
 
   snaptools_align_paired_end:
-    run: snaptools_align_paired_end_tool.cwl
+    run: create_snap_steps/snaptools_align_paired_end_tool.cwl
     in:
       input_reference: snaptools_index_ref_genome/output
       input_fastq1: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq1
@@ -81,7 +81,7 @@ steps:
     out: [output]
 
   snaptools_remove_blacklist:
-    run: snaptools_remove_blacklist.cwl
+    run: create_snap_steps/snaptools_remove_blacklist.cwl
     in:
       bam_file: snaptools_align_paired_end/output
       bed_file: blacklist_bed
@@ -89,7 +89,7 @@ steps:
     out: [rmsk_bam]
 
   snaptools_preprocess_reads:
-    run: snaptools_preprocess_reads_tool.cwl
+    run: create_snap_steps/snaptools_preprocess_reads_tool.cwl
     in:
       input_file: snaptools_remove_blacklist/rmsk_bam
       genome_size: snaptools_create_ref_genome_size_file/output
@@ -98,7 +98,7 @@ steps:
     out: [snap_file, snap_qc_file]
 
   snaptools_create_cell_by_bin_matrix:
-    run: snaptools_create_cell_by_bin_matrix_tool.cwl
+    run: create_snap_steps/snaptools_create_cell_by_bin_matrix_tool.cwl
     in:
       snap_file: snaptools_preprocess_reads/snap_file
 
