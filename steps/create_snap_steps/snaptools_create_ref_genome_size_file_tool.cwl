@@ -61,7 +61,7 @@ inputs:
     doc: The name of the genome size output file.
 
 outputs:
-  output:
+  genome_sizes:
     type: File
     outputBinding:
       glob: $(inputs.output_file)

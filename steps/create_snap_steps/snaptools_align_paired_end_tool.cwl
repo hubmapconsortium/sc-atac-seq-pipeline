@@ -147,7 +147,7 @@ inputs:
     doc: A boolen tag; if true output the progress.
 
 outputs:
-  output:
+  paired_end_bam:
     type: File
     outputBinding:
       glob: $(inputs.output_bam)

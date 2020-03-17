@@ -37,6 +37,9 @@ inputs:
   tmp_folder: string?
 
 outputs:
+  bam_file:
+    type: File
+    outputSource: snaptools_remove_blacklist/rmsk_bam
   snap_file:
     type: File
     outputSource: snaptools_create_cell_by_bin_matrix/snap_file_w_cell_by_bin
@@ -52,14 +55,14 @@ steps:
       reference_genome_index: reference_genome_index
 
     out:
-      [output]
+      [genome_index]
 
   snaptools_create_ref_genome_size_file:
     run: create_snap_steps/snaptools_create_ref_genome_size_file_tool.cwl
     in:
       ref_genome: input_reference_genome
 
-    out: [output]
+    out: [genome_sizes]
 
   snaptools_add_barcodes_to_reads_tool:
     run: create_snap_steps/snaptools_add_barcodes_to_reads_tool.cwl
@@ -73,17 +76,17 @@ steps:
   snaptools_align_paired_end:
     run: create_snap_steps/snaptools_align_paired_end_tool.cwl
     in:
-      input_reference: snaptools_index_ref_genome/output
+      input_reference: snaptools_index_ref_genome/genome_index
       input_fastq1: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq1
       input_fastq2: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq2
       tmp_folder: tmp_folder
 
-    out: [output]
+    out: [paired_end_bam]
 
   snaptools_remove_blacklist:
     run: create_snap_steps/snaptools_remove_blacklist.cwl
     in:
-      bam_file: snaptools_align_paired_end/output
+      bam_file: snaptools_align_paired_end/paired_end_bam
       bed_file: blacklist_bed
 
     out: [rmsk_bam]
@@ -92,7 +95,7 @@ steps:
     run: create_snap_steps/snaptools_preprocess_reads_tool.cwl
     in:
       input_file: snaptools_remove_blacklist/rmsk_bam
-      genome_size: snaptools_create_ref_genome_size_file/output
+      genome_size: snaptools_create_ref_genome_size_file/genome_sizes
       genome_name: genome_name
       
     out: [snap_file, snap_qc_file]

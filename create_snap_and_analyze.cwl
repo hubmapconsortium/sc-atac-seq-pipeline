@@ -44,6 +44,10 @@ inputs:
   promoters: File?
 
 outputs:
+  bam_file:
+    type: File
+    outputSource: snaptools_create_snap_file/bam_file
+
   snap_file:
     type: File
     outputSource: snaptools_create_snap_file/snap_file
@@ -100,7 +104,7 @@ steps:
      tmp_folder: tmp_folder
 
     out:
-      [snap_file, snap_qc_file]
+      [bam_file, snap_file, snap_qc_file]
 
 
   snapanalysis_setup_and_analyze:

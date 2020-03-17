@@ -93,7 +93,7 @@ inputs:
     doc: The number of threads to use.
 
 outputs:
-  output:
+  genome_index:
     type: File
     secondaryFiles: [".bwt", ".sa", ".ann", ".pac", ".amb"]
     outputBinding:
