@@ -33,7 +33,7 @@ inputs:
   input_fastq1: File
   input_fastq2: File
   input_barcode_fastq: File?
-  blacklist_bed: File
+  blacklist_bed: File?
   tmp_folder: string?
 
 outputs:

@@ -19,8 +19,8 @@ then
   do
     case "$1" in
         --reference-genome-index)
-            echo "Untarring reference genome index tar gz file $1"
             shift
+            echo "Untarring reference genome index tar gz file $1"
             tar -xvzf $1
             exit 0;
             ;;

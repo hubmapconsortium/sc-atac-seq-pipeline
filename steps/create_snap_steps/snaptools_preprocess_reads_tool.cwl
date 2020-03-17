@@ -127,7 +127,7 @@ inputs:
     inputBinding:
       position: 12
       prefix: --keep-single
-    default: "FALSE"
+    default: "TRUE"
     doc: A boolen tag indicating whether to keep those reads whose mates are not mapped or are missing.
 
   keep_secondary:

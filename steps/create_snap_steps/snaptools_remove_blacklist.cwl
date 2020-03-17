@@ -51,7 +51,7 @@ inputs:
     doc: The genome BAM file to be processed.
 
   bed_file:
-    type: File
+    type: File?
     inputBinding:
       position: 2
       prefix: --bed-file

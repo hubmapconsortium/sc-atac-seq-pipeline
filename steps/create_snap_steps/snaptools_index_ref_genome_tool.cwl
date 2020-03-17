@@ -59,7 +59,7 @@ inputs:
     inputBinding:
       position: 2
       prefix: --input-fasta
-    doc: The genome reference file to be indexed.
+    doc: The genome reference file in fasta format to be indexed.
 
   output_prefix:
     type: string?
