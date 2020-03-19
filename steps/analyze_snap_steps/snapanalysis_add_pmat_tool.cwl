@@ -90,6 +90,6 @@ outputs:
   snap_file_w_peaks:
     type: File
     outputBinding:
-      glob: $(inputs.snap_file)
+      glob: $(inputs.snap_file.basename)
 
 baseCommand: [snaptools, snap-add-pmat]
