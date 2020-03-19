@@ -1,4 +1,5 @@
-FROM ubuntu:18.04
+FROM r-base:3.6.3
+#FROM ubuntu:18.04
 
 # Use an env var so user is not requested to provide a
 # time zone for tzdata
@@ -11,7 +12,8 @@ RUN apt update && apt install -y \
     cython \
     gzip \
     htop \
-    libcurl3 \
+    #libcurl3 \
+    libcurl4-openssl-dev \
     libbz2-dev \
     liblzma-dev \
     libncurses5-dev \
@@ -36,11 +38,11 @@ LABEL maintainer="jshands@ucsc.edu"
 # Need to have both libcurl3 and libcurl4
 # Move libcurl3 to a different location so we can install libcurl4
 # https://dev.to/jake/using-libcurl3-and-libcurl4-on-ubuntu-1804-bionic-184g
-RUN cp /usr/lib/x86_64-linux-gnu/libcurl.so.4.5.0 /usr/lib/libcurl.so.3
+#RUN cp /usr/lib/x86_64-linux-gnu/libcurl.so.4.5.0 /usr/lib/libcurl.so.3
 # Now install libcurl4
-RUN apt install libcurl4 libcurl4-openssl-dev -y
+#RUN apt install libcurl4 libcurl4-openssl-dev -y
 
-# Make python3 the default so latest MACS version will install
+# Make python3 the default so BEDTools will install
 # https://stackoverflow.com/questions/41986507/unable-to-set-default-python-version-to-python3-in-ubuntu/41986843 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
@@ -52,10 +54,10 @@ RUN dpkg -i libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
 RUN apt install libreadline-dev
 
 # https://www.digitalocean.com/community/tutorials/how-to-install-r-on-ubuntu-18-04-quickstart
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
-RUN apt update
-RUN apt install -y r-base
+#RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+#RUN add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'
+#RUN apt update
+#RUN apt install -y r-base
 
 RUN pip3 install Cython --install-option="--no-cython-compile"
 
@@ -66,9 +68,12 @@ RUN pip3 install 'snaptools==1.4.8'
 RUN pip3 install 'MACS2==2.2.6'
 
 # Install R packages
-RUN R -e "install.packages(c('devtools', 'Matrix', 'doSNOW', 'plot3D', 'optparse'))"
+RUN R -e "install.packages(c('Matrix', 'doSNOW', 'plot3D', 'optparse'))"
+
 # Install SnapATAC
+RUN R -e "install.packages(c('devtools'))"
 RUN R -e "library(devtools); install_github('r3fang/SnapATAC')"
+
 # Install R packages using BioConductor
 # at https://bioconductor.org/install/#install-bioconductor-packages
 RUN R -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager')"
@@ -80,6 +85,11 @@ RUN R -e "BiocManager::install(version = '3.10')"
 # rmarkdown used when running an R markdown document
 # dplyr needed for R markdown to create PDF files
 RUN R -e "BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg38', 'rtracklayer', 'RFLPtools', 'rmarkdown', 'dplyr'))"
+
+# Needed to install chromVAR
+RUN R -e "BiocManager::install(c('motifmatchr'))"
+RUN R -e "BiocManager::install(c('SummarizedExperiment'))"
+RUN R -e "BiocManager::install(c('chromVAR'))"
 
 RUN pip3 install html5lib
 
@@ -115,5 +125,9 @@ COPY add_barcodes_to_reads.pl /tools/
 COPY remove_blacklist.sh /tools/
 COPY snapAnalysis_select_barcode.R /tools/
 COPY snapAnalysis.R /tools/
+COPY snapMotifAnalysis.R /tools/
 
 ENV PATH /tools/:$PATH
+
+
+

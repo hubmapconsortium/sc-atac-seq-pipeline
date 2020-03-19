@@ -482,7 +482,8 @@ cellByGene <- as.data.frame(cellByGeneMatrix);
 
 # Write cell by gene sparse matrix in Matrix Market format not CSV format
 #write.csv(cellByGene, file = "cellByGeneData.csv");
-writeMM(obj = cellByGeneData, file = "cellByGene.mtx")
+
+### DEBUG writeMM(obj = cellByGeneData, file = "cellByGene.mtx")
 
 
 # We don't need the cell by gene summary csv except for perhaps debugging
@@ -578,7 +579,10 @@ message(sprintf("Creating a cell by peak matrix\n"))
 
 peaks.df = as.data.frame(peak.gr)[,1:3];
 
+write.table(peaks.df,file = "peaks.combined.bed",append=FALSE,
+    quote= FALSE,sep="\t", eol = "\n", na = "NA", dec = ".", 
+    row.names = FALSE, col.names = FALSE, qmethod = c("escape", "double"),
+    fileEncoding = "")
+
+
 write.csv(peaks.df, file = "peaksAllCells.csv", row.names = FALSE);
-
-
-

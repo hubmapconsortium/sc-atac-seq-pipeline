@@ -1,8 +1,8 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-id: snapanalysis_analyze
-label: snap analysis analyze
+id: snapanalysis_motif
+label: snap analysis motif
 cwlVersion: v1.1
 
 s:author:
@@ -61,47 +61,12 @@ requirements:
   #    TMPDIR  : $(inputs.tmpdir)
 
 inputs:
-  input_snap:
+  snap_file:
     type: File
     inputBinding:
       position: 1
-      prefix: --input_snap
-    doc: The selected barcodes object file.
-
-  selected_barcodes:
-    type: File?
-    inputBinding:
-      position: 2
-      prefix: --selected_barcodes
-    doc: The selected barcodes object file.
-
-  encode_blacklist:
-    type: File
-    inputBinding:
-      position: 3
-      prefix: --encode_blacklist
-    doc: A BED file of ENCODE blacklist to prevent potential artifacts.
-
-  gene_track:
-    type: File
-    inputBinding:
-      position: 4
-      prefix: --gene_track
-    doc: A BED file of gene tracks.
-
-  gene_annotation:
-    type: File?
-    inputBinding:
-      position: 5
-      prefix: --gene_annotation
-    doc: A GTF file of gene annotations.
-
-  promoters:
-    type: File?
-    inputBinding:
-      position: 6
-      prefix: --promoters
-    doc: A BED file of promoters.
+      prefix: --snap_file
+    doc: The RDS file.
 
   #tmpdir:
   #  type: string?
@@ -112,45 +77,9 @@ inputs:
 
 
 outputs:
-  peaks_combined_bed:
+  motif_file:
     type: File
     outputBinding:
-      glob: "peaks.combined.bed"
+      glob: "cellMotif.csv"
 
-  CSV_files:
-    type:
-      type: array
-      items: File
-    outputBinding:
-      glob: "*.csv"
-
-  BED_files:
-    type:
-      type: array
-      items: File
-    outputBinding:
-      glob: "*.bed"
-
-  PDF_files:
-    type:
-      type: array
-      items: File
-    outputBinding:
-      glob: "*.pdf"
-
-  RDS_objects:
-    type:
-      type: array
-      items: File
-    outputBinding:
-      glob: "*.rds"
-
-  MTX_files:
-    type:
-      type: array
-      items: File
-    outputBinding:
-      glob: "*.mtx"
-
-
-baseCommand: [Rscript, /tools/snapAnalysis.R]
+baseCommand: [Rscript, /tools/snapMotif.R]
