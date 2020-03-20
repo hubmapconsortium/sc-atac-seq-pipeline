@@ -44,6 +44,18 @@ inputs:
   promoters: File?
 
 outputs:
+  zipped_files:
+    type:
+      type: array
+      items: File
+    outputSource: snaptools_create_snap_file/zipped_files
+
+  report_files:
+    type:
+      type: array
+      items: File
+    outputSource: snaptools_create_snap_file/report_files
+
   bam_file:
     type: File
     outputSource: snaptools_create_snap_file/bam_file
@@ -104,7 +116,7 @@ steps:
      tmp_folder: tmp_folder
 
     out:
-      [bam_file, snap_file, snap_qc_file]
+      [zipped_files, report_files, bam_file, snap_file, snap_qc_file]
 
 
   snapanalysis_setup_and_analyze:

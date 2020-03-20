@@ -48,6 +48,16 @@ outputs:
   snap_qc_file:
     type: File
     outputSource: snaptools_preprocess_reads/snap_qc_file
+  zipped_files:
+    type:
+      type: array
+      items: File
+    outputSource: snaptools_fastqc_tool/zipped_files
+  report_files:
+    type:
+      type: array
+      items: File
+    outputSource: snaptools_fastqc_tool/report_files
 
 steps:
   snaptools_index_ref_genome:
