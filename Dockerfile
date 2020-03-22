@@ -112,6 +112,7 @@ COPY remove_blacklist.sh /tools/
 COPY snapAnalysis_select_barcode.R /tools/
 COPY snapAnalysis.R /tools/
 COPY snapMotifAnalysis.R /tools/
+COPY gather_sequence_files.py /tools/
 
 ENV PATH /tools/:$PATH
 

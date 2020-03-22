@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "quay.io/wshands/sc-atac-seq:feature/add-motif-analysis"
+    dockerPull: "quay.io/wshands/sc-atac-seq:feature_add-motif-analysis"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
