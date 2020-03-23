@@ -31,9 +31,7 @@ inputs:
   input_reference_genome: File
   reference_genome_index: File?
   genome_name: string?
-  input_fastq1: File
-  input_fastq2: File
-  input_barcode_fastq: File?
+  sequence_directory: Directory
   blacklist_bed: File?
   tmp_folder: string?
 
@@ -44,70 +42,107 @@ inputs:
   promoters: File?
 
 outputs:
+  zipped_files:
+    type:
+      type: array
+      items:
+         type: array
+         items: File
+    outputSource: snaptools_create_snap_file/zipped_files
+
+  report_files:
+    type:
+      type: array
+      items:
+         type: array
+         items: File
+    outputSource: snaptools_create_snap_file/report_files
+
   bam_file:
-    type: File
+    type: File[]
     outputSource: snaptools_create_snap_file/bam_file
 
   snap_file:
-    type: File
+    type: File[]
     outputSource: snaptools_create_snap_file/snap_file
 
   snap_qc_file:
-    type: File
+    type: File[]
     outputSource: snaptools_create_snap_file/snap_qc_file
 
   analysis_CSV_files:
     type:
       type: array
-      items: File
+      items:
+         type: array
+         items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_CSV_files
  
   analysis_BED_files:
     type:
       type: array
-      items: File
+      items:
+         type: array
+         items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_BED_files
 
   analysis_PDF_files:
     type:
       type: array
-      items: File
+      items:
+         type: array
+         items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_PDF_files
 
   analysis_RDS_objects:
     type:
       type: array
-      items: File
+      items:
+         type: array
+         items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_RDS_objects
 
   analysis_MTX_files:
     type:
       type: array
-      items: File
+      items:
+         type: array
+         items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_MTX_files
 
 requirements:
   SubworkflowFeatureRequirement: {}
+  ScatterFeatureRequirement: {}
 
 steps:
+  gather_sequence_bundles:
+    run: gather_sequence_bundles.cwl
+    in: 
+      sequence_directory: sequence_directory
+    out:
+      [fastq1_files, fastq2_files, barcode_fastq_files]
 
   snaptools_create_snap_file:
+    scatter: [input_fastq1, input_fastq2, input_barcode_fastq]
+    scatterMethod: dotproduct
     run: steps/snaptools_create_snap_file.cwl
     in:
      input_reference_genome: input_reference_genome
      reference_genome_index: reference_genome_index
      genome_name: genome_name
-     input_fastq1: input_fastq1
-     input_fastq2: input_fastq2
-     input_barcode_fastq: input_barcode_fastq
+     input_fastq1: gather_sequence_bundles/fastq1_files
+     input_fastq2: gather_sequence_bundles/fastq2_files
+     input_barcode_fastq: gather_sequence_bundles/barcode_fastq_files
      blacklist_bed: blacklist_bed
      tmp_folder: tmp_folder
 
     out:
-      [bam_file, snap_file, snap_qc_file]
+      [zipped_files, report_files, bam_file, snap_file, snap_qc_file]
 
 
   snapanalysis_setup_and_analyze:
+    scatter: [input_snap]
+    scatterMethod: dotproduct
     run: steps/snapanalysis_setup_and_analyze.cwl
     in:
       input_snap: snaptools_create_snap_file/snap_file
@@ -118,6 +153,7 @@ steps:
       promoters: promoters
 
     out:
+      #[analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_MTX_files]
       [analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_MTX_files]
 
 

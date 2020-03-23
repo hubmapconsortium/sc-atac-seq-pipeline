@@ -1,8 +1,8 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-id: snaptools_remove_blacklist
-label: snaptools remove blacklist
+id: snaptools_fastqc_tool
+label: snaptools fastqc tool
 cwlVersion: v1.1
 
 s:author:
@@ -12,7 +12,7 @@ s:author:
     s:name: Walter Shands
 
 s:codeRepository: https://github.com/wshands/SnapTools/tree/feature/docker_cwl
-s:dateCreated: "2020-3-4"
+s:dateCreated: "2020-03-19"
 s:license: https://spdx.org/licenses/Apache-2.0
 
 s:keywords: edam:topic_0091 , edam:topic_0622
@@ -36,32 +36,52 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "quay.io/wshands/sc-atac-seq:latest"
+    dockerPull: "biocontainers/fastqc:v0.11.8dfsg-2-deb_cv1"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
     outdirMin: 100000
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.sequence_files)
 
 inputs:
-  bam_file:
-    type: File
+  outdir:
+    type: string?
     inputBinding:
       position: 1
-      prefix: --bam-file
-    doc: The genome BAM file to be processed.
+      prefix: --outdir
+    doc: Create all output files in the specified output directory.
 
-  bed_file:
-    type: File?
+  extract:
+    type: boolean?
     inputBinding:
       position: 2
-      prefix: --bed-file
-    doc: The genome BED file with the blacklisted regions to be removed.
+      prefix: --extract
+    doc: Do not uncompress the output file after creating it.
 
+  sequence_files:
+    type: File[]
+    inputBinding:
+      position: 3
+    doc: set of sequence files for each of which a quality control report is produced
 
 outputs:
-  rmsk_bam:
-    type: File
+  zipped_files:
+    type:
+      type: array
+      items: File
     outputBinding:
-      glob: rmsk.bam
+      glob: "*.zip"
+    doc: Individual graph files and additional data files containing the raw data from which plots were drawn.
+      
+  report_files:
+    type:
+      type: array
+      items: File
+    outputBinding:
+      glob: "*.html"
+    doc: HTML reports with embedded graphs
 
-baseCommand: [remove_blacklist.sh]
+
+baseCommand: [fastqc]

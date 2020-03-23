@@ -1,8 +1,8 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-id: snaptools_index_ref_genome
-label: snaptools index reference genome
+id: snapanalysis_add_pmat_tool
+label: snapanalysis add pmat
 cwlVersion: v1.1
 
 s:author:
@@ -44,59 +44,52 @@ requirements:
 
   InitialWorkDirRequirement:
     listing:
-      - $(inputs.input_fasta)
+      - entry: $(inputs.snap_file)
+        writable: true
+
 
 inputs:
-  reference_genome_index:
-    type: File?
+  snap_file:
+    type: File
     inputBinding:
       position: 1
-      prefix: --reference-genome-index
-    doc: The genome reference index file in tar.gz format. If provided snaptools index-genome is not called.
+      prefix: --snap-file
+    doc: The SNAP file to be processed.
 
-  input_fasta:
+  peak_file:
     type: File
     inputBinding:
       position: 2
-      prefix: --input-fasta
-    doc: The genome reference file in fasta format to be indexed.
+      prefix: --peak-file
+    doc: The BED file that contains peak information.
 
-  output_prefix:
+  buffer_size:
     type: string?
     inputBinding:
       position: 3
-      prefix: --output-prefix
-    #default: "$(inputs.input_fasta[\"nameroot\"])"
-    doc: The output prefix for the genome reference index file.
+      prefix: --buffer-size
+    doc: Max number of barcodes be stored in memory (default 1000).
 
-  aligner:
+  tmp_folder:
     type: string?
     inputBinding:
       position: 4
-      prefix: --aligner
-    default: "bwa"
-    doc: The name of the aligner, e.g. 'bwa'.
+      prefix: --tmp-folder
+    default: "/tmp"
+    doc: Directory to store temporary files.
 
-  path_to_aligner:
+  verbose:
     type: string?
     inputBinding:
       position: 5
-      prefix: --path-to-aligner
-    default: "/tools"
-    doc: The file system path to the aligner.
-
-  num_threads:
-    type: string?
-    inputBinding:
-      position: 6
-      prefix: --num-threads
-    doc: The number of threads to use.
+      prefix: --verbose
+    default: "TRUE"
+    doc: A boolen tag; if true output the progress.
 
 outputs:
-  genome_index:
+  snap_file_w_peaks:
     type: File
-    secondaryFiles: [".bwt", ".sa", ".ann", ".pac", ".amb"]
     outputBinding:
-      glob: $(inputs.input_fasta.basename)
+      glob: $(inputs.snap_file.basename)
 
-baseCommand: [create_reference_genome_index.sh]
+baseCommand: [snaptools, snap-add-pmat]

@@ -65,16 +65,18 @@ outputs:
       items: File
     outputSource: snapanalysis_analyze/MTX_files
 
-steps:
+#  analysis_motif_file:
+#    type: File
+#    outputSource: snapanalysis_motif/motif_file 
 
+
+steps:
   snapanalysis_select_barcode:
     run: analyze_snap_steps/snapanalysis_select_barcode.cwl
     in:
       preferred_barcodes: preferred_barcodes
-
     out:
       [selected_barcodes, barcode_PDF_files]
-
 
   snapanalysis_analyze:
     run: analyze_snap_steps/snapanalysis_analyze.cwl
@@ -85,8 +87,22 @@ steps:
       gene_track: gene_track
       gene_annotation: gene_annotation
       promoters: promoters
-
     out:
-      [CSV_files, BED_files, PDF_files, RDS_objects, MTX_files]
+      [peaks_combined_bed, CSV_files, BED_files, PDF_files, RDS_objects, MTX_files]
+
+  snapanalysis_add_pmat_tool:
+    run: analyze_snap_steps/snapanalysis_add_pmat_tool.cwl
+    in:
+      snap_file: input_snap
+      peak_file: snapanalysis_analyze/peaks_combined_bed
+    out:
+      [snap_file_w_peaks]
+
+#  snapanalysis_motif:
+#    run: analyze_snap_steps/snapanalysis_motif.cwl
+#    in:
+#      snap_file: snapanalysis_add_pmat_tool/snap_file_w_peaks
+#    out:
+#      [motif_file]
 
 
