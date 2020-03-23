@@ -65,9 +65,9 @@ outputs:
       items: File
     outputSource: snapanalysis_analyze/MTX_files
 
-  analysis_motif_file:
-    type: File
-    outputSource: snapanalysis_motif/motif_file 
+#  analysis_motif_file:
+#    type: File
+#    outputSource: snapanalysis_motif/motif_file 
 
 
 steps:
@@ -98,11 +98,11 @@ steps:
     out:
       [snap_file_w_peaks]
 
-  snapanalysis_motif:
-    run: analyze_snap_steps/snapanalysis_motif.cwl
-    in:
-      snap_file: snapanalysis_add_pmat_tool/snap_file_w_peaks
-    out:
-      [motif_file]
+#  snapanalysis_motif:
+#    run: analyze_snap_steps/snapanalysis_motif.cwl
+#    in:
+#      snap_file: snapanalysis_add_pmat_tool/snap_file_w_peaks
+#    out:
+#      [motif_file]
 
 

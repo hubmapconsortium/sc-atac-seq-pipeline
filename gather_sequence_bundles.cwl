@@ -56,28 +56,10 @@ inputs:
     doc: The directory with sample fastq or fastq.gz files.
 
 outputs:
-#  sequence_bundles:
-#    type: File[]
-#    outputBinding:
-#      glob: "input.json"
-#      loadContents: true
-#      outputEval: |
-#                ${
-#                    var new_sequence_str = self[0].contents;
-#                    var sequence_array_of_bundles = JSON.parse(new_sequence_str);
-#                    var fastq2_array = [];
-#                    for (var i =0; i < sequence_array_of_bundles.length; i++) {
-#                        var fastq2 = sequence_array_of_bundles[0].input_fastq2;
-#                        fastq2_array.push(fastq2);
-#                    }
-#                    return fastq2_array;
-#                    //var fastq2_array_str = JSON.stringify(fastq2_array);
-#                    //return fastq2_array_str;
-#                 }
-
   fastq1_files:
     type: File[]
     outputBinding:
+      # This file is written by gather_sequence_files.py 
       glob: "input.json"
       loadContents: true
       outputEval: |
@@ -86,6 +68,8 @@ outputs:
                     var bundle_array = JSON.parse(bundle_array_str);
                     var file_array = [];
                     for (var i =0; i < bundle_array.length; i++) {
+                        // The dictionary key 'input_fastq1' must match the key used
+                        // in the string template SEQUENCES_TEMPLATE in gather_sequence_files.py 
                         var file = bundle_array[i].input_fastq1;
                         file_array.push(file);
                     }
@@ -95,6 +79,7 @@ outputs:
   fastq2_files:
     type: File[]
     outputBinding:
+      # This file is written by gather_sequence_files.py 
       glob: "input.json"
       loadContents: true
       outputEval: |
@@ -103,6 +88,8 @@ outputs:
                     var bundle_array = JSON.parse(bundle_array_str);
                     var file_array = [];
                     for (var i =0; i < bundle_array.length; i++) {
+                        // The dictionary key 'input_fastq2' must match the key used
+                        // in the string template SEQUENCES_TEMPLATE in gather_sequence_files.py 
                         var file = bundle_array[i].input_fastq2;
                         file_array.push(file);
                     }
@@ -112,6 +99,7 @@ outputs:
   barcode_fastq_files:
     type: File[]
     outputBinding:
+      # This file is written by gather_sequence_files.py 
       glob: "input.json"
       loadContents: true
       outputEval: |
@@ -119,7 +107,9 @@ outputs:
                     var bundle_array_str = self[0].contents;
                     var bundle_array = JSON.parse(bundle_array_str);
                     var file_array = [];
-                    for (var i =0; i < bundle_array.length; i++) {
+                    for (var i =0; i < bundle_array.length; i++) {i
+                        // The dictionary key 'input_barcode_fastq' must match the key used
+                        // in the string template SEQUENCES_TEMPLATE in gather_sequence_files.py 
                         var file = bundle_array[i].input_barcode_fastq;
                         file_array.push(file);
                     }

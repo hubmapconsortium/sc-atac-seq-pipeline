@@ -90,9 +90,10 @@ if (!is.null(opt$selected_barcodes)) {
   dev.off()
 
   # From Matt: Don't select cutoff 2/24/2020
-  # choose the cutoff based on the plot 
-  #idx = which(promoter_ratio > 0.2 & promoter_ratio < 0.8 & log_cov > 3);
-  #x.sp = x.sp[idx,]
+  # choose the cutoff based on the plot
+  # however we need column idx for ChromVAR motif analysis... 
+  idx = which(promoter_ratio > 0.2 & promoter_ratio < 0.8 & log_cov > 3);
+  x.sp = x.sp[idx,]
 
 } else {
 
@@ -211,17 +212,17 @@ black_list.gr = GRanges(
 
 # Second, we remove unwanted chromosomes.
 message(sprintf("Removing unwanted chromosomes\n"))
-#chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM", seqlevels(x.sp@feature))];
-#idy = grep(paste(chr.exclude, collapse="|"), x.sp@feature);
-#if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]};
+chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM", seqlevels(x.sp@feature))];
+idy = grep(paste(chr.exclude, collapse="|"), x.sp@feature);
+if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]};
 
 # from KC20_Test.Rmd Dinh's script
 # however unwanted chromosomes and black listed items are not actually
 # removed in her script. 
 # TODO: Last word is that they should be removed from the BAM file, not sure about unwanted chromosomes
-idy1 = queryHits(findOverlaps(x.sp@feature, black_list.gr))
-idy2 = grep("chrM|random", x.sp@feature)
-idy = unique(c(idy1, idy2))
+#idy1 = queryHits(findOverlaps(x.sp@feature, black_list.gr))
+#idy2 = grep("chrM|random", x.sp@feature)
+#idy = unique(c(idy1, idy2))
 
 
 # Step 5. Dimensionality reduction
@@ -568,6 +569,12 @@ peaks.ls = mclapply(seq(clusters.sel), function(i){
 peaks.names = system("ls | grep narrowPeak", intern=TRUE);
 peak.gr.ls = lapply(peaks.names, function(x){
   peak.df = read.table(x)
+
+  # Remove the 'b' from b'chr1' which could be a result of using pthon3
+  # for SnapTools
+  # TODO remove this when the issue with SnapTools and python is fixed
+  peak.df[,1] <- gsub("b'chr", "'chr", peak.df[,1])
+
   GRanges(peak.df[,1], IRanges(peak.df[,2], peak.df[,3]))
 })
 peak.gr = reduce(Reduce(c, peak.gr.ls));

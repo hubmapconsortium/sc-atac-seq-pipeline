@@ -32,9 +32,6 @@ inputs:
   reference_genome_index: File?
   genome_name: string?
   sequence_directory: Directory
-  #input_fastq1: File
-  #input_fastq2: File
-  #input_barcode_fastq: File?
   blacklist_bed: File?
   tmp_folder: string?
 
@@ -51,9 +48,6 @@ outputs:
       items:
          type: array
          items: File
-    #type:
-    #  type: array
-    #  items: File
     outputSource: snaptools_create_snap_file/zipped_files
 
   report_files:
@@ -62,9 +56,6 @@ outputs:
       items:
          type: array
          items: File
-    #type:
-    #  type: array
-    #  items: File
     outputSource: snaptools_create_snap_file/report_files
 
   bam_file:
@@ -85,9 +76,6 @@ outputs:
       items:
          type: array
          items: File
-    #type:
-    #  type: array
-    #  items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_CSV_files
  
   analysis_BED_files:
@@ -96,9 +84,6 @@ outputs:
       items:
          type: array
          items: File
-    #type:
-    #  type: array
-    #  items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_BED_files
 
   analysis_PDF_files:
@@ -107,9 +92,6 @@ outputs:
       items:
          type: array
          items: File
-    #type:
-    #  type: array
-    #  items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_PDF_files
 
   analysis_RDS_objects:
@@ -118,9 +100,6 @@ outputs:
       items:
          type: array
          items: File
-    #type:
-    #  type: array
-    #  items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_RDS_objects
 
   analysis_MTX_files:
@@ -129,9 +108,6 @@ outputs:
       items:
          type: array
          items: File
-    #type:
-    #  type: array
-    #  items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_MTX_files
 
 requirements:
@@ -177,6 +153,7 @@ steps:
       promoters: promoters
 
     out:
-      [analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_MTX_files]
+      #[analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_MTX_files]
+      [analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_MTX_files]
 
 
