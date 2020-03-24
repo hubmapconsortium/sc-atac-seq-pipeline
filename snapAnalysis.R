@@ -483,8 +483,7 @@ cellByGene <- as.data.frame(cellByGeneMatrix);
 
 # Write cell by gene sparse matrix in Matrix Market format not CSV format
 #write.csv(cellByGene, file = "cellByGeneData.csv");
-
-### DEBUG writeMM(obj = cellByGeneData, file = "cellByGene.mtx")
+writeMM(obj = cellByGeneData, file = "cellByGene.mtx")
 
 
 # We don't need the cell by gene summary csv except for perhaps debugging

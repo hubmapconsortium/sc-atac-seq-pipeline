@@ -90,14 +90,14 @@ steps:
     out:
       [peaks_combined_bed, CSV_files, BED_files, PDF_files, RDS_objects, MTX_files]
 
-  snapanalysis_add_pmat_tool:
-    run: analyze_snap_steps/snapanalysis_add_pmat_tool.cwl
-    in:
-      snap_file: input_snap
-      peak_file: snapanalysis_analyze/peaks_combined_bed
-    out:
-      [snap_file_w_peaks]
-
+#  snapanalysis_add_pmat_tool:
+#    run: analyze_snap_steps/snapanalysis_add_pmat_tool.cwl
+#    in:
+#      snap_file: input_snap
+#      peak_file: snapanalysis_analyze/peaks_combined_bed
+#    out:
+#      [snap_file_w_peaks]
+#
 #  snapanalysis_motif:
 #    run: analyze_snap_steps/snapanalysis_motif.cwl
 #    in:
