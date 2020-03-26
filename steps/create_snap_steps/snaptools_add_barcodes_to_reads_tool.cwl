@@ -41,8 +41,6 @@ requirements:
     coresMin: 1
     ramMin: 1024
     outdirMin: 100000
-  InlineJavascriptRequirement: {}
-  ShellCommandRequirement: {}
 
 inputs:
   input_fastq1:

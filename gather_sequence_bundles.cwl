@@ -35,17 +35,16 @@ dct:creator:
   foaf:mbox: jshands@ucsc.edu
 
 requirements:
-  DockerRequirement:
+  - class: DockerRequirement
     dockerPull: "quay.io/wshands/sc-atac-seq:latest"
-  ResourceRequirement:
+  - class: ResourceRequirement
     coresMin: 1
     ramMin: 1024
     outdirMin: 100000
-  InlineJavascriptRequirement: {}
-
-  InitialWorkDirRequirement:
+  - class: InitialWorkDirRequirement
     listing:
       - $(inputs.sequence_directory)
+  - class: InlineJavascriptRequirement
 
 inputs:
   sequence_directory:

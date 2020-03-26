@@ -26,7 +26,7 @@ $schemas:
   - http://edamontology.org/EDAM_1.18.owl
 
 requirements:
-  MultipleInputFeatureRequirement: {}
+  - class: MultipleInputFeatureRequirement
 
 inputs:
   input_reference_genome: File

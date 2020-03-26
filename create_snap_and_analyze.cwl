@@ -111,8 +111,8 @@ outputs:
     outputSource: snapanalysis_setup_and_analyze/analysis_MTX_files
 
 requirements:
-  SubworkflowFeatureRequirement: {}
-  ScatterFeatureRequirement: {}
+  - class: SubworkflowFeatureRequirement
+  - class: ScatterFeatureRequirement
 
 steps:
   gather_sequence_bundles:
