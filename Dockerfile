@@ -35,12 +35,12 @@ RUN apt update && apt install -y \
 LABEL maintainer="jshands@ucsc.edu"
 
 # Make python3 the default so BEDTools will install
-# https://stackoverflow.com/questions/41986507/unable-to-set-default-python-version-to-python3-in-ubuntu/41986843 
+# https://stackoverflow.com/questions/41986507/unable-to-set-default-python-version-to-python3-in-ubuntu/41986843
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
 # Install libpng12 which is no longer available in Ubuntu package archive
 # but is needed by other software that we will install
-RUN wget https://launchpad.net/~ubuntu-security/+archive/ubuntu/ppa/+build/15108504/+files/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb 
+RUN wget https://launchpad.net/~ubuntu-security/+archive/ubuntu/ppa/+build/15108504/+files/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
 RUN dpkg -i libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
 
 RUN apt install libreadline-dev
@@ -79,6 +79,8 @@ RUN R -e "BiocManager::install(c('chromVAR'))"
 
 RUN pip3 install html5lib
 
+#RUN pip3 install sinto
+
 WORKDIR /opt/samtools
 RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 -O samtools.tar.bz2 && \
     tar -xjvf samtools.tar.bz2 && \
@@ -115,6 +117,3 @@ COPY snapMotifAnalysis.R /tools/
 COPY gather_sequence_files.py /tools/
 
 ENV PATH /tools/:$PATH
-
-
-

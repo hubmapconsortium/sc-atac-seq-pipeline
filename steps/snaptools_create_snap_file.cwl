@@ -42,6 +42,9 @@ outputs:
   bam_file:
     type: File
     outputSource: snaptools_remove_blacklist/rmsk_bam
+  fragment_file:
+    type: File
+    outputSource: snaptools_create_fragment_file/fragment_file
   snap_file:
     type: File
     outputSource: snaptools_create_cell_by_bin_matrix/snap_file_w_cell_by_bin
@@ -104,6 +107,13 @@ steps:
       bed_file: blacklist_bed
     out: [rmsk_bam]
 
+  snaptools_create_fragment_file:
+    run: create_snap_steps/snaptools_create_fragment_file.cwl
+    in:
+      input_bam: paired_end_bam
+      output_bed: fragment_file
+    out: [fragment_file]
+
   snaptools_preprocess_reads:
     run: create_snap_steps/snaptools_preprocess_reads_tool.cwl
     in:
@@ -117,5 +127,3 @@ steps:
     in:
       snap_file: snaptools_preprocess_reads/snap_file
     out: [snap_file_w_cell_by_bin]
-
-
