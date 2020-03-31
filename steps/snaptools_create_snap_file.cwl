@@ -37,6 +37,7 @@ inputs:
   input_barcode_fastq: File?
   blacklist_bed: File?
   tmp_folder: string?
+  output_bed: string?
 
 outputs:
   bam_file:
@@ -110,8 +111,8 @@ steps:
   snaptools_create_fragment_file:
     run: create_snap_steps/snaptools_create_fragment_file.cwl
     in:
-      input_bam: paired_end_bam
-      output_bed: fragment_file
+      input_bam: snaptools_align_paired_end/paired_end_bam
+      output_bed: output_bed
     out: [fragment_file]
 
   snaptools_preprocess_reads:
