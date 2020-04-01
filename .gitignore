@@ -130,3 +130,5 @@ dmypy.json
 
 # PyCharm development directory
 .idea
+# RStudio project
+.Rproj.user
