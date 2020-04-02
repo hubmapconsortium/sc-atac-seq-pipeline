@@ -4,6 +4,10 @@ class: CommandLineTool
 label: snaptools create fragment file
 cwlVersion: v1.1
 
+requirements:
+  DockerRequirement:
+    dockerPull: "biocontainers/fastqc:v0.11.8dfsg-2-deb_cv1"
+
 baseCommand: sinto
 
 inputs:
@@ -15,7 +19,7 @@ inputs:
     doc: The bam file to use
 
   output_bed:
-    type: int
+    type: string?
     inputBinding:
       position: 2
       prefix: -f
@@ -23,7 +27,7 @@ inputs:
     doc: The name to use for the output fragment file
 
   num_proc:
-    type: string?
+    type: int?
     inputBinding:
       position: 3
       prefix: -p
