@@ -2,8 +2,10 @@
 library("optparse")
 
 option_list = list(
-  make_option(c("-s", "--snap_file"), type="character", default=NULL,
-              help="Selected barcodes", metavar="character")
+  make_option(c("-s", "--snap_rds"), type="character", default=NULL,
+              help="Snap object in RDS file", metavar="character"),
+  make_option(c("-p", "--snap_file"), type="character", default=NULL,
+              help="Snap file", metavar="character")
 
   # ,make_option(c("-r", "--tmpdir"), type="character", default=NULL,
   #            help="Temporary directory path", metavar="character")
@@ -13,9 +15,9 @@ option_list = list(
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
 
-if (is.null(opt$snap_file)){
+if (is.null(opt$snap_rds)){
   print_help(opt_parser)
-  stop("--snap_file argument must be supplied (input file).n", call.=FALSE)
+  stop("--snap_rds argument must be supplied (input file).n", call.=FALSE)
 }
 
 mytmpdir <- Sys.getenv("TMP")
@@ -30,15 +32,49 @@ sprintf("tempdir() is: %s", mytmpdir)
 #write("TMPDIR = D:/mnt/", file=file.path(Sys.getenv('TMPDIR'), '.Renviron'))
 
 library(SnapATAC);
-x.sp = createSnap(
-  file=opt$snap_file,
-  sample="snap file with peaks data",
-  num.cores=6
-);
+
+#peaks_snap <- system.file("extdata", "peaks.snap", package = "SnapATAC");
+#x.sp <- createSnap(file.name, sample="peaks", do.par=FALSE);
+
+#message(sprintf("Creating temp working peaks snap file\n")) 
+#peaks_file.snap <- system.file("extdata", "demo.snap", package = "SnapATAC");
+#message(sprintf("calling snaptools snap-add-pmat\n")) 
+#system("snaptools snap-add-pmat --snap-file demo.snap --peak-file opt$peak_file")
+#message(sprintf("Creating snap object\n"))
+## Create snap object from peaks working snap file
+## the snap object stores the path to the snap file on disk
+## addPmatToSnap will read the snap file from disk using
+## this path
+#x.sp <- createSnap(peaks_file.snap, sample="peaks", do.par=FALSE);
 
 
+#x.sp = createSnap(
+#  file=opt$snap_file,
+#  sample="snap file with peaks data",
+#  num.cores=6
+#);
+
+# Read RDS file to create the input snap object
+x.sp = readRDS(opt$snap_rds);
 # Add cell by peak matrix
+
+message(sprintf("First few old snap file locations\n"));
+head(x.sp@file)
+
+# This code resets the path to the snap file to the current
+# location. The original path was set when the snap object
+# was created and may no longer be valid, especially when 
+# running under cwltool. addPmatToSnap uses this path to
+# read the peaks matrix from the snap file, so it needs to
+# be correct. The code to set the path is taken from
+# createSnapSingle at 
+# https://rdrr.io/github/r3fang/SnapATAC/src/R/snap-utilities.R
+x.sp@file <- rep(normalizePath(opt$snap_file), length(x.sp@barcode));
+message(sprintf("First few new snap file locations\n"));
+head(x.sp@file)
+
 x.sp = addPmatToSnap(x.sp);
+message(sprintf("Making PMAT binary\n"))
 x.sp = makeBinary(x.sp, mat="pmat");
 
 
@@ -57,7 +93,7 @@ x.sp@mmat = runChromVAR(
     species="Homo sapiens"
 );
 
-message(sprintf("Writing the cell by gene data to a Matrix Market format file\n"))
+message(sprintf("Writing the motif data to a Matrix Market format file\n"))
 cellMotifData <- x.sp@mmat;
 cellMotifMatrix <- as.matrix(cellMotifData)
 cellMotifFrame <- as.data.frame(cellMotifMatrix);

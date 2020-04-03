@@ -47,7 +47,6 @@ x.sp = createSnap(
   num.cores=6
 );
 
-
 if (!is.null(opt$selected_barcodes)) {
   message(sprintf("Reading selected barcode file\n"));
   barcodes.sel <- readRDS(opt$selected_barcodes);
@@ -92,8 +91,8 @@ if (!is.null(opt$selected_barcodes)) {
   # From Matt: Don't select cutoff 2/24/2020
   # choose the cutoff based on the plot
   # however we need column idx for ChromVAR motif analysis... 
-  idx = which(promoter_ratio > 0.2 & promoter_ratio < 0.8 & log_cov > 3);
-  x.sp = x.sp[idx,]
+  #idx = which(promoter_ratio > 0.2 & promoter_ratio < 0.8 & log_cov > 3);
+  #x.sp = x.sp[idx,]
 
 } else {
 
@@ -326,7 +325,7 @@ x.sp = runDiffusionMaps(
 # analysis. We use an ad hoc method by simply looking at a pairwise plot and
 # select the number of dimensions in which the scatter plot starts looking like
 #a blob. In the below example, we choose the first 20 dimensions.
-message(sprintf("Creating eigen plots\n"))
+#message(sprintf("Creating eigen plots\n"))
 plotDimReductPW(
   obj=x.sp,
   eigs.dims=1:50,
@@ -572,7 +571,10 @@ peak.gr.ls = lapply(peaks.names, function(x){
   # Remove the 'b' from b'chr1' which could be a result of using pthon3
   # for SnapTools
   # TODO remove this when the issue with SnapTools and python is fixed
-  peak.df[,1] <- gsub("b'chr", "'chr", peak.df[,1])
+  # Remove 'b'
+  #peak.df[,1] <- gsub("b'chr", "'chr", peak.df[,1])
+  # Remove quotes from beginning and end of chromosome name, e.g "'"
+  #peak.df[,1] <- gsub("'", "", peak.df[,1])
 
   GRanges(peak.df[,1], IRanges(peak.df[,2], peak.df[,3]))
 })
@@ -592,3 +594,6 @@ write.table(peaks.df,file = "peaks.combined.bed",append=FALSE,
 
 
 write.csv(peaks.df, file = "peaksAllCells.csv", row.names = FALSE);
+
+saveRDS(x.sp, file="peaks_snap.rds");
+

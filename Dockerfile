@@ -1,4 +1,4 @@
-FROM r-base:3.6.3
+FROM rocker/r-ver:3.6.3
 
 # Use an env var so user is not requested to provide a
 # time zone for tzdata
@@ -11,7 +11,6 @@ RUN apt update && apt install -y \
     cython \
     gzip \
     htop \
-    #libcurl3 \
     libcurl4-openssl-dev \
     libbz2-dev \
     liblzma-dev \
@@ -20,8 +19,10 @@ RUN apt update && apt install -y \
     libgsl-dev \
     libssl-dev \
     libxml2-dev \
+    libpng-dev \
     pandoc \
     perl \
+    python-pip \
     python3-pip \
     software-properties-common \
     texlive-latex-extra \
@@ -34,9 +35,6 @@ RUN apt update && apt install -y \
 
 LABEL maintainer="jshands@ucsc.edu"
 
-# Make python3 the default so BEDTools will install
-# https://stackoverflow.com/questions/41986507/unable-to-set-default-python-version-to-python3-in-ubuntu/41986843 
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
 # Install libpng12 which is no longer available in Ubuntu package archive
 # but is needed by other software that we will install
@@ -44,14 +42,6 @@ RUN wget https://launchpad.net/~ubuntu-security/+archive/ubuntu/ppa/+build/15108
 RUN dpkg -i libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
 
 RUN apt install libreadline-dev
-
-RUN pip3 install Cython --install-option="--no-cython-compile"
-
-# Install SnapTools
-# https://pypi.org/project/snaptools/
-RUN pip3 install 'snaptools==1.4.8'
-
-RUN pip3 install 'MACS2==2.2.6'
 
 # Install R packages
 RUN R -e "install.packages(c('Matrix', 'doSNOW', 'plot3D', 'optparse'))"
@@ -72,12 +62,13 @@ RUN R -e "BiocManager::install(version = '3.10')"
 # dplyr needed for R markdown to create PDF files
 RUN R -e "BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg38', 'rtracklayer', 'RFLPtools', 'rmarkdown', 'dplyr'))"
 
+# For motif analysis
 # Needed to install chromVAR
 RUN R -e "BiocManager::install(c('motifmatchr'))"
 RUN R -e "BiocManager::install(c('SummarizedExperiment'))"
 RUN R -e "BiocManager::install(c('chromVAR'))"
 
-RUN pip3 install html5lib
+RUN pip install html5lib
 
 WORKDIR /opt/samtools
 RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 -O samtools.tar.bz2 && \
@@ -104,6 +95,18 @@ RUN wget -O "bedtools-2.29.1.tar.gz" https://github.com/arq5x/bedtools2/releases
     cd bedtools2 && \
     make && \
     cp bin/* /tools/
+
+
+# Install SnapTools
+# https://pypi.org/project/snaptools/
+# Use pip instead of pip3 because snaptools requires python 2.7
+RUN pip install 'snaptools==1.4.8'
+
+# Python 3 required For MACS 2.2.6
+# numpy needed for MACS2
+RUN pip3 install numpy
+RUN pip3 install 'MACS2==2.2.6'
+
 
 COPY create_genome_size_file.sh /tools/
 COPY create_reference_genome_index.sh /tools/
