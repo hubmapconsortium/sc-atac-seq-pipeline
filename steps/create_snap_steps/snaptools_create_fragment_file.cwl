@@ -6,9 +6,9 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: "biocontainers/fastqc:v0.11.8dfsg-2-deb_cv1"
+    dockerPull: "seandonahue5311/sinto:v0.1"
 
-baseCommand: sinto
+baseCommand: /opt/sort_index_frag.py
 
 inputs:
   input_bam:
