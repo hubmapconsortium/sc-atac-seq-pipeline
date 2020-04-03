@@ -75,13 +75,6 @@ inputs:
       prefix: --snap_file
     doc: The snap file.
 
-#  peak_file:
-#    type: File
-#    inputBinding:
-#      position: 2
-#      prefix: --peak_file
-#    doc: The BED file that contains peak information.
-
   #tmpdir:
   #  type: string?
   #  inputBinding:

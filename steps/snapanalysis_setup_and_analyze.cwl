@@ -91,19 +91,10 @@ steps:
     out:
       [snap_rds, peaks_combined_bed, CSV_files, BED_files, PDF_files, RDS_objects, MTX_files]
 
-#  snapanalysis_del_tool:
-#    run: create_snap_steps/snaptools_del_tool.cwl
-#    in:
-#      snap_file: input_snap
-#      session_name: session_name
-#    out:
-#      [snap_file_wo_session]
-# 
   snapanalysis_add_pmat_tool:
     run: analyze_snap_steps/snapanalysis_add_pmat_tool.cwl
     in:
       snap_file: input_snap
-      #snap_file: snapanalysis_del_tool/snap_file_wo_session
       peak_file: snapanalysis_analyze/peaks_combined_bed
     out:
       [snap_file_w_peaks]
@@ -113,7 +104,6 @@ steps:
     in:
       snap_file: snapanalysis_add_pmat_tool/snap_file_w_peaks
       snap_rds: snapanalysis_analyze/snap_rds
-#      peak_file: snapanalysis_analyze/peaks_combined_bed
     out:
       [motif_file]
 
