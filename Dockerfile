@@ -24,6 +24,7 @@ RUN apt update && apt install -y \
     perl \
     python3-pip \
     software-properties-common \
+    tabix \
     texlive-latex-extra \
     unzip \
     wget \
@@ -79,7 +80,7 @@ RUN R -e "BiocManager::install(c('chromVAR'))"
 
 RUN pip3 install html5lib
 
-#RUN pip3 install sinto
+RUN pip3 install sinto
 
 WORKDIR /opt/samtools
 RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 -O samtools.tar.bz2 && \
@@ -115,5 +116,6 @@ COPY snapAnalysis_select_barcode.R /tools/
 COPY snapAnalysis.R /tools/
 COPY snapMotifAnalysis.R /tools/
 COPY gather_sequence_files.py /tools/
+COPY sort_index_frag.py /opt/
 
 ENV PATH /tools/:$PATH
