@@ -1,7 +1,7 @@
 cwlVersion: v1.1
 class: Workflow
 
-# label: A workflow that creates and analyzes a SNAP file as outlined at: 
+# label: A workflow that creates and analyzes a SNAP file as outlined at:
 # https://github.com/r3fang/SnapTools and https://github.com/r3fang/SnapATAC
 # doc: A workflow that analyzes a SNAP file as outlined at: https://github.com/r3fang/SnapATAC
 
@@ -41,6 +41,8 @@ inputs:
   preferred_barcodes: File?
   promoters: File?
 
+  alignment_threads: string?
+
 outputs:
   zipped_files:
     type:
@@ -77,7 +79,7 @@ outputs:
          type: array
          items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_CSV_files
- 
+
   analysis_BED_files:
     type:
       type: array
@@ -117,7 +119,7 @@ requirements:
 steps:
   gather_sequence_bundles:
     run: gather_sequence_bundles.cwl
-    in: 
+    in:
       sequence_directory: sequence_directory
     out:
       [fastq1_files, fastq2_files, barcode_fastq_files]
@@ -135,6 +137,7 @@ steps:
      input_barcode_fastq: gather_sequence_bundles/barcode_fastq_files
      blacklist_bed: blacklist_bed
      tmp_folder: tmp_folder
+     alignment_threads: alignment_threads
 
     out:
       [zipped_files, report_files, bam_file, snap_file, snap_qc_file]
@@ -155,5 +158,3 @@ steps:
     out:
       #[analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_MTX_files]
       [analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_MTX_files]
-
-
