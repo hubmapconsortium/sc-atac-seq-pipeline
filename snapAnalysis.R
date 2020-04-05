@@ -13,7 +13,9 @@ option_list = list(
   make_option(c("-a", "--gene_annotation"), type="character", default=NULL,
               help="Gene annotation GTF file"),
   make_option(c("-p", "--promoters"), type="character", default=NULL,
-              help="Promoters BED file")
+              help="Promoters BED file"),
+  make_option(c("-n", "--processes"), type="integer", default=1,
+              help="Number of subprocesses/threads to use")
 )
 
 opt_parser = OptionParser(option_list=option_list)
@@ -39,8 +41,8 @@ library(SnapATAC);
 x.sp = createSnap(
   file=opt$input_snap,
   sample="Input_snap",
-  num.cores=6
-);
+  num.cores=opt$processes
+)
 
 
 if (!is.null(opt$selected_barcodes)) {
