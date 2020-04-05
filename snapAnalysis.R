@@ -43,18 +43,13 @@ x.sp = createSnap(
   sample="Input_snap",
   num.cores=opt$processes
 )
-
+x.sp = addBmatToSnap(x.sp, bin.size=5000, num.cores=opt$processes)
 
 if (!is.null(opt$selected_barcodes)) {
   message(sprintf("Reading selected barcode file\n"));
   barcodes.sel <- readRDS(opt$selected_barcodes);
   x.sp = x.sp[which(x.sp@barcode %in% barcodes.sel$barcode),];
   x.sp@metaData = barcodes.sel[x.sp@barcode,];
-
-  ## Step 2. Add cell-by-bin matrix
-  ##showBinSizes(opt$input_snap);
-  message(sprintf("Add cell-by-bin-matrix\n"))
-  x.sp = addBmatToSnap(x.sp, bin.size=5000, num.cores=1);
 
 } else if (!is.null(opt$gene_annotation)) {
   # If there is no barcode CSV file
@@ -71,9 +66,6 @@ if (!is.null(opt$selected_barcodes)) {
 
   # extract promoter region for each gene
   promoter.gr <- reduce(promoters(gene.gr, upstream=2000, downstream=0))
-
-  # load the cell-by-bin matrix
-  x.sp = addBmatToSnap(x.sp)
 
   ov = findOverlaps(x.sp@feature, promoter.gr);
 
@@ -103,13 +95,6 @@ if (!is.null(opt$selected_barcodes)) {
 
   # From Dihn's KC20_Test.Rmd file
   # The input for example is "hg38.promoters.bed"
-
-  # load the cell-by-bin matrix
-  x.sp = addBmatToSnap(
-	obj=x.sp,
-	bin.size=5000,
-	num.cores=8
-  )
   calBmatCor(x.sp)
 
   promoter.df = read.table(opt$promoters);
