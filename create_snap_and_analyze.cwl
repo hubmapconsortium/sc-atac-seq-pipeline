@@ -104,6 +104,14 @@ outputs:
          items: File
     outputSource: snapanalysis_setup_and_analyze/analysis_RDS_objects
 
+  analysis_TXT_files:
+    type:
+      type: array
+      items:
+         type: array
+         items: File
+    outputSource: snapanalysis_setup_and_analyze/analysis_TXT_files
+
   analysis_MTX_files:
     type:
       type: array

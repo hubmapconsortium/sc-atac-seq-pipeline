@@ -59,6 +59,12 @@ outputs:
       items: File
     outputSource: snapanalysis_analyze/RDS_objects
 
+  analysis_TXT_files:
+    type:
+      type: array
+      items: File
+    outputSource: snapanalysis_analyze/TXT_files
+
   analysis_MTX_files:
     type:
       type: array
