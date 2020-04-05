@@ -214,6 +214,10 @@ if(length(idempty) > 0){
     x.sp <- x.sp[-idempty,, mat='bmat']
 };
 
+write.table(dimnames(x.sp@bmat)[[1]], 'barcodes.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
+write.table(dimnames(x.sp@bmat)[[2]], 'bins.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
+writeMM(x.sp@bmat, 'cell_by_bin.mtx')
+
 message(sprintf("Writing cell barcodes csv\n"))
 cellByBinData <- x.sp@bmat;
 barcodes <- x.sp@barcode;
