@@ -56,7 +56,8 @@ x.sp = addPmatToSnap(x.sp);
 message(sprintf("Removing unwanted chromosomes from PMAT\n"))
 # Provides seqlevels function
 library(GenomicRanges);
-chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM|chrUn", seqlevels(x.sp@feature))];
+#chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM|chrUn", seqlevels(x.sp@feature))];
+chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM", seqlevels(x.sp@feature))];
 idy = grep(paste(chr.exclude, collapse="|"), x.sp@feature);
 if(length(idy) > 0){x.sp = x.sp[,-idy, mat="pmat"]};
 

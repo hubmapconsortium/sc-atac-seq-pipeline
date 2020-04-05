@@ -207,10 +207,23 @@ black_list.gr = GRanges(
 #if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]};
 
 # Second, we remove unwanted chromosomes.
-message(sprintf("Removing unwanted chromosomes\n"))
-chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM|chrUn", seqlevels(x.sp@feature))];
-idy = grep(paste(chr.exclude, collapse="|"), x.sp@feature);
+message(sprintf("Removing unwanted random and M chromosomes\n"))
+chrrandomM.exclude = seqlevels(x.sp@feature)[grep("random|chrM", seqlevels(x.sp@feature))];
+chrrandomM.exclude
+idy = grep(paste(chrrandomM.exclude, collapse="|"), x.sp@feature);
 if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]};
+
+#message(sprintf("Removing unwanted decoy chromosomes\n"))
+#chrdecoy.exclude = seqlevels(x.sp@feature)[grep("decoy", seqlevels(x.sp@feature))];
+#chrdecoy.exclude
+#idydecoy = grep(paste(chrdecoy.exclude, collapse="|"), x.sp@feature);
+#if(length(idydecoy) > 0){x.sp = x.sp[,-idydecoy, mat="bmat"]};
+#
+#message(sprintf("Removing unwanted Unknown chromosomes\n"))
+#chrUn.exclude = seqlevels(x.sp@feature)[grep("chrUn", seqlevels(x.sp@feature))];
+#chrUn.exclude
+#idyUnknown = grep(paste(chrUn.exclude, collapse="|"), x.sp@feature);
+#if(length(idyUnknown) > 0){x.sp = x.sp[,-idyUnknown, mat="bmat"]};
 
 # from KC20_Test.Rmd Dinh's script
 # however unwanted chromosomes and black listed items are not actually
