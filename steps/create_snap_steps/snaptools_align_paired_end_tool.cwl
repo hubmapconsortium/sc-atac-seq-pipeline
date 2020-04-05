@@ -111,7 +111,7 @@ inputs:
     doc: Minimum number of fragments per barcode.
 
   num_threads:
-    type: string?
+    type: int?
     inputBinding:
       position: 9
       prefix: --num-threads

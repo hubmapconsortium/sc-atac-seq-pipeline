@@ -37,7 +37,7 @@ inputs:
   input_barcode_fastq: File?
   blacklist_bed: File?
   tmp_folder: string?
-  alignment_threads: string?
+  alignment_threads: int?
 
 outputs:
   bam_file:

@@ -41,7 +41,7 @@ inputs:
   preferred_barcodes: File?
   promoters: File?
 
-  alignment_threads: string?
+  alignment_threads: int?
 
 outputs:
   zipped_files:
