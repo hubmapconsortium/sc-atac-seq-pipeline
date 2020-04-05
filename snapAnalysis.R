@@ -44,6 +44,8 @@ x.sp = createSnap(
   num.cores=opt$processes
 )
 x.sp = addBmatToSnap(x.sp, bin.size=5000, num.cores=opt$processes)
+# Assign column (bin) names in the sparse cell-by-bin matrix
+dimnames(x.sp@bmat)[[2]] = x.sp@feature$name
 
 if (!is.null(opt$selected_barcodes)) {
   message(sprintf("Reading selected barcode file\n"));
