@@ -3,30 +3,27 @@ library("optparse")
 
 option_list = list(
   make_option(c("-b", "--selected_barcodes"), type="character", default=NULL,
-              help="Selected barcodes", metavar="character"),
+              help="Selected barcodes"),
   make_option(c("-s", "--input_snap"), type="character", default=NULL,
-              help="SNAP file name", metavar="character"),
+              help="SNAP file name"),
   make_option(c("-e", "--encode_blacklist"), type="character", default=NULL,
-              help="ENCODE blacklist BED.GZ file", metavar="character"),
+              help="ENCODE blacklist BED.GZ file"),
   make_option(c("-g", "--gene_track"), type="character", default=NULL,
-              help="Gene track BED file", metavar="character"),
+              help="Gene track BED file"),
   make_option(c("-a", "--gene_annotation"), type="character", default=NULL,
-              help="Gene annotation GTF file", metavar="character"),
+              help="Gene annotation GTF file"),
   make_option(c("-p", "--promoters"), type="character", default=NULL,
-              help="Promoters BED file", metavar="character")
+              help="Promoters BED file"),
+  make_option(c("-n", "--processes"), type="integer", default=1,
+              help="Number of subprocesses/threads to use")
+)
 
-
-  # ,make_option(c("-r", "--tmpdir"), type="character", default=NULL,
-  #            help="Temporary directory path", metavar="character")
-
-  );
-
-opt_parser = OptionParser(option_list=option_list);
-opt = parse_args(opt_parser);
+opt_parser = OptionParser(option_list=option_list)
+opt = parse_args(opt_parser)
 
 if (is.null(opt$input_snap)){
   print_help(opt_parser)
-  stop("--inputsnap argument must be supplied (input file).n", call.=FALSE)
+  stop("--input_snap argument must be supplied (input file).", call.=FALSE)
 }
 
 mytmpdir <- Sys.getenv("TMP")
@@ -44,19 +41,17 @@ library(SnapATAC);
 x.sp = createSnap(
   file=opt$input_snap,
   sample="Input_snap",
-  num.cores=6
-);
+  num.cores=opt$processes
+)
+x.sp = addBmatToSnap(x.sp, bin.size=5000, num.cores=opt$processes)
+# Assign column (bin) names in the sparse cell-by-bin matrix
+dimnames(x.sp@bmat)[[2]] = x.sp@feature$name
 
 if (!is.null(opt$selected_barcodes)) {
   message(sprintf("Reading selected barcode file\n"));
   barcodes.sel <- readRDS(opt$selected_barcodes);
   x.sp = x.sp[which(x.sp@barcode %in% barcodes.sel$barcode),];
   x.sp@metaData = barcodes.sel[x.sp@barcode,];
-
-  ## Add cell-by-bin matrix
-  ##showBinSizes(opt$input_snap);
-  message(sprintf("Add cell-by-bin-matrix\n"))
-  x.sp = addBmatToSnap(x.sp, bin.size=5000, num.cores=1);
 
 } else if (!is.null(opt$gene_annotation)) {
   # If there is no barcode CSV file
@@ -74,12 +69,9 @@ if (!is.null(opt$selected_barcodes)) {
   # extract promoter region for each gene
   promoter.gr <- reduce(promoters(gene.gr, upstream=2000, downstream=0))
 
-  # load the cell-by-bin matrix
-  x.sp = addBmatToSnap(x.sp)
-
   ov = findOverlaps(x.sp@feature, promoter.gr);
 
-  # find promoter overlapping bins 
+  # find promoter overlapping bins
   idy = queryHits(ov);
   log_cov = log10(SnapATAC::rowSums(x.sp, mat="bmat")+1)
   promoter_ratio = Matrix::rowSums(x.sp@bmat[,idy]) / Matrix::rowSums(x.sp@bmat);
@@ -105,13 +97,6 @@ if (!is.null(opt$selected_barcodes)) {
 
   # From Dihn's KC20_Test.Rmd file
   # The input for example is "hg38.promoters.bed"
-
-  # load the cell-by-bin matrix
-  x.sp = addBmatToSnap(
-	obj=x.sp, 
-	bin.size=5000, 
-	num.cores=8
-  )
   calBmatCor(x.sp)
 
   promoter.df = read.table(opt$promoters);
@@ -119,14 +104,14 @@ if (!is.null(opt$selected_barcodes)) {
   ov = findOverlaps(x.sp@feature, promoter.gr);
   idy = queryHits(ov);
   promoter_ratio = SnapATAC::rowSums(x.sp[,idy, mat="bmat"], mat="bmat") / SnapATAC::rowSums(x.sp, mat="bmat");
- 
-  pdf(file="PromotorRatioLogPlot.pdf") 
+
+  pdf(file="PromotorRatioLogPlot.pdf")
   plot(
-    x=log(SnapATAC::rowSums(x.sp, mat="bmat") + 1,10), 
-    y=promoter_ratio, 
-    cex=0.5, 
-    col="grey", 
-    xlab="log(count)", 
+    x=log(SnapATAC::rowSums(x.sp, mat="bmat") + 1,10),
+    y=promoter_ratio,
+    cex=0.5,
+    col="grey",
+    xlab="log(count)",
     ylab="FIP Ratio (promoter)",
     ylim=c(0, 1)
   )
@@ -150,15 +135,8 @@ x.sp = filterCells(
 )
 plotBarcode(x.sp, pdf.file.name = "BarcodeQualityControlDistributionAfter.pdf", col="grey", border="grey")
 
-x.sp = addBmatToSnap(
-    obj=x.sp, 
-    bin.size=5000, 
-    num.cores=8
-)
 calBmatCor(x.sp)
 
-
-# Matrix binarization
 # We will convert the cell-by-bin count matrix to a binary matrix. Some items
 # in the count matrix have abnormally high coverage perhaps due to the alignment
 # errors. Therefore, we next remove 0.1% items of the highest coverage in the
@@ -199,7 +177,7 @@ library(GenomicRanges);
 black_list = read.table(opt$encode_blacklist, header=FALSE, row.names=NULL, fill = TRUE);
 
 black_list.gr = GRanges(
-  black_list[,1], 
+  black_list[,1],
   IRanges(black_list[,2], black_list[,3])
 );
 
@@ -227,7 +205,7 @@ if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]};
 
 # from KC20_Test.Rmd Dinh's script
 # however unwanted chromosomes and black listed items are not actually
-# removed in her script. 
+# removed in her script.
 # TODO: Last word is that they should be removed from the BAM file, not sure about unwanted chromosomes
 #idy1 = queryHits(findOverlaps(x.sp@feature, black_list.gr))
 #idy2 = grep("chrM|random", x.sp@feature)
@@ -247,41 +225,14 @@ if(length(idempty) > 0){
     x.sp <- x.sp[-idempty,, mat='bmat']
 };
 
-message(sprintf("Writing cell barcodes csv\n"))
-cellByBinData <- x.sp@bmat;
-barcodes <- x.sp@barcode;
-
-cellByBinSummary <- summary(cellByBinData);
-
-# Rename the summary column names i,j
-#https://stackoverflow.com/questions/7531868/how-to-rename-a-single-column-in-a-data-frame
-names(cellByBinSummary)[names(cellByBinSummary) == 'i'] <- 'BarcodeID'
-names(cellByBinSummary)[names(cellByBinSummary) == 'j'] <- 'Bin'
-
-# Create a lookup table for barcode ID to barcode string
-Barcodes <- barcodes
-BarcodeIDs <- c(1:length(barcodes))
-#http://best-answer.net/easy-way-to-perform-a-lookup-in-r/
-BarcodeLookupTable <- data.frame("BarcodeID" = BarcodeIDs, "Barcode" = Barcodes);
-write.csv(BarcodeLookupTable, file = "cellBarcodes.csv", row.names = FALSE);
-
-# Update: only including the numeric barcode IDs in most files, since most people won't
-# care about the actual barcodes for most uses, and including these in every single
-# file just has the effect of inflating the file sizes. If people actually do care about
-# the barcode sequence of a cell, they'll still be able to use 'cellBarcodes.csv' to obtain it.
-## Look up the barcode string in the look up table using the barcode ID
-## column and add a new column for the barcode string
-#cellByBinSummary$Barcode <- BarcodeLookupTable[match(cellByBinSummary$BarcodeID, BarcodeLookupTable$BarcodeID), "Barcode"]
-
-# Remove the 'x' column since it is always 1 because this is a summary of the sparse matrix
-cellByBinSummary$x <- NULL
-message(sprintf("Writing cell by bin summary csv\n"))
-write.csv(cellByBinSummary, file = "cellByBin_summary.csv", row.names = FALSE);
+write.table(dimnames(x.sp@bmat)[[1]], 'barcodes.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
+write.table(dimnames(x.sp@bmat)[[2]], 'bins.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
+writeMM(x.sp@bmat, 'filtered_cell_by_bin.mtx')
 
 message(sprintf("Computing diffusion maps\n"))
 x.sp = runDiffusionMaps(
   obj=x.sp,
-  input.mat="bmat", 
+  input.mat="bmat",
   num.eigs=50
 );
 
@@ -291,7 +242,7 @@ x.sp = runDiffusionMaps(
 #head(row.covs)
 #
 #row.covs.dens = density(
-#      x = row.covs, 
+#      x = row.covs,
 #      bw = 'nrd', adjust = 1
 #);
 #
@@ -299,7 +250,7 @@ x.sp = runDiffusionMaps(
 #head(row.covs.dens)
 #
 #
-#sampling_prob = 1 / (approx(x = row.covs.dens$x, y = row.covs.dens$y, xout = row.covs)$y + .Machine$double.eps); 
+#sampling_prob = 1 / (approx(x = row.covs.dens$x, y = row.covs.dens$y, xout = row.covs)$y + .Machine$double.eps);
 #set.seed(1);
 #
 #message(sprintf("Executing step 5: nrow(x.sp):\n"))
@@ -312,12 +263,12 @@ x.sp = runDiffusionMaps(
 #
 #x.landmark.sp = runDiffusionMaps(
 #       obj= x.landmark.sp,
-#       input.mat="bmat", 
+#       input.mat="bmat",
 #       num.eigs=50
 #     );
 #
 #x.query.sp = runDiffusionMapsExtension(
-#     obj1=x.landmark.sp, 
+#     obj1=x.landmark.sp,
 #     obj2=x.query.sp,
 #     input.mat="bmat"
 #   );
@@ -424,21 +375,21 @@ plotViz(
 ##  pdf.file.name='Read_Depth_t-SNE.pdf',
 ##  obj=x.sp,
 ##  feature.value=log(x.sp@metaData[,"passed_filters"]+1,10),
-##  method="tsne", 
+##  method="tsne",
 ##  main="Read Depth t-SNE",
-##  point.size=0.2, 
-##  point.shape=19, 
+##  point.size=0.2,
+##  point.shape=19,
 ##  down.sample=10000,
 ##  quantiles=c(0.01, 0.99)
-##); 
+##);
 ##plotFeatureSingle(
 ##  pdf.file.name='FRiP_t-SNE.pdf',
 ##  obj=x.sp,
 ##  feature.value=x.sp@metaData$peak_region_fragments / x.sp@metaData$passed_filters,
-##  method="tsne", 
+##  method="tsne",
 ##  main="FRiP t-SNE",
-##  point.size=0.2, 
-##  point.shape=19, 
+##  point.size=0.2,
+##  point.shape=19,
 ##  down.sample=10000,
 ##  quantiles=c(0.01, 0.99) # remove outliers
 ##);
@@ -446,10 +397,10 @@ plotViz(
 ##  pdf.file.name='Duplicate_t-SNE.pdf',
 ##  obj=x.sp,
 ##  feature.value=x.sp@metaData$duplicate / x.sp@metaData$total,
-##  method="tsne", 
+##  method="tsne",
 ##  main="Duplicate t-SNE",
-##  point.size=0.2, 
-##  point.shape=19, 
+##  point.size=0.2,
+##  point.shape=19,
 ##  down.sample=10000,
 ##  quantiles=c(0.01, 0.99) # remove outliers
 ##);
@@ -470,7 +421,7 @@ genes_df = as(genes.gr, "data.frame")
 write.csv(genes_df, file = "GenesRanges.csv", row.names = FALSE)
 
 x.sp = createGmatFromMat(
-  obj=x.sp, 
+  obj=x.sp,
   input.mat="bmat",
   genes=genes.gr,
   do.par=TRUE,
@@ -507,7 +458,7 @@ writeMM(obj = cellByGeneData, file = "cellByGene.mtx")
 ## care about the actual barcodes for most uses, and including these in every single
 ## file just has the effect of inflating the file sizes. If people actually do care about
 ## the barcode sequence of a cell, they'll still be able to use 'cellBarcodes.csv' to obtain it.
-### Add barcodes column to cell by bin 
+### Add barcodes column to cell by bin
 ##cellByGeneSummary$Barcode <- BarcodeLookupTable[match(cellByGeneSummary$BarcodeID, BarcodeLookupTable$BarcodeID), "Barcode"]
 #
 ## Get the gene names from the sparse matrix
@@ -532,7 +483,7 @@ write.csv(geneLookupTable, file = "cellGenes.csv", row.names = FALSE);
 # contains the identified peak and .bedGraph file for visualization. To obtain
 # the most robust result, we don't recommend to perform this step for clusters
 # with cell number less than 100. In the below example, SnapATAC creates
-# atac_v1_adult_brain_fresh_5k.1_peaks.narrowPeak and 
+# atac_v1_adult_brain_fresh_5k.1_peaks.narrowPeak and
 # atac_v1_adult_brain_fresh_5k.1_treat_pileup.bdg. bdg file can be compressed
 # to bigWig file using bedGraphToBigWig for IGV or Genome Browser visulization.
 message(sprintf("Identifying peaks\n"))
@@ -559,12 +510,12 @@ clusters.sel = names(table(x.sp@cluster))[which(table(x.sp@cluster) > 200)];
 peaks.ls = mclapply(seq(clusters.sel), function(i){
   print(clusters.sel[i]);
   runMACS(
-      obj=x.sp[which(x.sp@cluster==clusters.sel[i]),], 
+      obj=x.sp[which(x.sp@cluster==clusters.sel[i]),],
       output.prefix=paste0("Peaks_", gsub(" ", "_", clusters.sel)[i]),
       path.to.snaptools="/usr/local/bin/snaptools",
       path.to.macs="/usr/local/bin/macs2",
       gsize="hs", # mm, hs, etc
-      buffer.size=500, 
+      buffer.size=500,
       num.cores=1,
       macs.options="--nomodel --shift 100 --ext 200 --qval 5e-2 -B --SPMR",
       tmp.folder=tempdir()
@@ -587,7 +538,7 @@ message(sprintf("Creating a cell by peak matrix\n"))
 peaks.df = as.data.frame(peak.gr)[,1:3];
 
 write.table(peaks.df,file = "peaks.combined.bed",append=FALSE,
-    quote= FALSE,sep="\t", eol = "\n", na = "NA", dec = ".", 
+    quote= FALSE,sep="\t", eol = "\n", na = "NA", dec = ".",
     row.names = FALSE, col.names = FALSE, qmethod = c("escape", "double"),
     fileEncoding = "")
 
