@@ -135,8 +135,11 @@ dmypy.json
 *.Rproj
 
 # Data files
-*.csv
-*.pdf
 *.bam
+*.csv
+*.mtx
+*.pdf
 *.snap
 *.snap.qc
+barcodes.txt
+bins.txt
