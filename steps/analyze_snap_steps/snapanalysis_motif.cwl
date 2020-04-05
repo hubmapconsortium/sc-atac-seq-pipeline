@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "quay.io/wshands/sc-atac-seq:latest"
+    dockerPull: "hubmap/sc-atac-seq"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
@@ -46,7 +46,7 @@ requirements:
   # Set the environment variable for the location of
   # the R environment file. In this file will be set
   # the location of the R temporary working directory
-  # to a directory on the host and not in 
+  # to a directory on the host and not in
   # the Docker container. If this is not done R
   # can run out of memory due to memory limitations
   # in the container

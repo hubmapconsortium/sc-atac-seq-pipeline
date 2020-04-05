@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "quay.io/wshands/sc-atac-seq:latest"
+    dockerPull: "hubmap/sc-atac-seq"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
@@ -59,7 +59,7 @@ outputs:
   fastq1_files:
     type: File[]
     outputBinding:
-      # This file is written by gather_sequence_files.py 
+      # This file is written by gather_sequence_files.py
       glob: "input.json"
       loadContents: true
       outputEval: |
@@ -69,7 +69,7 @@ outputs:
                     var file_array = [];
                     for (var i =0; i < bundle_array.length; i++) {
                         // The dictionary key 'input_fastq1' must match the key used
-                        // in the string template SEQUENCES_TEMPLATE in gather_sequence_files.py 
+                        // in the string template SEQUENCES_TEMPLATE in gather_sequence_files.py
                         var file = bundle_array[i].input_fastq1;
                         file_array.push(file);
                     }
@@ -79,7 +79,7 @@ outputs:
   fastq2_files:
     type: File[]
     outputBinding:
-      # This file is written by gather_sequence_files.py 
+      # This file is written by gather_sequence_files.py
       glob: "input.json"
       loadContents: true
       outputEval: |
@@ -89,7 +89,7 @@ outputs:
                     var file_array = [];
                     for (var i =0; i < bundle_array.length; i++) {
                         // The dictionary key 'input_fastq2' must match the key used
-                        // in the string template SEQUENCES_TEMPLATE in gather_sequence_files.py 
+                        // in the string template SEQUENCES_TEMPLATE in gather_sequence_files.py
                         var file = bundle_array[i].input_fastq2;
                         file_array.push(file);
                     }
@@ -99,7 +99,7 @@ outputs:
   barcode_fastq_files:
     type: File[]
     outputBinding:
-      # This file is written by gather_sequence_files.py 
+      # This file is written by gather_sequence_files.py
       glob: "input.json"
       loadContents: true
       outputEval: |
@@ -109,7 +109,7 @@ outputs:
                     var file_array = [];
                     for (var i =0; i < bundle_array.length; i++) {i
                         // The dictionary key 'input_barcode_fastq' must match the key used
-                        // in the string template SEQUENCES_TEMPLATE in gather_sequence_files.py 
+                        // in the string template SEQUENCES_TEMPLATE in gather_sequence_files.py
                         var file = bundle_array[i].input_barcode_fastq;
                         file_array.push(file);
                     }
