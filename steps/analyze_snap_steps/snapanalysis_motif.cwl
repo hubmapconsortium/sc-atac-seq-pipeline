@@ -61,12 +61,19 @@ requirements:
   #    TMPDIR  : $(inputs.tmpdir)
 
 inputs:
-  snap_file:
+  snap_rds:
     type: File
     inputBinding:
       position: 1
+      prefix: --snap_rds
+    doc: The snap object RDS file.
+
+  snap_file:
+    type: File
+    inputBinding:
+      position: 2
       prefix: --snap_file
-    doc: The RDS file.
+    doc: The snap file.
 
   #tmpdir:
   #  type: string?

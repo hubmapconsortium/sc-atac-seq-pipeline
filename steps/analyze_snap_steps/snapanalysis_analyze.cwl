@@ -112,6 +112,11 @@ inputs:
 
 
 outputs:
+  snap_rds:
+    type: File
+    outputBinding:
+      glob: "peaks_snap.rds"
+
   peaks_combined_bed:
     type: File
     outputBinding:

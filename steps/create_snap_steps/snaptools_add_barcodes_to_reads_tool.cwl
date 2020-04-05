@@ -60,7 +60,7 @@ inputs:
     doc: The second paired end fastq file.
 
   input_barcode_fastq:
-    type: File
+    type: File?
     inputBinding:
       position: 3
       prefix: --input-barcode-fastq

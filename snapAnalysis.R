@@ -47,14 +47,13 @@ x.sp = createSnap(
   num.cores=6
 );
 
-
 if (!is.null(opt$selected_barcodes)) {
   message(sprintf("Reading selected barcode file\n"));
   barcodes.sel <- readRDS(opt$selected_barcodes);
   x.sp = x.sp[which(x.sp@barcode %in% barcodes.sel$barcode),];
   x.sp@metaData = barcodes.sel[x.sp@barcode,];
 
-  ## Step 2. Add cell-by-bin matrix
+  ## Add cell-by-bin matrix
   ##showBinSizes(opt$input_snap);
   message(sprintf("Add cell-by-bin-matrix\n"))
   x.sp = addBmatToSnap(x.sp, bin.size=5000, num.cores=1);
@@ -90,10 +89,10 @@ if (!is.null(opt$selected_barcodes)) {
   dev.off()
 
   # From Matt: Don't select cutoff 2/24/2020
-  # choose the cutoff based on the plot
+  # Choose the cutoff based on the plot
   # however we need column idx for ChromVAR motif analysis... 
-  idx = which(promoter_ratio > 0.2 & promoter_ratio < 0.8 & log_cov > 3);
-  x.sp = x.sp[idx,]
+  #idx = which(promoter_ratio > 0.2 & promoter_ratio < 0.8 & log_cov > 3);
+  #x.sp = x.sp[idx,]
 
 } else {
 
@@ -159,7 +158,7 @@ x.sp = addBmatToSnap(
 calBmatCor(x.sp)
 
 
-# Step 3. Matrix binarization
+# Matrix binarization
 # We will convert the cell-by-bin count matrix to a binary matrix. Some items
 # in the count matrix have abnormally high coverage perhaps due to the alignment
 # errors. Therefore, we next remove 0.1% items of the highest coverage in the
@@ -189,17 +188,14 @@ hist(
 );
 dev.off()
 
-#Step 4. Bin filtering
-#First, we filter out any bins overlapping with the ENCODE blacklist to prevent from potential artifacts.
+# Bin filtering
+# Filter out any bins overlapping with the ENCODE blacklist to prevent from potential artifacts.
 message(sprintf("Doing bin filtering\n"))
 
-#system("wget http://mitra.stanford.edu/kundaje/akundaje/release/blacklists/mm10-mouse/mm10.blacklist.bed.gz");
 library(GenomicRanges);
-#black_list = read.table("mm10.blacklist.bed.gz");
 # Read the black list table and ignore missing columns
 # NOTE: ignoring missing columns could cause a problem
 # if by some chance the chr region start or end was missing from the BED file
-#black_list = read.table(opt$encode_blacklist, colClasses = c(rep("string", 1),rep("integer", 2), rep("NULL", 3)), fill = TRUE);
 black_list = read.table(opt$encode_blacklist, header=FALSE, row.names=NULL, fill = TRUE);
 
 black_list.gr = GRanges(
@@ -211,10 +207,23 @@ black_list.gr = GRanges(
 #if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]};
 
 # Second, we remove unwanted chromosomes.
-message(sprintf("Removing unwanted chromosomes\n"))
-chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM", seqlevels(x.sp@feature))];
-idy = grep(paste(chr.exclude, collapse="|"), x.sp@feature);
+message(sprintf("Removing unwanted random and M chromosomes\n"))
+chrrandomM.exclude = seqlevels(x.sp@feature)[grep("random|chrM", seqlevels(x.sp@feature))];
+chrrandomM.exclude
+idy = grep(paste(chrrandomM.exclude, collapse="|"), x.sp@feature);
 if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]};
+
+#message(sprintf("Removing unwanted decoy chromosomes\n"))
+#chrdecoy.exclude = seqlevels(x.sp@feature)[grep("decoy", seqlevels(x.sp@feature))];
+#chrdecoy.exclude
+#idydecoy = grep(paste(chrdecoy.exclude, collapse="|"), x.sp@feature);
+#if(length(idydecoy) > 0){x.sp = x.sp[,-idydecoy, mat="bmat"]};
+#
+#message(sprintf("Removing unwanted Unknown chromosomes\n"))
+#chrUn.exclude = seqlevels(x.sp@feature)[grep("chrUn", seqlevels(x.sp@feature))];
+#chrUn.exclude
+#idyUnknown = grep(paste(chrUn.exclude, collapse="|"), x.sp@feature);
+#if(length(idyUnknown) > 0){x.sp = x.sp[,-idyUnknown, mat="bmat"]};
 
 # from KC20_Test.Rmd Dinh's script
 # however unwanted chromosomes and black listed items are not actually
@@ -225,7 +234,7 @@ if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]};
 #idy = unique(c(idy1, idy2))
 
 
-# Step 5. Dimensionality reduction
+# Dimensionality reduction
 # We compute diffusion maps for dimentionality reduction.
 
 # Remove empty rows from bmat
@@ -321,12 +330,12 @@ x.sp = runDiffusionMaps(
 #rm(x.landmark.sp, x.query.sp); # free memory
 #
 
-# Step 6. Determine significant components
+# Determine significant components
 # We next determine the number of reduced dimensions to include for downstream
 # analysis. We use an ad hoc method by simply looking at a pairwise plot and
 # select the number of dimensions in which the scatter plot starts looking like
 #a blob. In the below example, we choose the first 20 dimensions.
-message(sprintf("Creating eigen plots\n"))
+#message(sprintf("Creating eigen plots\n"))
 plotDimReductPW(
   obj=x.sp,
   eigs.dims=1:50,
@@ -341,7 +350,7 @@ plotDimReductPW(
 );
 
 
-# Step 7. Graph-based clustering
+# Graph-based clustering
 # Using the selected significant dimensions, we next construct a K Nearest Neighbor
 # (KNN) Graph (k=15). Each cell is a node and the k-nearest neighbors of each cell
 # are identified according to the Euclidian distance and edges are draw between
@@ -545,8 +554,6 @@ runMACS(
   tmp.folder=tempdir()
   );
 
-# Next, we provide a short script that performs this step for all clusters.
-
 # call peaks for all cluster with more than 100 cells
 clusters.sel = names(table(x.sp@cluster))[which(table(x.sp@cluster) > 200)];
 peaks.ls = mclapply(seq(clusters.sel), function(i){
@@ -568,19 +575,13 @@ peaks.ls = mclapply(seq(clusters.sel), function(i){
 peaks.names = system("ls | grep narrowPeak", intern=TRUE);
 peak.gr.ls = lapply(peaks.names, function(x){
   peak.df = read.table(x)
-
-  # Remove the 'b' from b'chr1' which could be a result of using pthon3
-  # for SnapTools
-  # TODO remove this when the issue with SnapTools and python is fixed
-  peak.df[,1] <- gsub("b'chr", "'chr", peak.df[,1])
-
   GRanges(peak.df[,1], IRanges(peak.df[,2], peak.df[,3]))
 })
 peak.gr = reduce(Reduce(c, peak.gr.ls));
 peak.gr
 
 message(sprintf("Creating a cell by peak matrix\n"))
-# Step 12. Create a cell-by-peak matrix
+# Create a cell-by-peak matrix
 # Using merged peak list as a reference, we next create a cell-by-peak matrix using the original snap file.
 
 peaks.df = as.data.frame(peak.gr)[,1:3];
@@ -592,3 +593,6 @@ write.table(peaks.df,file = "peaks.combined.bed",append=FALSE,
 
 
 write.csv(peaks.df, file = "peaksAllCells.csv", row.names = FALSE);
+
+saveRDS(x.sp, file="peaks_snap.rds");
+
