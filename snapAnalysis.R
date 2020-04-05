@@ -80,7 +80,7 @@ if (!is.null(opt$selected_barcodes)) {
 
   ov = findOverlaps(x.sp@feature, promoter.gr);
 
-  # find promoter overlapping bins 
+  # find promoter overlapping bins
   idy = queryHits(ov);
   log_cov = log10(SnapATAC::rowSums(x.sp, mat="bmat")+1)
   promoter_ratio = Matrix::rowSums(x.sp@bmat[,idy]) / Matrix::rowSums(x.sp@bmat);
@@ -91,7 +91,7 @@ if (!is.null(opt$selected_barcodes)) {
 
   # From Matt: Don't select cutoff 2/24/2020
   # choose the cutoff based on the plot
-  # however we need column idx for ChromVAR motif analysis... 
+  # however we need column idx for ChromVAR motif analysis...
   idx = which(promoter_ratio > 0.2 & promoter_ratio < 0.8 & log_cov > 3);
   x.sp = x.sp[idx,]
 
@@ -109,8 +109,8 @@ if (!is.null(opt$selected_barcodes)) {
 
   # load the cell-by-bin matrix
   x.sp = addBmatToSnap(
-	obj=x.sp, 
-	bin.size=5000, 
+	obj=x.sp,
+	bin.size=5000,
 	num.cores=8
   )
   calBmatCor(x.sp)
@@ -120,14 +120,14 @@ if (!is.null(opt$selected_barcodes)) {
   ov = findOverlaps(x.sp@feature, promoter.gr);
   idy = queryHits(ov);
   promoter_ratio = SnapATAC::rowSums(x.sp[,idy, mat="bmat"], mat="bmat") / SnapATAC::rowSums(x.sp, mat="bmat");
- 
-  pdf(file="PromotorRatioLogPlot.pdf") 
+
+  pdf(file="PromotorRatioLogPlot.pdf")
   plot(
-    x=log(SnapATAC::rowSums(x.sp, mat="bmat") + 1,10), 
-    y=promoter_ratio, 
-    cex=0.5, 
-    col="grey", 
-    xlab="log(count)", 
+    x=log(SnapATAC::rowSums(x.sp, mat="bmat") + 1,10),
+    y=promoter_ratio,
+    cex=0.5,
+    col="grey",
+    xlab="log(count)",
     ylab="FIP Ratio (promoter)",
     ylim=c(0, 1)
   )
@@ -152,8 +152,8 @@ x.sp = filterCells(
 plotBarcode(x.sp, pdf.file.name = "BarcodeQualityControlDistributionAfter.pdf", col="grey", border="grey")
 
 x.sp = addBmatToSnap(
-    obj=x.sp, 
-    bin.size=5000, 
+    obj=x.sp,
+    bin.size=5000,
     num.cores=8
 )
 calBmatCor(x.sp)
@@ -203,7 +203,7 @@ library(GenomicRanges);
 black_list = read.table(opt$encode_blacklist, header=FALSE, row.names=NULL, fill = TRUE);
 
 black_list.gr = GRanges(
-  black_list[,1], 
+  black_list[,1],
   IRanges(black_list[,2], black_list[,3])
 );
 
@@ -218,7 +218,7 @@ if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]};
 
 # from KC20_Test.Rmd Dinh's script
 # however unwanted chromosomes and black listed items are not actually
-# removed in her script. 
+# removed in her script.
 # TODO: Last word is that they should be removed from the BAM file, not sure about unwanted chromosomes
 #idy1 = queryHits(findOverlaps(x.sp@feature, black_list.gr))
 #idy2 = grep("chrM|random", x.sp@feature)
@@ -272,7 +272,7 @@ write.csv(cellByBinSummary, file = "cellByBin_summary.csv", row.names = FALSE);
 message(sprintf("Computing diffusion maps\n"))
 x.sp = runDiffusionMaps(
   obj=x.sp,
-  input.mat="bmat", 
+  input.mat="bmat",
   num.eigs=50
 );
 
@@ -282,7 +282,7 @@ x.sp = runDiffusionMaps(
 #head(row.covs)
 #
 #row.covs.dens = density(
-#      x = row.covs, 
+#      x = row.covs,
 #      bw = 'nrd', adjust = 1
 #);
 #
@@ -290,7 +290,7 @@ x.sp = runDiffusionMaps(
 #head(row.covs.dens)
 #
 #
-#sampling_prob = 1 / (approx(x = row.covs.dens$x, y = row.covs.dens$y, xout = row.covs)$y + .Machine$double.eps); 
+#sampling_prob = 1 / (approx(x = row.covs.dens$x, y = row.covs.dens$y, xout = row.covs)$y + .Machine$double.eps);
 #set.seed(1);
 #
 #message(sprintf("Executing step 5: nrow(x.sp):\n"))
@@ -303,12 +303,12 @@ x.sp = runDiffusionMaps(
 #
 #x.landmark.sp = runDiffusionMaps(
 #       obj= x.landmark.sp,
-#       input.mat="bmat", 
+#       input.mat="bmat",
 #       num.eigs=50
 #     );
 #
 #x.query.sp = runDiffusionMapsExtension(
-#     obj1=x.landmark.sp, 
+#     obj1=x.landmark.sp,
 #     obj2=x.query.sp,
 #     input.mat="bmat"
 #   );
@@ -415,21 +415,21 @@ plotViz(
 ##  pdf.file.name='Read_Depth_t-SNE.pdf',
 ##  obj=x.sp,
 ##  feature.value=log(x.sp@metaData[,"passed_filters"]+1,10),
-##  method="tsne", 
+##  method="tsne",
 ##  main="Read Depth t-SNE",
-##  point.size=0.2, 
-##  point.shape=19, 
+##  point.size=0.2,
+##  point.shape=19,
 ##  down.sample=10000,
 ##  quantiles=c(0.01, 0.99)
-##); 
+##);
 ##plotFeatureSingle(
 ##  pdf.file.name='FRiP_t-SNE.pdf',
 ##  obj=x.sp,
 ##  feature.value=x.sp@metaData$peak_region_fragments / x.sp@metaData$passed_filters,
-##  method="tsne", 
+##  method="tsne",
 ##  main="FRiP t-SNE",
-##  point.size=0.2, 
-##  point.shape=19, 
+##  point.size=0.2,
+##  point.shape=19,
 ##  down.sample=10000,
 ##  quantiles=c(0.01, 0.99) # remove outliers
 ##);
@@ -437,10 +437,10 @@ plotViz(
 ##  pdf.file.name='Duplicate_t-SNE.pdf',
 ##  obj=x.sp,
 ##  feature.value=x.sp@metaData$duplicate / x.sp@metaData$total,
-##  method="tsne", 
+##  method="tsne",
 ##  main="Duplicate t-SNE",
-##  point.size=0.2, 
-##  point.shape=19, 
+##  point.size=0.2,
+##  point.shape=19,
 ##  down.sample=10000,
 ##  quantiles=c(0.01, 0.99) # remove outliers
 ##);
@@ -461,7 +461,7 @@ genes_df = as(genes.gr, "data.frame")
 write.csv(genes_df, file = "GenesRanges.csv", row.names = FALSE)
 
 x.sp = createGmatFromMat(
-  obj=x.sp, 
+  obj=x.sp,
   input.mat="bmat",
   genes=genes.gr,
   do.par=TRUE,
@@ -498,7 +498,7 @@ writeMM(obj = cellByGeneData, file = "cellByGene.mtx")
 ## care about the actual barcodes for most uses, and including these in every single
 ## file just has the effect of inflating the file sizes. If people actually do care about
 ## the barcode sequence of a cell, they'll still be able to use 'cellBarcodes.csv' to obtain it.
-### Add barcodes column to cell by bin 
+### Add barcodes column to cell by bin
 ##cellByGeneSummary$Barcode <- BarcodeLookupTable[match(cellByGeneSummary$BarcodeID, BarcodeLookupTable$BarcodeID), "Barcode"]
 #
 ## Get the gene names from the sparse matrix
@@ -523,7 +523,7 @@ write.csv(geneLookupTable, file = "cellGenes.csv", row.names = FALSE);
 # contains the identified peak and .bedGraph file for visualization. To obtain
 # the most robust result, we don't recommend to perform this step for clusters
 # with cell number less than 100. In the below example, SnapATAC creates
-# atac_v1_adult_brain_fresh_5k.1_peaks.narrowPeak and 
+# atac_v1_adult_brain_fresh_5k.1_peaks.narrowPeak and
 # atac_v1_adult_brain_fresh_5k.1_treat_pileup.bdg. bdg file can be compressed
 # to bigWig file using bedGraphToBigWig for IGV or Genome Browser visulization.
 message(sprintf("Identifying peaks\n"))
@@ -552,12 +552,12 @@ clusters.sel = names(table(x.sp@cluster))[which(table(x.sp@cluster) > 200)];
 peaks.ls = mclapply(seq(clusters.sel), function(i){
   print(clusters.sel[i]);
   runMACS(
-      obj=x.sp[which(x.sp@cluster==clusters.sel[i]),], 
+      obj=x.sp[which(x.sp@cluster==clusters.sel[i]),],
       output.prefix=paste0("Peaks_", gsub(" ", "_", clusters.sel)[i]),
       path.to.snaptools="/usr/local/bin/snaptools",
       path.to.macs="/usr/local/bin/macs2",
       gsize="hs", # mm, hs, etc
-      buffer.size=500, 
+      buffer.size=500,
       num.cores=1,
       macs.options="--nomodel --shift 100 --ext 200 --qval 5e-2 -B --SPMR",
       tmp.folder=tempdir()
@@ -586,7 +586,7 @@ message(sprintf("Creating a cell by peak matrix\n"))
 peaks.df = as.data.frame(peak.gr)[,1:3];
 
 write.table(peaks.df,file = "peaks.combined.bed",append=FALSE,
-    quote= FALSE,sep="\t", eol = "\n", na = "NA", dec = ".", 
+    quote= FALSE,sep="\t", eol = "\n", na = "NA", dec = ".",
     row.names = FALSE, col.names = FALSE, qmethod = c("escape", "double"),
     fileEncoding = "")
 
