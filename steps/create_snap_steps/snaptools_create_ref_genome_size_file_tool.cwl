@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "quay.io/wshands/sc-atac-seq:latest"
+    dockerPull: "hubmap/sc-atac-seq"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024

@@ -14,6 +14,8 @@ RUN apt-get update \
     libcurl4-openssl-dev \
     libgsl-dev \
     liblzma-dev \
+    libncurses-dev \
+    libpng-dev \
     libssl-dev \
     libxml2-dev \
     python-dev \
@@ -39,7 +41,7 @@ RUN python2 -m pip install "Cython==0.29.15" --install-option="--no-cython-compi
  && rm -rf /root/.cache/pip /opt/requirements_py2.txt /opt/requirements_py3.txt
 
 COPY install_R_packages.R /opt
-RUN R CMD BATCH /opt/install_R_packages.R \
+RUN Rscript /opt/install_R_packages.R \
  && rm /opt/install_R_packages.R
 
 WORKDIR /opt

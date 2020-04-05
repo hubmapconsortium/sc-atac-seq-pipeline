@@ -132,3 +132,14 @@ dmypy.json
 .idea
 # RStudio project
 .Rproj.user
+*.Rproj
+
+# Data files
+*.bam
+*.csv
+*.mtx
+*.pdf
+*.snap
+*.snap.qc
+barcodes.txt
+bins.txt
