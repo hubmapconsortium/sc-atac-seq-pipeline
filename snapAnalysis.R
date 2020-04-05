@@ -82,7 +82,7 @@ if (!is.null(opt$selected_barcodes)) {
 
   # From Matt: Don't select cutoff 2/24/2020
   # Choose the cutoff based on the plot
-  # however we need column idx for ChromVAR motif analysis... 
+  # however we need column idx for ChromVAR motif analysis...
   #idx = which(promoter_ratio > 0.2 & promoter_ratio < 0.8 & log_cov > 3);
   #x.sp = x.sp[idx,]
 
@@ -322,7 +322,7 @@ x.sp@metaData$cluster = x.sp@cluster;
 
 cellClusterAssignment <- as.data.frame(x.sp@cluster)
 # Add a barcode column
-cellClusterAssignment$BarcodeID <- BarcodeIDs
+cellClusterAssignment$BarcodeID <- dimnames(x.sp@bmat)[[1]]
 
 # Update: only including the numeric barcode IDs in most files, since most people won't
 # care about the actual barcodes for most uses, and including these in every single
