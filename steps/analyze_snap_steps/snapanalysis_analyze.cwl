@@ -150,6 +150,13 @@ outputs:
     outputBinding:
       glob: "*.rds"
 
+  TXT_files:
+    type:
+      type: array
+      items: File
+    outputBinding:
+      glob: "*.txt"
+
   MTX_files:
     type:
       type: array
