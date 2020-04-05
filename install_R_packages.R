@@ -6,7 +6,8 @@ install.packages(
 		'plot3D',
 		'optparse',
 		'BiocManager'
-	)
+	),
+	Ncpus=6
 )
 # Install SnapATAC
 library(devtools)
@@ -31,5 +32,6 @@ BiocManager::install(
 		'SummarizedExperiment',
 		'chromVAR'
 	),
-	ask=FALSE
+	ask=FALSE,
+	Ncpus=6
 )
