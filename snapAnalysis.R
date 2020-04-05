@@ -216,38 +216,7 @@ if(length(idempty) > 0){
 
 write.table(dimnames(x.sp@bmat)[[1]], 'barcodes.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
 write.table(dimnames(x.sp@bmat)[[2]], 'bins.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
-writeMM(x.sp@bmat, 'cell_by_bin.mtx')
-
-message(sprintf("Writing cell barcodes csv\n"))
-cellByBinData <- x.sp@bmat;
-barcodes <- x.sp@barcode;
-
-cellByBinSummary <- summary(cellByBinData);
-
-# Rename the summary column names i,j
-#https://stackoverflow.com/questions/7531868/how-to-rename-a-single-column-in-a-data-frame
-names(cellByBinSummary)[names(cellByBinSummary) == 'i'] <- 'BarcodeID'
-names(cellByBinSummary)[names(cellByBinSummary) == 'j'] <- 'Bin'
-
-# Create a lookup table for barcode ID to barcode string
-Barcodes <- barcodes
-BarcodeIDs <- c(1:length(barcodes))
-#http://best-answer.net/easy-way-to-perform-a-lookup-in-r/
-BarcodeLookupTable <- data.frame("BarcodeID" = BarcodeIDs, "Barcode" = Barcodes);
-write.csv(BarcodeLookupTable, file = "cellBarcodes.csv", row.names = FALSE);
-
-# Update: only including the numeric barcode IDs in most files, since most people won't
-# care about the actual barcodes for most uses, and including these in every single
-# file just has the effect of inflating the file sizes. If people actually do care about
-# the barcode sequence of a cell, they'll still be able to use 'cellBarcodes.csv' to obtain it.
-## Look up the barcode string in the look up table using the barcode ID
-## column and add a new column for the barcode string
-#cellByBinSummary$Barcode <- BarcodeLookupTable[match(cellByBinSummary$BarcodeID, BarcodeLookupTable$BarcodeID), "Barcode"]
-
-# Remove the 'x' column since it is always 1 because this is a summary of the sparse matrix
-cellByBinSummary$x <- NULL
-message(sprintf("Writing cell by bin summary csv\n"))
-write.csv(cellByBinSummary, file = "cellByBin_summary.csv", row.names = FALSE);
+writeMM(x.sp@bmat, 'filtered_cell_by_bin.mtx')
 
 message(sprintf("Computing diffusion maps\n"))
 x.sp = runDiffusionMaps(
