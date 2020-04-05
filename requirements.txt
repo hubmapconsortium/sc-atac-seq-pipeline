@@ -1,3 +1,0 @@
-MACS2==2.2.6
-html5lib==1.0.1
-snaptools==1.4.8
