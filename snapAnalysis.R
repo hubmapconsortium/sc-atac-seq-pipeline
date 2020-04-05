@@ -135,14 +135,6 @@ x.sp = filterCells(
 )
 plotBarcode(x.sp, pdf.file.name = "BarcodeQualityControlDistributionAfter.pdf", col="grey", border="grey")
 
-x.sp = addBmatToSnap(
-    obj=x.sp,
-    bin.size=5000,
-    num.cores=8
-)
-calBmatCor(x.sp)
-
-
 # Step 3. Matrix binarization
 # We will convert the cell-by-bin count matrix to a binary matrix. Some items
 # in the count matrix have abnormally high coverage perhaps due to the alignment
