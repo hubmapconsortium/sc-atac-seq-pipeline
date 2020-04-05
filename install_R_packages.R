@@ -30,7 +30,8 @@ BiocManager::install(
 		'dplyr',
 		'motifmatchr',
 		'SummarizedExperiment',
-		'chromVAR'
+		'chromVAR',
+		'JASPAR2016'
 	),
 	ask=FALSE,
 	Ncpus=6
