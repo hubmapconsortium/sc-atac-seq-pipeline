@@ -33,7 +33,6 @@ inputs:
   preferred_barcodes: File?
   promoters: File?
   input_snap: File
-  session_name: string?
 
 outputs:
   analysis_CSV_files:
