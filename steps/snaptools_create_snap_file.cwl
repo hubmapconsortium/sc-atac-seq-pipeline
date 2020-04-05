@@ -37,6 +37,7 @@ inputs:
   input_barcode_fastq: File?
   blacklist_bed: File?
   tmp_folder: string?
+  alignment_threads: int?
 
 outputs:
   bam_file:
@@ -95,6 +96,8 @@ steps:
       input_fastq1: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq1
       input_fastq2: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq2
       tmp_folder: tmp_folder
+      num_threads: alignment_threads
+
     out: [paired_end_bam]
 
   snaptools_remove_blacklist:
@@ -117,5 +120,3 @@ steps:
     in:
       snap_file: snaptools_preprocess_reads/snap_file
     out: [snap_file_w_cell_by_bin]
-
-
