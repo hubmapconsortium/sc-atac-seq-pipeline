@@ -3,30 +3,25 @@ library("optparse")
 
 option_list = list(
   make_option(c("-b", "--selected_barcodes"), type="character", default=NULL,
-              help="Selected barcodes", metavar="character"),
+              help="Selected barcodes"),
   make_option(c("-s", "--input_snap"), type="character", default=NULL,
-              help="SNAP file name", metavar="character"),
+              help="SNAP file name"),
   make_option(c("-e", "--encode_blacklist"), type="character", default=NULL,
-              help="ENCODE blacklist BED.GZ file", metavar="character"),
+              help="ENCODE blacklist BED.GZ file"),
   make_option(c("-g", "--gene_track"), type="character", default=NULL,
-              help="Gene track BED file", metavar="character"),
+              help="Gene track BED file"),
   make_option(c("-a", "--gene_annotation"), type="character", default=NULL,
-              help="Gene annotation GTF file", metavar="character"),
+              help="Gene annotation GTF file"),
   make_option(c("-p", "--promoters"), type="character", default=NULL,
-              help="Promoters BED file", metavar="character")
+              help="Promoters BED file")
+)
 
-
-  # ,make_option(c("-r", "--tmpdir"), type="character", default=NULL,
-  #            help="Temporary directory path", metavar="character")
-
-  );
-
-opt_parser = OptionParser(option_list=option_list);
-opt = parse_args(opt_parser);
+opt_parser = OptionParser(option_list=option_list)
+opt = parse_args(opt_parser)
 
 if (is.null(opt$input_snap)){
   print_help(opt_parser)
-  stop("--inputsnap argument must be supplied (input file).n", call.=FALSE)
+  stop("--input_snap argument must be supplied (input file).", call.=FALSE)
 }
 
 mytmpdir <- Sys.getenv("TMP")
