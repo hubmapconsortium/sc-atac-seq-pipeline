@@ -86,7 +86,7 @@ inputs:
     inputBinding:
       position: 5
       prefix: --path-to-aligner
-    default: "/tools"
+    default: "/usr/local/bin"
     doc: The file system path to the aligner.
 
   aligner_options:
