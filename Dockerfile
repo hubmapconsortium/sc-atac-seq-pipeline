@@ -66,6 +66,8 @@ RUN R -e "BiocManager::install(c('BSgenome.Hsapiens.UCSC.hg38', 'rtracklayer', '
 # Needed to install chromVAR
 RUN R -e "BiocManager::install(c('motifmatchr'))"
 RUN R -e "BiocManager::install(c('SummarizedExperiment'))"
+# Needed to run chromVAR
+RUN R -e "BiocManager::install(c('JASPAR2016'))"
 RUN R -e "BiocManager::install(c('chromVAR'))"
 
 RUN pip install html5lib
@@ -106,7 +108,6 @@ RUN pip install 'snaptools==1.4.8'
 # numpy needed for MACS2
 RUN pip3 install numpy
 RUN pip3 install 'MACS2==2.2.6'
-
 
 COPY create_genome_size_file.sh /tools/
 COPY create_reference_genome_index.sh /tools/
