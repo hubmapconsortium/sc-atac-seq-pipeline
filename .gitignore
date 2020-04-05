@@ -136,10 +136,14 @@ dmypy.json
 
 # Data files
 *.bam
+*.bed
 *.csv
+*.html
 *.mtx
 *.pdf
+*.rds
 *.snap
 *.snap.qc
+*.zip
 barcodes.txt
 bins.txt
