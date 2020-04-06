@@ -115,7 +115,7 @@ inputs:
     inputBinding:
       position: 9
       prefix: --num-threads
-    default: "8"
+    default: 8
     doc: The number of threads to use.
 
   if_sort:
