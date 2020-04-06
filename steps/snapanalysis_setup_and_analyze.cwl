@@ -94,7 +94,7 @@ steps:
       gene_annotation: gene_annotation
       promoters: promoters
     out:
-      [snap_rds, peaks_combined_bed, CSV_files, BED_files, PDF_files, RDS_objects, MTX_files]
+      [snap_rds, peaks_combined_bed, CSV_files, BED_files, PDF_files, RDS_objects, TXT_files, MTX_files]
 
   snapanalysis_add_pmat_tool:
     run: analyze_snap_steps/snapanalysis_add_pmat_tool.cwl
