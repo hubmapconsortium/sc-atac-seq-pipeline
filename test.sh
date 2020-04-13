@@ -8,4 +8,4 @@ die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
 start travis_test
 echo "hello world"
-stop travis_test
+end travis_test
