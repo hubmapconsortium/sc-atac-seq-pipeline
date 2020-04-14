@@ -22,7 +22,7 @@ set -o xtrace
    #set
 
 
-   cwltool --debug --timestamps --target analysis_TXT_files $CWLTOOL_TMPDIR_PREFIX $CWLTOOL_TMP_OUTDIR_PREFIX  ../steps/create_snap_and_analyze.cwl create_snap_and_analyze.json
+   cwltool --debug --timestamps --target analysis_TXT_files $CWLTOOL_TMPDIR_PREFIX $CWLTOOL_TMP_OUTDIR_PREFIX  ../create_snap_and_analyze.cwl create_snap_and_analyze.json
 
 
 
