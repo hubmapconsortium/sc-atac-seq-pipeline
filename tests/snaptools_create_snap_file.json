@@ -1,0 +1,22 @@
+{
+  "input_reference_genome": {
+        "class": "File",
+        "path": "https://storage.googleapis.com/sc-atac-seq-pipeline-testing/Homo_sapiens_assembly38.fasta"
+  },
+  "input_fastq1": {
+        "class": "File",
+        "path": "https://storage.googleapis.com/sc-atac-seq-pipeline-testing/BUKMAP_20190529I_1000000__R1.fastq"
+  },
+  "input_fastq2": {
+        "class": "File",
+        "path": "https://storage.googleapis.com/sc-atac-seq-pipeline-testing/BUKMAP_20190529I_1000000__R3.fastq"
+  },
+  "input_barcode_fastq":{
+         "class": "File",
+         "path": "https://storage.googleapis.com/sc-atac-seq-pipeline-testing/BUKMAP_20190529I_1000000__R2.fastq"
+  },
+  "reference_genome_index": {
+        "class": "File",
+        "path": "https://storage.googleapis.com/sc-atac-seq-pipeline-testing/hg38_index.tar.gz"
+  }
+}
