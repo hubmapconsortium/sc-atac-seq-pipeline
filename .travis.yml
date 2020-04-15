@@ -30,4 +30,4 @@ script:
      # Have Travis CI wait for a set time even if the workflows do not provide
      # output for a number seconds
      #travis_wait 55 ./$TEST_SUITE
-     .run_sc_atac_seq_tests.sh
+     ./run_sc_atac_seq_tests.sh
