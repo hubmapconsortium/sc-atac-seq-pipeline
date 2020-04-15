@@ -1,7 +1,33 @@
+services:
+   - docker
+env:
+    global:
+        # These environment variables are set up for all the parallel jobs to use
+        # - wget https://github.com/broadinstitute/cromwell/releases/download/34/cromwell-34.jar  --directory-prefix=$TRAVIS_BUILD_DIR/tests
+        matrix:
+            # These environment variables specify that these tests will run in parallel
+            - TEST_SUITE=run_sc_atac_seq_tests.sh
+            #      - TEST_SUITE=test_aligner_WDL_checker.sh
+
 language: python
 python:
   - "3.6"
 install:
   - pip install -r requirements_host.txt
 script:
-  - ./test.sh
+ #Execute each line separately using the literal style block scalar for yaml
+ # http://yaml.org/spec/1.2/spec.html#id2795688
+  - |
+     .test.sh     
+     cwltool --version
+     pwd
+     ls -al
+     df -h
+     sudo du -hsx ./* | sort -n | head -100
+     cd $TRAVIS_BUILD_DIR/tests/
+     pwd
+     ls -al
+     # Have Travis CI wait for a set time even if the workflows do not provide
+     # output for a number seconds
+     travis_wait 55 ./$TEST_SUITE
+
