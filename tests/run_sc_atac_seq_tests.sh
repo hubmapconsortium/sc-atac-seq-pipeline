@@ -40,6 +40,7 @@ shift $((OPTIND -1))
 ## cwltool writes files downloaded using http or https to the directory specified
 ## by the TMPDIR env var 
 #https://unix.stackexchange.com/questions/122845/using-a-b-for-variable-assignment-in-scripts
+CWLTOOL_TMPDIR="${CWLTOOL_TMPDIR:-/tmp}"
 TMPDIR="${TMPDIR:-$CWLTOOL_TMPDIR}"
 CWLTOOL_TMPDIR_PREFIX="${CWLTOOL_TMPDIR_PREFIX:-}"
 CWLTOOL_TMP_OUTDIR_PREFIX="${CWLTOOL_TMP_OUTDIR_PREFIX:-}"
