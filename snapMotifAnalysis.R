@@ -4,8 +4,7 @@ library(optparse)
 library(chromVAR)
 library(motifmatchr)
 library(SummarizedExperiment)
-library(BSgenome.Hsapiens.UCSC.hg38)
-
+library(BSgenome.Hsapiens.NCBI.GRCh38)
 
 option_list = list(
   make_option(
@@ -60,10 +59,15 @@ x.sp = makeBinary(x.sp, mat="pmat")
 
 # SnapATAC also incorporates chromVAR (Schep et al) for motif variability analysis.
 
+genome_seq_names = names(BSgenome.Hsapiens.NCBI.GRCh38@single_sequences)
+names_without_chr = grep('^H', genome_seq_names, perl=TRUE, invert=TRUE)
+genome_seq_names[names_without_chr] = paste('chr', genome_seq_names[names_without_chr], sep='')
+BSgenome.Hsapiens.NCBI.GRCh38@single_sequences@objnames = genome_seq_names
+
 x.sp@mmat = runChromVAR(
     obj=x.sp,
     input.mat="pmat",
-    genome=BSgenome.Hsapiens.UCSC.hg38,
+    genome=BSgenome.Hsapiens.NCBI.GRCh38,
     min.count=10,
     species="Homo sapiens"
 )
