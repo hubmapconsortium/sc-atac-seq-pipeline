@@ -62,7 +62,11 @@ x.sp = makeBinary(x.sp, mat="pmat")
 genome_seq_names = names(BSgenome.Hsapiens.NCBI.GRCh38@single_sequences)
 names_without_chr = grep('^H', genome_seq_names, perl=TRUE, invert=TRUE)
 genome_seq_names[names_without_chr] = paste('chr', genome_seq_names[names_without_chr], sep='')
+named_genome_seq_names = genome_seq_names
+names(named_genome_seq_names) = genome_seq_names
+BSgenome.Hsapiens.NCBI.GRCh38@seqinfo@seqnames = genome_seq_names
 BSgenome.Hsapiens.NCBI.GRCh38@single_sequences@objnames = genome_seq_names
+BSgenome.Hsapiens.NCBI.GRCh38@user_seqnames = named_genome_seq_names
 
 x.sp@mmat = runChromVAR(
     obj=x.sp,
