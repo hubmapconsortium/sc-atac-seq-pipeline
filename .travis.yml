@@ -18,7 +18,7 @@ script:
  #Execute each line separately using the literal style block scalar for yaml
  # http://yaml.org/spec/1.2/spec.html#id2795688
   - |
-     .test.sh     
+     #.test.sh     
      cwltool --version
      pwd
      ls -al
