@@ -18,11 +18,12 @@ set -o xtrace
    #ls -al
    #df -h
    #sudo du -hsx ./* | sort -n | head -100
-   #export $TMPDIR=/mnt/tmp
-   #set
 
+   wget https://storage.googleapis.com/sc-atac-seq-pipeline-testing/BUKMAP_20190529I_1000000__R1.fastq
+   wget https://storage.googleapis.com/sc-atac-seq-pipeline-testing/BUKMAP_20190529I_1000000__R2.fastq
+   wget https://storage.googleapis.com/sc-atac-seq-pipeline-testing/BUKMAP_20190529I_1000000__R3.fastq
 
-   cwltool --debug --timestamps --target analysis_TXT_files $CWLTOOL_TMPDIR_PREFIX $CWLTOOL_TMP_OUTDIR_PREFIX  ../create_snap_and_analyze.cwl create_snap_and_analyze.json
-
+   cwltool --debug --timestamps --target snap_file $CWLTOOL_TMPDIR_PREFIX $CWLTOOL_TMP_OUTDIR_PREFIX  ../create_snap_and_analyze.cwl create_snap_and_analyze.json
+  
 
 
