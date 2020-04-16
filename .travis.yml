@@ -7,7 +7,7 @@ env:
         # These environment variables are set up for all the parallel jobs to use
         matrix:
             # These environment variables specify that these tests will run in parallel
-            - TEST_SUITE="run_sc_atac_seq_tests.sh"
+            - TEST_SUITE="./run_sc_atac_seq_tests.sh"
 
 language: python
 python:
@@ -31,4 +31,4 @@ script:
      # output for a number seconds
      #travis_wait 55 ./$TEST_SUITE
      #./run_sc_atac_seq_tests.sh
-     ./$TEST_SUITE
+     $TEST_SUITE
