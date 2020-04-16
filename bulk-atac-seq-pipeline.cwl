@@ -51,7 +51,7 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: snaptools_create_snap_file/zipped_files
+    outputSource: create_bulk_snap_file/zipped_files
 
   report_files:
     type:
@@ -59,19 +59,19 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: snaptools_create_snap_file/report_files
+    outputSource: create_bulk_snap_file/report_files
 
   bam_file:
     type: File[]
-    outputSource: snaptools_create_snap_file/bam_file
+    outputSource: create_bulk_snap_file/bam_file
 
   snap_file:
     type: File[]
-    outputSource: snaptools_create_snap_file/snap_file
+    outputSource: create_bulk_snap_file/snap_file
 
   snap_qc_file:
     type: File[]
-    outputSource: snaptools_create_snap_file/snap_qc_file
+    outputSource: create_bulk_snap_file/snap_qc_file
 
   analysis_CSV_files:
     type:
@@ -119,16 +119,16 @@ requirements:
 
 steps:
   gather_sequence_bundles:
-    run: gather_sequence_bundles.cwl
+    run: bulk_gather_sequence_bundles.cwl
     in:
       sequence_directory: sequence_directory
     out:
       [fastq1_files, fastq2_files]
 
-  snaptools_create_snap_file:
+  create_bulk_snap_file:
     scatter: [input_fastq1, input_fastq2]
     scatterMethod: dotproduct
-    run: steps/snaptools_create_snap_file.cwl
+    run: steps/create_bulk_snap_file.cwl
     in:
      input_reference_genome: input_reference_genome
      reference_genome_index: reference_genome_index
@@ -149,7 +149,7 @@ steps:
     scatterMethod: dotproduct
     run: steps/snapanalysis_setup_and_analyze.cwl
     in:
-      input_snap: snaptools_create_snap_file/snap_file
+      input_snap: create_bulk_snap_file/snap_file
       preferred_barcodes: preferred_barcodes
       encode_blacklist: encode_blacklist
       gene_track: gene_track

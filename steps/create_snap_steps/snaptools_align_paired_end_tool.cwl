@@ -145,7 +145,7 @@ inputs:
     inputBinding:
       position: 13
       prefix: --verbose
-    doc: A boolen tag; if true output the progress.
+    doc: A boolean tag; if true output the progress.
 
 outputs:
   paired_end_bam:

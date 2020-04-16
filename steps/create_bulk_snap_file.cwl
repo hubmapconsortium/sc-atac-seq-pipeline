@@ -71,13 +71,7 @@ steps:
       num_threads: alignment_threads
       if_sort: if_sort
 
-    out: [unsorted_paired_end_bam]
-
-  sort_bam_file:
-    run: sort_bam_file_tool.cwl
-    in:
-      unsorted_paired_end_bam
-    out: [sorted_paired_end_bam]
+    out: [paired_end_bam]
 
   snaptools_remove_blacklist:
     run: create_snap_steps/snaptools_remove_blacklist.cwl
@@ -99,3 +93,10 @@ steps:
     in:
       snap_file: snaptools_preprocess_reads/snap_file
     out: [snap_file_w_cell_by_bin]
+
+
+  #  sort_bam_file:
+  #    run: create_snap_steps/sort_bam_file_tool.cwl
+  #    in:
+  #      unsorted_paired_end_bam: snaptools_align_paired_end/paired_end_bam
+  #    out: [sorted_paired_end_bam]
