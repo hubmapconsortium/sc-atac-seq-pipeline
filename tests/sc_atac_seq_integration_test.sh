@@ -23,7 +23,7 @@ set -o xtrace
    wget https://storage.googleapis.com/sc-atac-seq-pipeline-testing/BUKMAP_20190529I_1000000__R2.fastq
    wget https://storage.googleapis.com/sc-atac-seq-pipeline-testing/BUKMAP_20190529I_1000000__R3.fastq
 
-   cwltool --debug --timestamps --target snap_file $CWLTOOL_TMPDIR_PREFIX $CWLTOOL_TMP_OUTDIR_PREFIX  ../create_snap_and_analyze.cwl create_snap_and_analyze.json
+   cwltool --debug --timestamps --target zipped_files $CWLTOOL_TMPDIR_PREFIX $CWLTOOL_TMP_OUTDIR_PREFIX  ../create_snap_and_analyze.cwl create_snap_and_analyze.json
   
 
 
