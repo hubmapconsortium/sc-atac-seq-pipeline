@@ -9,7 +9,8 @@ Source code can be found at https://github.com/hubmapconsortium/sc-atac-seq-pipe
 SnapTools performs quantification using a specified aligner,
 and HuBMAP has standardized on BWA with the GRCh38 reference genome.
 SnapTools divides the genome into non-overlapping bins of user-specified size
-(we use 1000, 5000, and 10000) and produces a binary cell-by-bin matrix
+(we use 1000, 5000, and 10000), produces FASTQC analysis of the input fastq files,
+and produces a binary cell-by-bin matrix
 denoting whether reads in each cell were aligned to each bin.
 
 The SnapATAC
@@ -37,26 +38,22 @@ build an alternate container by modifying the Dockerfile.
 
 # Inputs
 ## Required
-* sequence_directory
-
+* sequence_directory\
 A directory for the pipeline to search for fastq or fastq.gz files. The pipeline
 only works on paired end reads and expects, for historical reasons, the paired
 end read files to be named
 `<some_name>*_R1*.fastq` and `<some_name>*_R3*.fastq`. If a file
 containing barcodes `<some_name>*_R2*.fastq` is found the barcodes will be
-read and added to the read IDs in the paired end fastq/fastq.gz files
+read and added to the read IDs in the paired end fastq files
 
-* input_reference_genome
-
+* input_reference_genome\
 A fasta file of the GRCh38 reference genome
 
-* encode_blacklist
-
+* encode_blacklist\
 The genome BED file with blacklisted regions. If reads overlap with blacklisted
 regions they are removed from the BAM file. E.g `hg38.blacklist.bed`
 
-* gene_track
-
+* gene_track\
 A BED file of gene tracks. Used to create the cell by gene matrix.
 E.g `gencode.v32.annotation.bed`
 
