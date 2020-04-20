@@ -22,10 +22,12 @@ RUN apt-get update \
     python-pip \
     python3-dev \
     python3-pip \
+    tabix \
     wget \
     zlib1g-dev \
  && rm -rf /var/lib/apt/lists
 
+<<<<<<< HEAD
 # Make sure a 'python' command is available so bedtools will install, as required in
 # https://github.com/arq5x/bedtools2/blob/58e9973af1b3f5e3b26e5584aad7dc7b720f8765/Makefile#L192
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
@@ -80,7 +82,6 @@ COPY snapAnalysis_select_barcode.R /tools/
 COPY snapAnalysis.R /tools/
 COPY snapMotifAnalysis.R /tools/
 COPY gather_sequence_files.py /tools/
-
-ENV PATH=$PATH:/opt:/tools
+COPY sort_index_frag.py /opt/
 
 CMD ["/bin/bash"]

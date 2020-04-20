@@ -156,24 +156,5 @@ steps:
 
     out:
       [zipped_files, report_files, bam_file, snap_file, snap_qc_file,
-      #[analysis_motif_file, analysis_CSV_files, analysis_BED_files, 
-      #analysis_PDF_files, analysis_RDS_objects, analysis_TXT_files, 
-      #analysis_MTX_files]
       analysis_CSV_files, analysis_BED_files, analysis_PDF_files, 
       analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files]
-
-#  snapanalysis_setup_and_analyze:
-#    scatter: [input_snap]
-#    scatterMethod: dotproduct
-#    run: steps/snapanalysis_setup_and_analyze.cwl
-#    in:
-#      input_snap: snaptools_create_snap_file/snap_file
-#      preferred_barcodes: preferred_barcodes
-#      encode_blacklist: encode_blacklist
-#      gene_track: gene_track
-#      gene_annotation: gene_annotation
-#      promoters: promoters
-#
-#    out:
-#      #[analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_MTX_files]
-#      [analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_MTX_files]

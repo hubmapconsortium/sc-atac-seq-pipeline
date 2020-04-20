@@ -11,12 +11,12 @@ FASTQ_EXTENSIONS = [
     'fastq.gz',
 ]
 
-# cwltool --debug --leave-tmpdir --tmpdir-prefix=/mnt/tmp/ --tmp-outdir-prefix=/mnt/tmp/ ../createSNAPAndAnalyze.cwl ../createSNAPAndAnalyze.openstack.human.json
+# cwltool --debug --leave-tmpdir --tmpdir-prefix=/mnt/tmp/ --tmp-outdir-prefix=/mnt/tmp/ ../create_snap_and_analyze.cwl ../create_snap_and_analyze.openstack.human.json
 SC_ATAC_SEQ_COMMAND = [
     'cwltool',
     '--tmpdir-prefix=/mnt/tmp/',
     '--tmp-outdir-prefix=/mnt/tmp/',
-    '/mnt/gitroot/sc-atac-seq-pipeline/createSNAPAndAnalyze.cwl',
+    '/mnt/gitroot/sc-atac-seq-pipeline/create_snap_and_analyze.cwl',
     'input.json'
 ]
 
