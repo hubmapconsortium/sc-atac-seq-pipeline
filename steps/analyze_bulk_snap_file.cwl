@@ -30,7 +30,6 @@ inputs:
   encode_blacklist: File
   gene_track: File
   gene_annotation: File?
-  preferred_barcodes: File?
   promoters: File?
   input_snap: File
 
@@ -71,18 +70,11 @@ outputs:
 
 
 steps:
-  snapanalysis_select_barcode:
-    run: analyze_snap_steps/snapanalysis_select_barcode.cwl
-    in:
-      preferred_barcodes: preferred_barcodes
-    out:
-      [selected_barcodes, barcode_PDF_files]
 
   snapanalysis_analyze:
     run: analyze_snap_steps/snapanalysis_analyze.cwl
     in:
       input_snap: input_snap
-      selected_barcodes: snapanalysis_select_barcode/selected_barcodes
       encode_blacklist: encode_blacklist
       gene_track: gene_track
       gene_annotation: gene_annotation

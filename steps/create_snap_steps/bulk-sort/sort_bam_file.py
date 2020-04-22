@@ -8,7 +8,6 @@ import argparse
 from argparse import ArgumentParser
 from subprocess import check_call
 import os
-import pysam
 
 def main(bam_file: str, sorted_bam_name: str):
     command = ["samtools", "sort", bam_file, "-o", sorted_bam_name]
