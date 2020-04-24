@@ -1,8 +1,8 @@
 cwlVersion: v1.1
 class: Workflow
 
-# label: A workflow that creates a SNAP file as outlined at: https://github.com/r3fang/SnapTools
-# doc: A workflow that creates a SNAP file as outlined at: https://github.com/r3fang/SnapTools
+# label: A workflow that processes bulk ATAC seq data
+# doc: A workflow that processes bulk ATAC seq data
 
 requirements:
   MultipleInputFeatureRequirement: {}
@@ -17,6 +17,7 @@ inputs:
   tmp_folder: string?
   alignment_threads: int?
   num_cores: int?
+  if_sort: string?
 
 outputs:
 
@@ -36,44 +37,6 @@ outputs:
       items: File
     outputSource: snaptools_fastqc_tool/report_files
 
-  peaks_table:
-    type: File
-    outputSource: call_peaks/peaks_table
-
-  narrow_peaks:
-    type: File
-    outputSource: call_peaks/narrow_peaks
-
-  summits_bed:
-    type: File
-    outputSource: call_peaks/summits_bed
-
-  r_script:
-    type: File
-    outputSource: call_peaks/r_script
-
-  bed_graphs:
-    type:
-      type: array
-      items: File
-    outputSource: call_peaks/bed_graphs
-
-  motifs:
-    type: File
-    outputSource: motif_analysis/motifs
-
-  known_results:
-    type: File
-    outputSource: motif_analysis/known_results
-
-  autonormalization_statistics:
-    type: File
-    outputSource: motif_analysis/autonormalization_statistics
-
-  formatted_results:
-    type: File
-    outputSource: motif_analysis/formatted_results
-
 
 steps:
 
@@ -91,6 +54,7 @@ steps:
       input_fastq2: input_fastq2
       tmp_folder: tmp_folder
       num_threads: alignment_threads
+      if_sort: if_sort
 
     out: [paired_end_bam]
 
@@ -106,16 +70,3 @@ steps:
       bam_file: sort_bam_file/sorted_paired_end_bam
       bed_file: blacklist_bed
     out: [rmsk_bam]
-
-  call_peaks:
-    run: call_peaks.cwl
-    in:
-      bam_file: snaptools_remove_blacklist/rmsk_bam
-    out: [peaks_table, narrow_peaks, summits_bed, r_script, bed_graphs]
-
-  motif_analysis:
-    run: motif_analysis.cwl
-    in:
-      bed_file: call_peaks/summits_bed
-      num_cores: num_cores
-    out: [motifs, known_results, autonormalization_statistics, formatted_results]

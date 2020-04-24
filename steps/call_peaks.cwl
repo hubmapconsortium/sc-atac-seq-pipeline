@@ -14,14 +14,18 @@ requirements:
     outdirMin: 100000
 
 inputs:
-  bam_file:
-    type: File
+
+  bam_files:
+    type:
+      type: array
+      items: File
     inputBinding:
       position: 1
       prefix: -t
     doc: The bam file to call peaks on
 
 outputs:
+
   peaks_table:
     type: File
     outputBinding:
