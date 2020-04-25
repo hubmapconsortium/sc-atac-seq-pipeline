@@ -3,12 +3,6 @@ library(motifmatchr)
 library(BSgenome.Hsapiens.NCBI.GRCh38)
 library(RColorBrewer)
 
-#a list of narrowPeaks files and a list of BAM files
-#for each narrowPeak file:
-  #get motifs
-  #compute scores
-  #write out motifs and scores
-
 args = commandArgs(trailingOnly=TRUE)
 peak_file = args[1]
 bam_list = args[2:length(args)]
@@ -78,17 +72,13 @@ motifs <- getJasparMotifs()
 cat('Matching motifs\n')
 counts_filtered = filterPeaks(fragment_counts)
 motif_ix <- matchMotifs(motifs, counts_filtered, genome=BSgenome.Hsapiens.NCBI.GRCh38)
+cat(typeof(motif_ix))
 #If possible, output this as well
 
 cat('Computing deviations\n')
 dev <- computeDeviations(object=counts_filtered, annotations=motif_ix)
 
 scores = deviationScores(dev)
+cat(typeof(scores))
 #This should be a numerical matrix.  Output it somehow
 write.csv(scores)
-
-pdf('output.pdf', width=7, height=16)
-heatmap(scores, col=brewer.pal(11, 'RdBu'), scale='none')
-dev.off()
-
-save.image(file='output.RData')

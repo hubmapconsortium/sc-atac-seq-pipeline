@@ -8,7 +8,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/bioconductor-chromvar:1.2.0--r341_0
+    dockerPull: hubmap/sc-atac-seq
     #Make custom docker container from this one containing chromvar-analysis script
   ResourceRequirement:
     coresMin: 1
