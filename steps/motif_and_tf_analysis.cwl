@@ -8,7 +8,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq
+    dockerPull: seandonahue5311/chromvar
     #Make custom docker container from this one containing chromvar-analysis script
   ResourceRequirement:
     coresMin: 1
