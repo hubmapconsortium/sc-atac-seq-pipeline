@@ -28,7 +28,7 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: create_bulk_snap_file/zipped_files
+    outputSource: bulk_process/zipped_files
 
   report_files:
     type:
@@ -36,43 +36,35 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: create_bulk_snap_file/report_files
+    outputSource: bulk_process/report_files
 
   bam_file:
-    type: File[]
-    outputSource: create_bulk_snap_file/bam_file
+    type:
+      type: array
+      items: File
+    outputSource: bulk_process/bam_file
 
   peaks_table:
     type: File
-    outputBinding:
-      glob: "*.xls"
-    doc: Tabular file containing peak data
+    outputSource: bulk_analysis/peaks_table
 
   narrow_peaks:
     type: File
-    outputBinding:
-      glob: "*.narrowPeak"
-    doc: BED6+4 format file which contains the peak locations together with peak summit, p-value, and q-value. Can be loaded into UCSC genome browser
+    outputSource: bulk_analysis/narrow_peaks
 
   summits_bed:
     type: File
-    outputBinding:
-      glob: "*.bed"
-    doc: BED file containing summit locations for every peak
+    outputSource: bulk_analysis/summits_bed
 
   r_script:
     type: File
-    outputBinding:
-      glob: "*.r"
-    doc: An r script for generating a pdf of model based on data
+    outputSource: bulk_analysis/r_script
 
   bed_graphs:
     type:
       type: array
       items: File
-    outputBinding:
-      glob: "*.bdg"
-    doc: Bed graph files containing information about pileup signals and local biases
+    outputSource: bulk_analysis/bed_graphs
 
 steps:
   gather_sequence_bundles:
@@ -107,5 +99,4 @@ steps:
       bam_files: bulk_process/bam_file
 
     out:
-      #motifs
-      #scores
+      [peaks_table, narrow_peaks, summits_bed, bed_graphs, r_script]

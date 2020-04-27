@@ -9,7 +9,7 @@ requirements:
 
 inputs:
   input_reference_genome: File
-  reference_genome_index: File
+  reference_genome_index: File?
   genome_name: string?
   input_fastq1: File
   input_fastq2: File
@@ -46,10 +46,24 @@ steps:
       sequence_files: [input_fastq1, input_fastq2]
     out: [zipped_files, report_files]
 
+  snaptools_index_ref_genome:
+    run: create_snap_steps/snaptools_index_ref_genome_tool.cwl
+    in:
+      input_fasta: input_reference_genome
+      reference_genome_index: reference_genome_index
+    out:
+      [genome_index]
+
+  snaptools_create_ref_genome_size_file:
+    run: create_snap_steps/snaptools_create_ref_genome_size_file_tool.cwl
+    in:
+      ref_genome: input_reference_genome
+    out: [genome_sizes]
+
   snaptools_align_paired_end:
     run: create_snap_steps/snaptools_align_paired_end_tool.cwl
     in:
-      input_reference: reference_genome_index
+      input_reference: snaptools_index_ref_genome/genome_index
       input_fastq1: input_fastq1
       input_fastq2: input_fastq2
       tmp_folder: tmp_folder

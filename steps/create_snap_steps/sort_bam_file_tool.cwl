@@ -1,8 +1,8 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-id: snaptools_align_paired_end
-label: snaptools align paired end reads
+id: sort_bam_file_tool
+label: sort bam file
 cwlVersion: v1.1
 
 requirements:

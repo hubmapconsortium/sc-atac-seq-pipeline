@@ -1,6 +1,6 @@
 library(chromVAR)
 library(motifmatchr)
-library(BSgenome.Hsapiens.NCBI.GRCh38)
+library(BSgenome.Hsapiens.UCSC.hg38)
 library(RColorBrewer)
 
 args = commandArgs(trailingOnly=TRUE)
@@ -51,7 +51,7 @@ read_Narrowpeaks = function (filename, width=500, non_overlapping = TRUE)
 
 cat('Reading peaks\n')
 peaks = read_Narrowpeaks(peak_file)
-peaks = peaks[seqnames(peaks) %in% seqnames(BSgenome.Hsapiens.NCBI.GRCh38)]
+peaks = peaks[seqnames(peaks) %in% seqnames(BSgenome.Hsapiens.UCSC.hg38)]
 
 samples = sapply(strsplit(bam_list, '_'), function(x) {x[1]})
 
@@ -65,13 +65,13 @@ fragment_counts = getCounts(
   colData = DataFrame(sample=samples)
 )
 cat('Computing GC bias\n')
-fragment_counts <- addGCBias(fragment_counts, genome=BSgenome.Hsapiens.NCBI.GRCh38)
+fragment_counts <- addGCBias(fragment_counts, genome=BSgenome.Hsapiens.UCSC.hg38)
 
 cat('Loading motifs\n')
 motifs <- getJasparMotifs()
 cat('Matching motifs\n')
 counts_filtered = filterPeaks(fragment_counts)
-motif_ix <- matchMotifs(motifs, counts_filtered, genome=BSgenome.Hsapiens.NCBI.GRCh38)
+motif_ix <- matchMotifs(motifs, counts_filtered, genome=BSgenome.Hsapiens.UCSC.hg38)
 cat(typeof(motif_ix))
 #If possible, output this as well
 
