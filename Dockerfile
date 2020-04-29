@@ -35,9 +35,6 @@ COPY requirements_py2.txt /opt
 COPY requirements_py3.txt /opt
 RUN python2 -m pip install "Cython==0.29.15" --install-option="--no-cython-compile" \
  && python2 -m pip install -r /opt/requirements_py2.txt \
- # MACS2's `setup.py` file imports `numpy`, so need to install NumPy first.
- # See https://github.com/taoliu/MACS/issues/364
- && python3 -m pip install "numpy==1.18.2" \
  && python3 -m pip install -r /opt/requirements_py3.txt \
  && rm -rf /root/.cache/pip /opt/requirements_py2.txt /opt/requirements_py3.txt
 
