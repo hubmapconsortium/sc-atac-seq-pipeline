@@ -27,7 +27,6 @@ RUN apt-get update \
     zlib1g-dev \
  && rm -rf /var/lib/apt/lists
 
-<<<<<<< HEAD
 # Make sure a 'python' command is available so bedtools will install, as required in
 # https://github.com/arq5x/bedtools2/blob/58e9973af1b3f5e3b26e5584aad7dc7b720f8765/Makefile#L192
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
