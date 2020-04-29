@@ -50,7 +50,7 @@ x.sp = addPmatToSnap(x.sp)
 message(sprintf("Removing unwanted chromosomes from PMAT\n"))
 # Provides seqlevels function
 #chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM|chrUn", seqlevels(x.sp@feature))];
-chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM", seqlevels(x.sp@feature))]
+chr.exclude = seqlevels(x.sp@feature)[grep("random|MT", seqlevels(x.sp@feature))]
 idy = grep(paste(chr.exclude, collapse="|"), x.sp@feature)
 if(length(idy) > 0){x.sp = x.sp[,-idy, mat="pmat"]}
 
@@ -58,15 +58,6 @@ message(sprintf("Making PMAT binary\n"))
 x.sp = makeBinary(x.sp, mat="pmat")
 
 # SnapATAC also incorporates chromVAR (Schep et al) for motif variability analysis.
-
-genome_seq_names = names(BSgenome.Hsapiens.NCBI.GRCh38@single_sequences)
-names_without_chr = grep('^H', genome_seq_names, perl=TRUE, invert=TRUE)
-genome_seq_names[names_without_chr] = paste('chr', genome_seq_names[names_without_chr], sep='')
-named_genome_seq_names = genome_seq_names
-names(named_genome_seq_names) = genome_seq_names
-BSgenome.Hsapiens.NCBI.GRCh38@seqinfo@seqnames = genome_seq_names
-BSgenome.Hsapiens.NCBI.GRCh38@single_sequences@objnames = genome_seq_names
-BSgenome.Hsapiens.NCBI.GRCh38@user_seqnames = named_genome_seq_names
 
 x.sp@mmat = runChromVAR(
     obj=x.sp,
