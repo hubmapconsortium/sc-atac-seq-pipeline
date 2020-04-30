@@ -10,6 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
  && apt-get -y install \
     build-essential \
+    git \
     libbz2-dev \
     libcurl4-openssl-dev \
     libgsl-dev \
@@ -18,8 +19,6 @@ RUN apt-get update \
     libpng-dev \
     libssl-dev \
     libxml2-dev \
-    python-dev \
-    python-pip \
     python3-dev \
     python3-pip \
     tabix \
@@ -31,12 +30,10 @@ RUN apt-get update \
 # https://github.com/arq5x/bedtools2/blob/58e9973af1b3f5e3b26e5584aad7dc7b720f8765/Makefile#L192
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
-COPY requirements_py2.txt /opt
-COPY requirements_py3.txt /opt
-RUN python2 -m pip install "Cython==0.29.15" --install-option="--no-cython-compile" \
- && python2 -m pip install -r /opt/requirements_py2.txt \
- && python3 -m pip install -r /opt/requirements_py3.txt \
- && rm -rf /root/.cache/pip /opt/requirements_py2.txt /opt/requirements_py3.txt
+COPY requirements.txt /opt
+RUN python3 -m pip install "Cython==0.29.17" --install-option="--no-cython-compile" \
+ && python3 -m pip install -r /opt/requirements.txt \
+ && rm -rf /root/.cache/pip /opt/requirements.txt
 
 COPY install_R_packages.R /opt
 RUN Rscript /opt/install_R_packages.R \
