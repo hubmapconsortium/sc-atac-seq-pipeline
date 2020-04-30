@@ -64,4 +64,4 @@ outputs:
     outputBinding:
       glob: rmsk.bam
 
-baseCommand: [remove_blacklist.sh]
+baseCommand: [/opt/remove_blacklist.sh]

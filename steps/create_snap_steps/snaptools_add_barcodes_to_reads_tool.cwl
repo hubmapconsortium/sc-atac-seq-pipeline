@@ -86,4 +86,4 @@ outputs:
     outputBinding:
       glob: $(inputs.output_fastq_prefix).R3.fastq
 
-baseCommand: [add_barcodes_to_reads.pl]
+baseCommand: [/opt/add_barcodes_to_reads.pl]

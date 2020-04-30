@@ -67,14 +67,6 @@ RUN wget -O bedtools-${BEDTOOLS_VERSION}.tar.gz https://github.com/arq5x/bedtool
  && make install \
  && rm -rf /opt/bedtools-${BEDTOOLS_VERSION}.tar.gz /opt/bedtools2
 
-COPY create_genome_size_file.sh /tools/
-COPY create_reference_genome_index.sh /tools/
-COPY add_barcodes_to_reads.pl /tools/
-COPY remove_blacklist.sh /tools/
-COPY snapAnalysis_select_barcode.R /tools/
-COPY snapAnalysis.R /tools/
-COPY snapMotifAnalysis.R /tools/
-COPY gather_sequence_files.py /tools/
-COPY sort_index_frag.py /opt/
+COPY bin /opt
 
 CMD ["/bin/bash"]
