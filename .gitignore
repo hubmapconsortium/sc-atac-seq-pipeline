@@ -138,10 +138,12 @@ dmypy.json
 
 # Data files
 *.bam
+*.bdg
 *.bed
 *.csv
 *.html
 *.mtx
+*.narrowPeak
 *.pdf
 *.rds
 *.snap

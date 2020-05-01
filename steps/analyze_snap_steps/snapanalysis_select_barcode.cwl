@@ -68,4 +68,4 @@ outputs:
       glob: "*.pdf"
 
 
-baseCommand: [Rscript, /tools/snapAnalysis_select_barcode.R]
+baseCommand: [Rscript, /opt/snapAnalysis_select_barcode.R]

@@ -66,4 +66,4 @@ outputs:
     outputBinding:
       glob: $(inputs.output_file)
 
-baseCommand: [create_genome_size_file.sh]
+baseCommand: [/opt/create_genome_size_file.sh]
