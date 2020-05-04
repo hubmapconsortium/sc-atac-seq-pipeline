@@ -1,1 +1,2 @@
-hubmap/sc-atac-seq	Dockerfile
+hubmap/sc-atac-seq	docker/base/Dockerfile
+hubmap/sc-atac-seq-grch38	docker/with-data/Dockerfile
