@@ -31,4 +31,4 @@ outputs:
     outputBinding:
       glob: $(inputs.sorted_bam_name)
 
-baseCommand: /opt/sort_bam_file.py
+baseCommand: /opt/bulk/sort_bam_file.py
