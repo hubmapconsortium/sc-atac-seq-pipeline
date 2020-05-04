@@ -1,7 +1,30 @@
+dist: bionic
+
+services:
+   - docker
+
 language: python
+
 python:
   - "3.6"
+
 install:
   - pip install -r requirements_host.txt
+
 script:
-  - ./test.sh
+ #Execute each line separately using the literal style block scalar for yaml
+ # http://yaml.org/spec/1.2/spec.html#id2795688
+  - |
+     #.test.sh     
+     cwltool --version
+     pwd
+     ls -al
+     df -h
+     sudo du -hsx ./* | sort -n | head -100
+     cd $TRAVIS_BUILD_DIR/tests/
+     pwd
+     ls -al
+     # Have Travis CI wait for a set time even if the workflows do not provide
+     # output for a number seconds
+     #travis_wait 55 ./$TEST_SUITE
+     ./run_sc_atac_seq_tests.sh

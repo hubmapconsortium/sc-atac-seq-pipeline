@@ -165,4 +165,4 @@ outputs:
       glob: "*.mtx"
 
 
-baseCommand: [Rscript, /tools/snapAnalysis.R]
+baseCommand: [Rscript, /opt/snapAnalysis.R]

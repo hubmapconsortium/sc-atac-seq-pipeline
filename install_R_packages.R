@@ -23,7 +23,7 @@ install_github('r3fang/SnapATAC')
 # dplyr needed for R markdown to create PDF files
 BiocManager::install(
     c(
-		'BSgenome.Hsapiens.UCSC.hg38',
+		'BSgenome.Hsapiens.NCBI.GRCh38',
 		'rtracklayer',
 		'RFLPtools',
 		'rmarkdown',

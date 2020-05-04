@@ -331,7 +331,7 @@ cellClusterAssignment$BarcodeID <- dimnames(x.sp@bmat)[[1]]
 # Look up the barcode string in the look up table using the barcode ID
 # column and add a new column for the barcode string
 #cellClusterAssignment$Barcode <- BarcodeLookupTable[match(cellClusterAssignment$BarcodeID, BarcodeLookupTable$BarcodeID), "Barcode"]
-names(cellClusterAssignment)[names(cellClusterAssignment) == 'x.sp@cluster'] <- 'Cluster'
+names(cellClusterAssignment)[1] <- 'Cluster'
 # write it to csv and only quote the Barcode in column 3
 #write.csv(cellClusterAssignment, file = "cellClusterAssignment.csv", quote = c(3), row.names = FALSE)
 message(sprintf("Writing cell cluster assignment csv\n"))

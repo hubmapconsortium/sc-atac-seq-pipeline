@@ -89,4 +89,4 @@ outputs:
     outputBinding:
       glob: "cellMotif.csv"
 
-baseCommand: [Rscript, /tools/snapMotifAnalysis.R]
+baseCommand: [Rscript, /opt/snapMotifAnalysis.R]

@@ -116,4 +116,4 @@ outputs:
                     return file_array;
                  }
 
-baseCommand: [gather_sequence_files.py]
+baseCommand: [/opt/gather_sequence_files.py]
