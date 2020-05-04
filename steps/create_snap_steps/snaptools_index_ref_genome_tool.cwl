@@ -99,4 +99,4 @@ outputs:
     outputBinding:
       glob: $(inputs.input_fasta.basename)
 
-baseCommand: [create_reference_genome_index.sh]
+baseCommand: [/opt/create_reference_genome_index.sh]

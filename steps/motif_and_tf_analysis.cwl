@@ -43,4 +43,4 @@ outputs:
     outputBinding:
       glob:
 
-baseCommand: [Rscript, chromvar-analysis.R]
+baseCommand: [Rscript, /opt/chromvar-analysis.R]
