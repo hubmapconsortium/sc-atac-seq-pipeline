@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: "seandonahue5311/bulk-atac:v1.0"
+    dockerPull: hubmap/sc-atac-seq
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
