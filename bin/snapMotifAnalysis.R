@@ -47,14 +47,20 @@ x.sp = addPmatToSnap(x.sp)
 
 # Remove unwanted chromosomes, otherwise chromVAR throws the error with the message
 # 'trying to load regions beyond the boundaries of non-circular sequence'
-message(sprintf("Removing unwanted chromosomes from PMAT\n"))
+message(sprintf("Removing unwanted and mismatched chromosomes from peak matrix\n"))
 # Provides seqlevels function
 #chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM|chrUn", seqlevels(x.sp@feature))];
-chr.exclude = seqlevels(x.sp@feature)[grep("random|MT", seqlevels(x.sp@feature))]
-idy = grep(paste(chr.exclude, collapse="|"), x.sp@feature)
-if(length(idy) > 0){x.sp = x.sp[,-idy, mat="pmat"]}
 
-message(sprintf("Making PMAT binary\n"))
+seqs_to_keep = as.vector(
+  setdiff(
+    intersect(x.sp@peak@seqnames, BSgenome.Hsapiens.NCBI.GRCh38@single_sequences@objnames),
+    'MT'
+  )
+)
+
+peaks_to_keep = x.sp@peak@seqnames %in% seqs_to_keep
+x.sp = x.sp[, which(peaks_to_keep), mat="pmat"]
+
 x.sp = makeBinary(x.sp, mat="pmat")
 
 # SnapATAC also incorporates chromVAR (Schep et al) for motif variability analysis.
@@ -68,12 +74,13 @@ x.sp@mmat = runChromVAR(
 )
 
 message(sprintf("Writing the motif data to a Matrix Market format file\n"))
-cellMotifData <- x.sp@mmat
-cellMotifMatrix <- as.matrix(cellMotifData)
-cellMotifFrame <- as.data.frame(cellMotifMatrix)
 
 # Write cell by gene sparse matrix in Matrix Market format not CSV format
-write.csv(cellMotifFrame, file = "cellMotif.csv")
+write.csv(
+  x.sp@mmat,
+  file="cellMotif.csv",
+  na=''
+)
 #writeMM(obj = cellMotifData, file = "cellMotif.mtx")
 
 
