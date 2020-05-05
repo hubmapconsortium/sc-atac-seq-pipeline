@@ -338,25 +338,22 @@ message(sprintf("Writing cell cluster assignment csv\n"))
 write.csv(cellClusterAssignment, file = "cellClusterAssignment.csv", quote = FALSE, row.names = FALSE)
 
 ## Step 8. Visualization
-## SnapATAC visualizes and explores the data using tSNE (FI-tsne) or UMAP. In this
-## example, we compute the t-SNE embedding. We next project the sequencing depth
-## or other bias onto the t-SNE embedding.
-message(sprintf("Creating embedding t-SNE plot\n"))
+message(sprintf("Creating embedding UMAP plot\n"))
 x.sp = runViz(
   obj=x.sp,
   tmp.folder=tempdir(),
   dims=2,
   eigs.dims=1:20,
-  method="Rtsne",
+  method="umap",
   seed.use=10
 );
 
 #par(mfrow = c(2, 2));
 plotViz(
-  pdf.file.name='Embedding_t-SNE.pdf',
+  pdf.file.name='Embedding_UMAP.pdf',
   obj=x.sp,
-  method="tsne",
-  main="Embedding t-SNE",
+  method="umap",
+  main="Embedding UMAP",
   point.color=x.sp@cluster,
   point.size=1,
   point.shape=19,
@@ -370,45 +367,6 @@ plotViz(
   down.sample=10000,
   legend.add=FALSE
 );
-
-##plotFeatureSingle(
-##  pdf.file.name='Read_Depth_t-SNE.pdf',
-##  obj=x.sp,
-##  feature.value=log(x.sp@metaData[,"passed_filters"]+1,10),
-##  method="tsne",
-##  main="Read Depth t-SNE",
-##  point.size=0.2,
-##  point.shape=19,
-##  down.sample=10000,
-##  quantiles=c(0.01, 0.99)
-##);
-##plotFeatureSingle(
-##  pdf.file.name='FRiP_t-SNE.pdf',
-##  obj=x.sp,
-##  feature.value=x.sp@metaData$peak_region_fragments / x.sp@metaData$passed_filters,
-##  method="tsne",
-##  main="FRiP t-SNE",
-##  point.size=0.2,
-##  point.shape=19,
-##  down.sample=10000,
-##  quantiles=c(0.01, 0.99) # remove outliers
-##);
-##plotFeatureSingle(
-##  pdf.file.name='Duplicate_t-SNE.pdf',
-##  obj=x.sp,
-##  feature.value=x.sp@metaData$duplicate / x.sp@metaData$total,
-##  method="tsne",
-##  main="Duplicate t-SNE",
-##  point.size=0.2,
-##  point.shape=19,
-##  down.sample=10000,
-##  quantiles=c(0.01, 0.99) # remove outliers
-##);
-##
-
-
-
-
 
 message(sprintf("Creating cell by gene matrix\n"))
 genes = read.table(opt$gene_track);
