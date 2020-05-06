@@ -36,8 +36,8 @@ inputs:
   blacklist_bed: File?
   tmp_folder: string?
 
-  encode_blacklist: File
-  gene_track: File
+  encode_blacklist: File?
+  gene_track: File?
   gene_annotation: File?
   preferred_barcodes: File?
   promoters: File?
