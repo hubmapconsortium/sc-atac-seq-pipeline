@@ -42,33 +42,36 @@ requirements:
     ramMin: 1024
     outdirMin: 100000
 
+arguments:
+  - position: 2
+    valueFrom: "--"
+
 inputs:
   input_reference:
-    type: File
+    type: Directory?
     inputBinding:
       position: 1
-      prefix: --input-reference
-    secondaryFiles: [".bwt", ".sa", ".ann", ".pac", ".amb"]
-    doc: The genome reference file to use.
+      prefix: --alignment-index
+    doc: The alignment index to use.
 
   input_fastq1:
     type: File
     inputBinding:
-      position: 1
+      position: 3
       prefix: --input-fastq1
     doc: The first paired end fastq file to be aligned.
 
   input_fastq2:
     type: File
     inputBinding:
-      position: 2
+      position: 4
       prefix: --input-fastq2
     doc: The second paired end fastq file to be aligned.
 
   output_bam:
     type: string
     inputBinding:
-      position: 3
+      position: 5
       prefix: --output-bam
     default: "snaptools_alignment.bam"
     doc: The name to use for the output bam file containing unfiltered alignments.
@@ -76,7 +79,7 @@ inputs:
   aligner:
     type: string?
     inputBinding:
-      position: 4
+      position: 6
       prefix: --aligner
     default: "bwa"
     doc: The name of the aligner, e.g. 'bwa'.
@@ -84,7 +87,7 @@ inputs:
   path_to_aligner:
     type: string?
     inputBinding:
-      position: 5
+      position: 7
       prefix: --path-to-aligner
     default: "/usr/local/bin"
     doc: The file system path to the aligner.
@@ -93,27 +96,27 @@ inputs:
     type: string[]?
     inputBinding:
       prefix: --aligner-options
-      position: 6
+      position: 8
     doc: List of strings indicating options you would like passed to aligner.
 
   read_fastq_command:
     type: string?
     inputBinding:
-      position: 7
+      position: 9
       prefix: --read-fastq-command
     doc: Command line to execute for each of the input files.
 
   min_cov:
     type: string?
     inputBinding:
-      position: 8
+      position: 10
       prefix: --min-cov
     doc: Minimum number of fragments per barcode.
 
   num_threads:
     type: int?
     inputBinding:
-      position: 9
+      position: 11
       prefix: --num-threads
     default: 8
     doc: The number of threads to use.
@@ -121,14 +124,14 @@ inputs:
   if_sort:
     type: string?
     inputBinding:
-      position: 10
+      position: 12
       prefix: --if-sort
     doc: Whether to sort the bam file based on the read name.
 
   tmp_folder:
     type: string?
     inputBinding:
-      position: 11
+      position: 13
       prefix: --tmp-folder
     default: "/tmp"
     doc: Directory to store temporary files.
@@ -136,14 +139,14 @@ inputs:
   overwrite:
     type: string?
     inputBinding:
-      position: 12
+      position: 14
       prefix: --overwrite
     doc: Whether to overwrite the output file if it already exists.
 
   verbose:
     type: string?
     inputBinding:
-      position: 13
+      position: 15
       prefix: --verbose
     doc: A boolen tag; if true output the progress.
 
@@ -153,4 +156,4 @@ outputs:
     outputBinding:
       glob: $(inputs.output_bam)
 
-baseCommand: [snaptools, align-paired-end]
+baseCommand: [/opt/snaptools_align_wrapper.py]
