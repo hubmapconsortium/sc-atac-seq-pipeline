@@ -71,6 +71,9 @@ outputs:
       items: File
     outputSource: snaptools_fastqc_tool/report_files
 
+  analysis_motif_file:
+    type: File
+    outputSource: snapanalysis_setup_and_analyze/analysis_motif_file
 
   analysis_CSV_files:
     type: File[]
@@ -176,7 +179,5 @@ steps:
       promoters: promoters
 
     out:
-      #[analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files,
-      #analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files]
-      [analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects,
-      analysis_TXT_files, analysis_MTX_files]
+      [analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files,
+      analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files]

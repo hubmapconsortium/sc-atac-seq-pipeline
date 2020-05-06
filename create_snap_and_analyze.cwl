@@ -73,6 +73,10 @@ outputs:
     type: File[]
     outputSource: create_and_analyze_snap_file/snap_qc_file
 
+  analysis_motif_file:
+    type: File[]
+    outputSource: create_and_analyze_snap_file/analysis_motif_file
+
   analysis_CSV_files:
     type:
       type: array
@@ -156,6 +160,5 @@ steps:
 
     out:
       [zipped_files, report_files, bam_file, snap_file, snap_qc_file,
-      #analysis_motif_file,analysis_CSV_files, analysis_BED_files, analysis_PDF_files,
-      analysis_CSV_files, analysis_BED_files, analysis_PDF_files, 
+      analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files,
       analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files]
