@@ -91,7 +91,7 @@ steps:
   snaptools_align_paired_end:
     run: create_snap_steps/snaptools_align_paired_end_tool.cwl
     in:
-      input_reference: snaptools_index_ref_genome/genome_index
+      alignment_index: snaptools_index_ref_genome/genome_index
       input_fastq1: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq1
       input_fastq2: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq2
       tmp_folder: tmp_folder

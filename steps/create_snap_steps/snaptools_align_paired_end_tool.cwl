@@ -47,7 +47,7 @@ arguments:
     valueFrom: "--"
 
 inputs:
-  input_reference:
+  alignment_index:
     type: Directory?
     inputBinding:
       position: 1
