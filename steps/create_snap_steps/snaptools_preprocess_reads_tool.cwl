@@ -67,12 +67,10 @@ inputs:
     doc: The genome identifier (i.e. hg19, hg38, mm10).
 
   genome_size:
-    type: File
+    type: File?
     inputBinding:
       position: 4
       prefix: --genome-size
-    # TODO: why doesn't this default javascript work?
-    #default: "$(inputs.input_file.basename).chrom.sizes"
     doc: A a text file that contains corresponding genome sizes.
 
   barcode_file:
@@ -188,4 +186,4 @@ outputs:
       glob: "$(inputs.output_snap).qc"
 
 
-baseCommand: [snaptools, snap-pre]
+baseCommand: [/opt/snaptools_wrapper.py, snap-pre]

@@ -156,4 +156,4 @@ outputs:
     outputBinding:
       glob: $(inputs.output_bam)
 
-baseCommand: [/opt/snaptools_align_wrapper.py]
+baseCommand: [/opt/snaptools_wrapper.py, align-paired-end]
