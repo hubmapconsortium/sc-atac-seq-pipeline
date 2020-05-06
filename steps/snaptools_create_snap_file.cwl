@@ -74,12 +74,6 @@ steps:
     out:
       [genome_alignment_index, genome_size_index]
 
-  snaptools_create_ref_genome_size_file:
-    run: create_snap_steps/snaptools_create_ref_genome_size_file_tool.cwl
-    in:
-      ref_genome: input_reference_genome
-    out: [genome_sizes]
-
   snaptools_fastqc_tool:
     run: create_snap_steps/snaptools_fastqc_tool.cwl
     in:
@@ -122,7 +116,7 @@ steps:
     run: create_snap_steps/snaptools_preprocess_reads_tool.cwl
     in:
       input_file: snaptools_remove_blacklist/rmsk_bam
-      genome_size: snaptools_create_ref_genome_size_file/genome_sizes
+      genome_size: snaptools_index_ref_genome/genome_size_index
       genome_name: genome_name
     out: [snap_file, snap_qc_file]
 
