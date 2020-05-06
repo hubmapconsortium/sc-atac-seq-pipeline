@@ -64,7 +64,7 @@ inputs:
     doc: The BED file that contains peak information.
 
   buffer_size:
-    type: string?
+    type: int?
     inputBinding:
       position: 3
       prefix: --buffer-size
