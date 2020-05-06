@@ -1,21 +1,61 @@
 #!/usr/bin/env Rscript
-library("optparse")
+library(optparse)
+
+ospj = function(...) {
+  paste(c(...), collapse='/')
+}
+
+# TODO move/refactor this
+supplementary_data_path = '/opt/supplementary-data'
+
+default_gene_track = ospj(supplementary_data_path, 'gencode.v32.annotation.bed')
+default_encode_blacklist = ospj(supplementary_data_path, 'hg38.blacklist.bed')
+default_promoters = ospj(supplementary_data_path, 'hg38.promoters.bed')
+# /TODO move/refactor this
 
 option_list = list(
-  make_option(c("-b", "--selected_barcodes"), type="character", default=NULL,
-              help="Selected barcodes"),
-  make_option(c("-s", "--input_snap"), type="character", default=NULL,
-              help="SNAP file name"),
-  make_option(c("-e", "--encode_blacklist"), type="character", default=NULL,
-              help="ENCODE blacklist BED.GZ file"),
-  make_option(c("-g", "--gene_track"), type="character", default=NULL,
-              help="Gene track BED file"),
-  make_option(c("-a", "--gene_annotation"), type="character", default=NULL,
-              help="Gene annotation GTF file"),
-  make_option(c("-p", "--promoters"), type="character", default=NULL,
-              help="Promoters BED file"),
-  make_option(c("-n", "--processes"), type="integer", default=1,
-              help="Number of subprocesses/threads to use")
+  make_option(
+    c("-b", "--selected_barcodes"),
+    type="character",
+    default=NULL,
+    help="Selected barcodes"
+  ),
+  make_option(
+    c("-s", "--input_snap"),
+    type="character",
+    default=NULL,
+    help="SNAP file name"
+  ),
+  make_option(
+    c("-e", "--encode_blacklist"),
+    type="character",
+    default=default_encode_blacklist,
+    help="ENCODE blacklist BED.GZ file"
+  ),
+  make_option(
+    c("-g", "--gene_track"),
+    type="character",
+    default=default_gene_track,
+    help="Gene track BED file"
+  ),
+  make_option(
+    c("-a", "--gene_annotation"),
+    type="character",
+    default=NULL,
+    help="Gene annotation GTF file"
+  ),
+  make_option(
+    c("-p", "--promoters"),
+    type="character",
+    default=default_promoters,
+    help="Promoters BED file"
+  ),
+  make_option(
+    c("-n", "--processes"),
+    type="integer",
+    default=1,
+    help="Number of subprocesses/threads to use"
+  )
 )
 
 opt_parser = OptionParser(option_list=option_list)
@@ -383,7 +423,7 @@ x.sp = createGmatFromMat(
   input.mat="bmat",
   genes=genes.gr,
   do.par=TRUE,
-  num.cores=10
+  num.cores=opt$processes
 );
 
 # smooth the cell-by-gene matrix
@@ -395,13 +435,11 @@ x.sp = runMagic(
 );
 
 message(sprintf("Writing the cell by gene data to a Matrix Market format file\n"))
-cellByGeneData <- x.sp@gmat;
-cellByGeneMatrix <- as.matrix(cellByGeneData)
-cellByGene <- as.data.frame(cellByGeneMatrix);
-
 # Write cell by gene sparse matrix in Matrix Market format not CSV format
 #write.csv(cellByGene, file = "cellByGeneData.csv");
-writeMM(obj = cellByGeneData, file = "cellByGene.mtx")
+# barcodes are the same as above
+write.table(dimnames(x.sp@gmat)[[2]], 'genes.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
+writeMM(x.sp@gmat, file="cellByGene.mtx")
 
 
 # We don't need the cell by gene summary csv except for perhaps debugging
@@ -458,7 +496,7 @@ runMACS(
   #gsize: effective genome size. 'hs' for human, 'mm' for mouse, 'ce' for C. elegans, 'dm' for fruitfly (default: None)
   gsize="hs",
   buffer.size=500,
-  num.cores=5,
+  num.cores=opt$processes,
   macs.options="--nomodel --shift 37 --ext 73 --qval 1e-2 -B --SPMR --call-summits",
   tmp.folder=tempdir()
   );
@@ -474,7 +512,7 @@ peaks.ls = mclapply(seq(clusters.sel), function(i){
       path.to.macs="/usr/local/bin/macs2",
       gsize="hs", # mm, hs, etc
       buffer.size=500,
-      num.cores=1,
+      num.cores=opt$processes,
       macs.options="--nomodel --shift 100 --ext 200 --qval 5e-2 -B --SPMR",
       tmp.folder=tempdir()
  );

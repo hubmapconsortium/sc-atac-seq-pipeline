@@ -73,9 +73,8 @@ x.sp@mmat = runChromVAR(
     species="Homo sapiens"
 )
 
-message(sprintf("Writing the motif data to a Matrix Market format file\n"))
+message(sprintf("Writing the motif data to CSV\n"))
 
-# Write cell by gene sparse matrix in Matrix Market format not CSV format
 write.csv(
   x.sp@mmat,
   file="cellMotif.csv",

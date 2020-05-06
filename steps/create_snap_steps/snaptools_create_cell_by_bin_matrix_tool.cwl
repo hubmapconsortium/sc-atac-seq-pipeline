@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "hubmap/sc-atac-seq"
+    dockerPull: "hubmap/sc-atac-seq-grch38"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
@@ -77,7 +77,7 @@ inputs:
       position: 13
       prefix: --verbose
     default: "TRUE"
-    doc: A boolen tag; if true output the progress.
+    doc: A boolean tag; if true output the progress.
 
 outputs:
   snap_file_w_cell_by_bin:

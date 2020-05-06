@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "hubmap/sc-atac-seq"
+    dockerPull: "hubmap/sc-atac-seq-grch38"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
@@ -76,14 +76,14 @@ inputs:
     doc: The selected barcodes object file.
 
   encode_blacklist:
-    type: File
+    type: File?
     inputBinding:
       position: 3
       prefix: --encode_blacklist
     doc: A BED file of ENCODE blacklist to prevent potential artifacts.
 
   gene_track:
-    type: File
+    type: File?
     inputBinding:
       position: 4
       prefix: --gene_track
