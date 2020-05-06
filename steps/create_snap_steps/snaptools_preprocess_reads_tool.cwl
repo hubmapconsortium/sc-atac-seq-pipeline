@@ -43,12 +43,12 @@ requirements:
     outdirMin: 100000
 
 inputs:
-  input_file:
+  input_bam:
     type: File
     inputBinding:
       position: 1
       prefix: --input-file
-    doc: The genome BAM or BED file to be processed.
+    doc: The BAM file to be processed.
 
   output_snap:
     type: string?

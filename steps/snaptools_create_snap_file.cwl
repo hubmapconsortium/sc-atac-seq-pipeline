@@ -115,7 +115,7 @@ steps:
   snaptools_preprocess_reads:
     run: create_snap_steps/snaptools_preprocess_reads_tool.cwl
     in:
-      input_file: snaptools_remove_blacklist/rmsk_bam
+      input_bam: snaptools_remove_blacklist/rmsk_bam
       genome_size: snaptools_index_ref_genome/genome_size_index
       genome_name: genome_name
     out: [snap_file, snap_qc_file]
