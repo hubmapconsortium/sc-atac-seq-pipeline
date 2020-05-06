@@ -98,7 +98,7 @@ def run_with_defaults(snaptools_command: str, other_args: List[Union[Path, str]]
             args.append(option)
             args.append(func(default))
 
-    command = ['snaptools']
+    command = ['snaptools', snaptools_command]
     command.extend(fspath(arg) for arg in args)
 
     print('Running:', ' '.join(command))
