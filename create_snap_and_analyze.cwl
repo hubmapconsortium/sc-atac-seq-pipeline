@@ -28,21 +28,21 @@ $schemas:
 
 
 inputs:
-  input_reference_genome: File
-  reference_genome_index: File?
+  reference_genome_fasta: File?
+  alignment_index: File?
+  size_index: File?
   genome_name: string?
   sequence_directory: Directory
   blacklist_bed: File?
   tmp_folder: string?
 
-  alignment_threads: int?
-
-  encode_blacklist: File
-  gene_track: File
+  encode_blacklist: File?
+  gene_track: File?
   gene_annotation: File?
   preferred_barcodes: File?
   promoters: File?
 
+  alignment_threads: int?
 
 outputs:
   zipped_files:
@@ -142,8 +142,9 @@ steps:
     scatterMethod: dotproduct
     run: steps/snaptools_create_snap_file.cwl
     in:
-     input_reference_genome: input_reference_genome
-     reference_genome_index: reference_genome_index
+     reference_genome_fasta: reference_genome_fasta
+     alignment_index: alignment_index
+     size_index: size_index
      genome_name: genome_name
      input_fastq1: gather_sequence_bundles/fastq1_files
      input_fastq2: gather_sequence_bundles/fastq2_files

@@ -30,8 +30,9 @@ requirements:
   SubworkflowFeatureRequirement: {}
 
 inputs:
-  input_reference_genome: File
-  reference_genome_index: File?
+  reference_genome_fasta: File?
+  alignment_index: File?
+  size_index: File?
   genome_name: string?
   input_fastq1: File
   input_fastq2: File
@@ -104,16 +105,11 @@ steps:
   snaptools_index_ref_genome:
     run: create_snap_steps/snaptools_index_ref_genome_tool.cwl
     in:
-      input_fasta: input_reference_genome
-      reference_genome_index: reference_genome_index
+      input_fasta: reference_genome_fasta
+      alignment_index: alignment_index
+      size_index: size_index
     out:
-      [genome_index]
-
-  snaptools_create_ref_genome_size_file:
-    run: create_snap_steps/snaptools_create_ref_genome_size_file_tool.cwl
-    in:
-      ref_genome: input_reference_genome
-    out: [genome_sizes]
+      [genome_alignment_index, genome_size_index]
 
   snaptools_fastqc_tool:
     run: create_snap_steps/snaptools_fastqc_tool.cwl
@@ -132,7 +128,7 @@ steps:
   snaptools_align_paired_end:
     run: create_snap_steps/snaptools_align_paired_end_tool.cwl
     in:
-      input_reference: snaptools_index_ref_genome/genome_index
+      alignment_index: snaptools_index_ref_genome/genome_alignment_index
       input_fastq1: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq1
       input_fastq2: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq2
       tmp_folder: tmp_folder
@@ -156,8 +152,8 @@ steps:
   snaptools_preprocess_reads:
     run: create_snap_steps/snaptools_preprocess_reads_tool.cwl
     in:
-      input_file: snaptools_remove_blacklist/rmsk_bam
-      genome_size: snaptools_create_ref_genome_size_file/genome_sizes
+      input_bam: snaptools_remove_blacklist/rmsk_bam
+      genome_size: snaptools_index_ref_genome/genome_size_index
       genome_name: genome_name
     out: [snap_file, snap_qc_file]
 

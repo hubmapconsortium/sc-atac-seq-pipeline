@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "hubmap/sc-atac-seq"
+    dockerPull: "hubmap/sc-atac-seq-grch38"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
@@ -47,56 +47,35 @@ requirements:
       - $(inputs.input_fasta)
 
 inputs:
-  reference_genome_index:
+  input_fasta:
     type: File?
     inputBinding:
       position: 1
-      prefix: --reference-genome-index
-    doc: The genome reference index file in tar.gz format. If provided snaptools index-genome is not called.
+      prefix: --reference-genome
+    doc: The reference genome file in FASTA format, if in
 
-  input_fasta:
-    type: File
+  alignment_index:
+    type: File?
     inputBinding:
       position: 2
-      prefix: --input-fasta
-    doc: The genome reference file in fasta format to be indexed.
+      prefix: --alignment-index
+    doc: The alignment index file in tar.* format. If provided snaptools index-genome is not called.
 
-  output_prefix:
-    type: string?
+  size_index:
+    type: File?
     inputBinding:
       position: 3
-      prefix: --output-prefix
-    #default: "$(inputs.input_fasta[\"nameroot\"])"
-    doc: The output prefix for the genome reference index file.
-
-  aligner:
-    type: string?
-    inputBinding:
-      position: 4
-      prefix: --aligner
-    default: "bwa"
-    doc: The name of the aligner, e.g. 'bwa'.
-
-  path_to_aligner:
-    type: string?
-    inputBinding:
-      position: 5
-      prefix: --path-to-aligner
-    default: "/usr/local/bin"
-    doc: The file system path to the aligner.
-
-  num_threads:
-    type: string?
-    inputBinding:
-      position: 6
-      prefix: --num-threads
-    doc: The number of threads to use.
+      prefix: --size-index
+    doc: The genome size index, produced by "samtools faidx".
 
 outputs:
-  genome_index:
-    type: File
-    secondaryFiles: [".bwt", ".sa", ".ann", ".pac", ".amb"]
+  genome_alignment_index:
+    type: Directory?
     outputBinding:
-      glob: $(inputs.input_fasta.basename)
+      glob: "index"
+  genome_size_index:
+    type: File?
+    outputBinding:
+      glob: "*.fai"
 
-baseCommand: [/opt/create_reference_genome_index.sh]
+baseCommand: [/opt/index_reference_genome.py]
