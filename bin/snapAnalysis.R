@@ -1,21 +1,61 @@
 #!/usr/bin/env Rscript
-library("optparse")
+library(optparse)
+
+ospj = function(...) {
+  paste(c(...), collapse='/')
+}
+
+# TODO move/refactor this
+supplementary_data_path = '/opt/supplementary-data'
+
+default_gene_track = ospj(supplementary_data_path, 'gencode.v32.annotation.bed')
+default_encode_blacklist = ospj(supplementary_data_path, 'hg38.blacklist.bed')
+default_promoters = ospj(supplementary_data_path, 'hg38.promoters.bed')
+# /TODO move/refactor this
 
 option_list = list(
-  make_option(c("-b", "--selected_barcodes"), type="character", default=NULL,
-              help="Selected barcodes"),
-  make_option(c("-s", "--input_snap"), type="character", default=NULL,
-              help="SNAP file name"),
-  make_option(c("-e", "--encode_blacklist"), type="character", default=NULL,
-              help="ENCODE blacklist BED.GZ file"),
-  make_option(c("-g", "--gene_track"), type="character", default=NULL,
-              help="Gene track BED file"),
-  make_option(c("-a", "--gene_annotation"), type="character", default=NULL,
-              help="Gene annotation GTF file"),
-  make_option(c("-p", "--promoters"), type="character", default=NULL,
-              help="Promoters BED file"),
-  make_option(c("-n", "--processes"), type="integer", default=1,
-              help="Number of subprocesses/threads to use")
+  make_option(
+    c("-b", "--selected_barcodes"),
+    type="character",
+    default=NULL,
+    help="Selected barcodes"
+  ),
+  make_option(
+    c("-s", "--input_snap"),
+    type="character",
+    default=NULL,
+    help="SNAP file name"
+  ),
+  make_option(
+    c("-e", "--encode_blacklist"),
+    type="character",
+    default=default_encode_blacklist,
+    help="ENCODE blacklist BED.GZ file"
+  ),
+  make_option(
+    c("-g", "--gene_track"),
+    type="character",
+    default=default_gene_track,
+    help="Gene track BED file"
+  ),
+  make_option(
+    c("-a", "--gene_annotation"),
+    type="character",
+    default=NULL,
+    help="Gene annotation GTF file"
+  ),
+  make_option(
+    c("-p", "--promoters"),
+    type="character",
+    default=default_promoters,
+    help="Promoters BED file"
+  ),
+  make_option(
+    c("-n", "--processes"),
+    type="integer",
+    default=1,
+    help="Number of subprocesses/threads to use"
+  )
 )
 
 opt_parser = OptionParser(option_list=option_list)
