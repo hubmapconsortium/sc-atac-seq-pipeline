@@ -435,13 +435,11 @@ x.sp = runMagic(
 );
 
 message(sprintf("Writing the cell by gene data to a Matrix Market format file\n"))
-cellByGeneData <- x.sp@gmat;
-cellByGeneMatrix <- as.matrix(cellByGeneData)
-cellByGene <- as.data.frame(cellByGeneMatrix);
-
 # Write cell by gene sparse matrix in Matrix Market format not CSV format
 #write.csv(cellByGene, file = "cellByGeneData.csv");
-writeMM(obj = cellByGeneData, file = "cellByGene.mtx")
+# barcodes are the same as above
+write.table(dimnames(x.sp@gmat)[[2]], 'genes.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
+writeMM(x.sp@gmat, file="cellByGene.mtx")
 
 
 # We don't need the cell by gene summary csv except for perhaps debugging
