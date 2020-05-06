@@ -33,6 +33,7 @@ inputs:
   preferred_barcodes: File?
   promoters: File?
   input_snap: File
+  test_mode: boolean?
 
 outputs:
   analysis_CSV_files:
@@ -93,6 +94,7 @@ steps:
       gene_track: gene_track
       gene_annotation: gene_annotation
       promoters: promoters
+      test_mode: test_mode
     out:
       [snap_rds, peaks_combined_bed, CSV_files, BED_files, PDF_files, RDS_objects, TXT_files, MTX_files]
 

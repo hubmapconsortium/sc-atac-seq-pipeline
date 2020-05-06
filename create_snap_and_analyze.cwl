@@ -35,6 +35,7 @@ inputs:
   sequence_directory: Directory
   blacklist_bed: File?
   tmp_folder: string?
+  test_mode: boolean?
 
   encode_blacklist: File?
   gene_track: File?

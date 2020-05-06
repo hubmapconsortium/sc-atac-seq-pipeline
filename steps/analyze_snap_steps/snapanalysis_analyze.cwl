@@ -103,6 +103,13 @@ inputs:
       prefix: --promoters
     doc: A BED file of promoters.
 
+  test_mode:
+    type: boolean?
+    default: false
+    inputBinding:
+      prefix: --test
+    doc: Run pipeline in test mode (lower thresholds for cell/bin/etc. filtering)
+
   #tmpdir:
   #  type: string?
   #  inputBinding:

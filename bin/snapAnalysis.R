@@ -59,6 +59,11 @@ option_list = list(
     type="integer",
     default=1,
     help="Number of subprocesses/threads to use"
+  ),
+  make_option(
+    "--test",
+    action="store_true",
+    help="Run in test mode: use lower thresholds for filtering"
   )
 )
 
