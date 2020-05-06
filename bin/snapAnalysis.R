@@ -423,7 +423,7 @@ x.sp = createGmatFromMat(
   input.mat="bmat",
   genes=genes.gr,
   do.par=TRUE,
-  num.cores=10
+  num.cores=opt$processes
 );
 
 # smooth the cell-by-gene matrix
@@ -498,7 +498,7 @@ runMACS(
   #gsize: effective genome size. 'hs' for human, 'mm' for mouse, 'ce' for C. elegans, 'dm' for fruitfly (default: None)
   gsize="hs",
   buffer.size=500,
-  num.cores=5,
+  num.cores=opt$processes,
   macs.options="--nomodel --shift 37 --ext 73 --qval 1e-2 -B --SPMR --call-summits",
   tmp.folder=tempdir()
   );
@@ -514,7 +514,7 @@ peaks.ls = mclapply(seq(clusters.sel), function(i){
       path.to.macs="/usr/local/bin/macs2",
       gsize="hs", # mm, hs, etc
       buffer.size=500,
-      num.cores=1,
+      num.cores=opt$processes,
       macs.options="--nomodel --shift 100 --ext 200 --qval 5e-2 -B --SPMR",
       tmp.folder=tempdir()
  );
