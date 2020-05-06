@@ -67,7 +67,7 @@ CommandData = Tuple[
 ]
 
 SNAPTOOLS_COMMAND_DEFAULTS: Dict[str, List[CommandData]] = {
-    'align_paired_end': [
+    'align-paired-end': [
         ('--input-reference', snaptools_defaults.DEFAULT_ALIGNMENT_INDEX, find_base_index_path),
     ],
     'snap-pre': [
