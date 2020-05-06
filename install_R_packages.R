@@ -1,11 +1,12 @@
 install.packages(
 	c(
-		'devtools',
+		'BiocManager',
 		'Matrix',
+		'devtools',
 		'doSNOW',
-		'plot3D',
 		'optparse',
-		'BiocManager'
+		'plot3D',
+		'umap'
 	),
 	Ncpus=6
 )
@@ -24,14 +25,14 @@ install_github('r3fang/SnapATAC')
 BiocManager::install(
     c(
 		'BSgenome.Hsapiens.NCBI.GRCh38',
-		'rtracklayer',
+		'JASPAR2016',
 		'RFLPtools',
-		'rmarkdown',
-		'dplyr',
-		'motifmatchr',
 		'SummarizedExperiment',
 		'chromVAR',
-		'JASPAR2016'
+		'dplyr',
+		'motifmatchr',
+		'rmarkdown',
+		'rtracklayer'
 	),
 	ask=FALSE,
 	Ncpus=6
