@@ -84,7 +84,7 @@ inputs:
       position: 5
       prefix: --verbose
     default: "TRUE"
-    doc: A boolen tag; if true output the progress.
+    doc: A boolean tag; if true output the progress.
 
 outputs:
   snap_file_w_peaks:

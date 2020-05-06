@@ -42,18 +42,22 @@ requirements:
     ramMin: 1024
     outdirMin: 100000
 
+arguments:
+  - position: 1
+    valueFrom: "--"
+
 inputs:
   input_bam:
     type: File
     inputBinding:
-      position: 1
+      position: 2
       prefix: --input-file
     doc: The BAM file to be processed.
 
   output_snap:
     type: string?
     inputBinding:
-      position: 2
+      position: 3
       prefix: --output-snap
     default: "snaptools.snap"
     doc: The name to use for the output SNAP file.
@@ -61,7 +65,7 @@ inputs:
   genome_name:
     type: string?
     inputBinding:
-      position: 3
+      position: 4
       prefix: --genome-name
     default: "hg38"
     doc: The genome identifier (i.e. hg19, hg38, mm10).
@@ -69,7 +73,7 @@ inputs:
   genome_size:
     type: File?
     inputBinding:
-      position: 4
+      position: 5
       prefix: --genome-size
     doc: A a text file that contains corresponding genome sizes.
 
@@ -118,7 +122,7 @@ inputs:
       position: 11
       prefix: --keep-chrm
     default: "TRUE"
-    doc: A boolen tag indicating whether to keep fragments mapped to chrM.
+    doc: A boolean tag indicating whether to keep fragments mapped to chrM.
 
   keep_single:
     type: string?
@@ -126,7 +130,7 @@ inputs:
       position: 12
       prefix: --keep-single
     default: "TRUE"
-    doc: A boolen tag indicating whether to keep those reads whose mates are not mapped or are missing.
+    doc: A boolean tag indicating whether to keep those reads whose mates are not mapped or are missing.
 
   keep_secondary:
     type: string?
@@ -134,14 +138,14 @@ inputs:
       position: 13
       prefix: --keep-secondary
     default: "FALSE"
-    doc: A boolen tag indicating whether to keep secondary alignments.
+    doc: A boolean tag indicating whether to keep secondary alignments.
 
   keep_discordant:
     type: string?
     inputBinding:
       position: 14
       prefix: --keep-discordant
-    doc: A boolen tag indicating whether to keep discordant read pairs.
+    doc: A boolean tag indicating whether to keep discordant read pairs.
 
   tmp_folder:
     type: string?
@@ -164,7 +168,7 @@ inputs:
     inputBinding:
       position: 17
       prefix: --qc-file
-    doc: A boolen tag indicating whether to create a master qc file.
+    doc: A boolean tag indicating whether to create a master qc file.
 
   verbose:
     type: string?
@@ -172,7 +176,7 @@ inputs:
       position: 18
       prefix: --verbose
     default: "TRUE"
-    doc: A boolen tag; if true output the progress.
+    doc: A boolean tag; if true output the progress.
 
 outputs:
   snap_file:

@@ -43,14 +43,14 @@ requirements:
     outdirMin: 100000
 
 arguments:
-  - position: 2
+  - position: 1
     valueFrom: "--"
 
 inputs:
   alignment_index:
     type: Directory?
     inputBinding:
-      position: 1
+      position: 2
       prefix: --alignment-index
     doc: The alignment index to use.
 
@@ -148,7 +148,7 @@ inputs:
     inputBinding:
       position: 15
       prefix: --verbose
-    doc: A boolen tag; if true output the progress.
+    doc: A boolean tag; if true output the progress.
 
 outputs:
   paired_end_bam:
