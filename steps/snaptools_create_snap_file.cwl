@@ -72,7 +72,7 @@ steps:
       alignment_index: alignment_index
       size_index: size_index
     out:
-      [genome_index, size_index]
+      [genome_alignment_index, genome_size_index]
 
   snaptools_create_ref_genome_size_file:
     run: create_snap_steps/snaptools_create_ref_genome_size_file_tool.cwl

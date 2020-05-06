@@ -69,11 +69,11 @@ inputs:
     doc: The genome size index, produced by "samtools faidx".
 
 outputs:
-  genome_index:
+  genome_alignment_index:
     type: Directory?
     outputBinding:
       glob: "index"
-  size_index:
+  genome_size_index:
     type: File?
     outputBinding:
       glob: "*.fai"
