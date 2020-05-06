@@ -41,8 +41,8 @@ inputs:
   tmp_folder: string?
   alignment_threads: int?
 
-  encode_blacklist: File
-  gene_track: File
+  encode_blacklist: File?
+  gene_track: File?
   gene_annotation: File?
   preferred_barcodes: File?
   promoters: File?
