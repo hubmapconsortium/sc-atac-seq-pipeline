@@ -1,5 +1,9 @@
 #!/usr/bin/env Rscript
 library(optparse)
+library(SnapATAC)
+library(rtracklayer)
+library(GenomicRanges)
+
 
 ospj = function(...) {
   paste(c(...), collapse='/')
@@ -77,7 +81,6 @@ sprintf("tempdir() is: %s", mytmpdir)
 
 #write("TMPDIR = D:/mnt/", file=file.path(Sys.getenv('TMPDIR'), '.Renviron'))
 
-library(SnapATAC)
 x.sp = createSnap(
   file=opt$input_snap,
   sample="Input_snap",
@@ -98,9 +101,6 @@ if (!is.null(opt$selected_barcodes)) {
   # Otherwise select cells based on "coverage" and "promoter ratio -"
   # percentage of reads mapped to promoters per cell
   # https://github.com/r3fang/SnapATAC/issues/139
-
-  library(rtracklayer)
-  library(GenomicRanges)
 
   message(sprintf("Selecting barcodes base on coverage and promoter ratio\n"))
   gtf.gr <- rtracklayer::import(opt$gene_annotation)
@@ -132,8 +132,6 @@ if (!is.null(opt$selected_barcodes)) {
     print_help(opt_parser)
     stop("--promotors argument must be supplied if no barcode CSV or gene annotation file is provided", call.=FALSE)
   }
-
-  library(GenomicRanges)
 
   # From Dihn's KC20_Test.Rmd file
   # The input for example is "hg38.promoters.bed"
@@ -210,7 +208,6 @@ dev.off()
 # Filter out any bins overlapping with the ENCODE blacklist to prevent from potential artifacts.
 message(sprintf("Doing bin filtering\n"))
 
-library(GenomicRanges)
 # Read the black list table and ignore missing columns
 # NOTE: ignoring missing columns could cause a problem
 # if by some chance the chr region start or end was missing from the BED file
