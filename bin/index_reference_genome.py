@@ -75,7 +75,6 @@ def index_if_necessary(
         raise ValueError('Alignment index is required if providing size index.')
 
     if alignment_index:
-        extract_alignment_index(alignment_index)
         if not size_index:
             message = """
             Size index (from `samtools faidx`) is required if providing alignment
@@ -83,6 +82,7 @@ def index_if_necessary(
             of `samtools faidx` is not yet implemented. 
             """
             raise NotImplementedError(normalize_whitespace(message))
+        extract_alignment_index(alignment_index)
         size_index_dest = Path() / size_index.name
         print('Copying', size_index, 'to', size_index_dest)
         copy(size_index, size_index_dest)
