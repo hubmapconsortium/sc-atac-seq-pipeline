@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 from os import fspath
 from pathlib import Path
 from subprocess import run
-from typing import Callable, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Callable, Dict, List, Tuple, Union
 
 import snaptools_defaults
 from utils import identity
@@ -99,7 +99,7 @@ def run_with_defaults(snaptools_command: str, other_args: List[Union[Path, str]]
             args.append(func(default))
 
     command = ['snaptools']
-    command.extend(args)
+    command.extend(fspath(arg) for arg in args)
 
     print('Running:', ' '.join(command))
     run(command, check=True)
