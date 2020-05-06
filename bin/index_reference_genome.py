@@ -9,6 +9,7 @@ from utils import normalize_whitespace
 
 SNAPTOOLS_INDEX_REFERENCE_COMMAND = [
     'snaptools',
+    'index-genome',
     '--aligner=bwa',
     # from Dockerfile
     '--path-to-aligner=/usr/local/bin',
@@ -30,14 +31,14 @@ def index_reference(reference_genome: Path):
     index_dest_dir = Path('index')
     index_dest_dir.mkdir()
     snaptools_command = [
-        piece.format(reference_genome)
+        piece.format(reference_genome=reference_genome)
         for piece in SNAPTOOLS_INDEX_REFERENCE_COMMAND
     ]
     print('Running', ' '.join(snaptools_command))
     run(snaptools_command, check=True, cwd=index_dest_dir)
 
     samtools_command = [
-        piece.format(reference_genome)
+        piece.format(reference_genome=reference_genome)
         for piece in SAMTOOLS_FAIDX_COMMAND
     ]
     print('Running', ' '.join(snaptools_command))
