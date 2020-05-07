@@ -337,7 +337,6 @@ plotDimReductPW(
   pdf.width=7
 )
 
-
 # Graph-based clustering
 # Using the selected significant dimensions, we next construct a K Nearest Neighbor
 # (KNN) Graph (k=15). Each cell is a node and the k-nearest neighbors of each cell
@@ -437,38 +436,6 @@ message(sprintf("Writing the cell by gene data to a Matrix Market format file\n"
 # barcodes are the same as above
 write.table(dimnames(x.sp@gmat)[[2]], 'genes.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
 writeMM(x.sp@gmat, file="cellByGene.mtx")
-
-
-# We don't need the cell by gene summary csv except for perhaps debugging
-#cellByGeneSummary <- summary(cellByGeneData)
-#
-## Rename the summary column names i,j
-##https://stackoverflow.com/questions/7531868/how-to-rename-a-single-column-in-a-data-frame
-#names(cellByGeneSummary)[names(cellByGeneSummary) == 'i'] <- 'BarcodeID'
-#names(cellByGeneSummary)[names(cellByGeneSummary) == 'j'] <- 'GeneID'
-#
-## Update: only including the numeric barcode IDs in most files, since most people won't
-## care about the actual barcodes for most uses, and including these in every single
-## file just has the effect of inflating the file sizes. If people actually do care about
-## the barcode sequence of a cell, they'll still be able to use 'cellBarcodes.csv' to obtain it.
-### Add barcodes column to cell by bin
-##cellByGeneSummary$Barcode <- BarcodeLookupTable[match(cellByGeneSummary$BarcodeID, BarcodeLookupTable$BarcodeID), "Barcode"]
-#
-## Get the gene names from the sparse matrix
-#summaryGeneNames <- colnames(cellByGene)[cellByGeneSummary$GeneID]
-#cellByGeneSummary$Gene <- summaryGeneNames
-#
-#message(sprintf("Writing the cell by gene summary to a csv\n"))
-#write.csv(cellByGeneSummary, file = "cellByGene_summary.csv", row.names = FALSE)
-
-message(sprintf("Writing the gene id to gene name lookup table to a csv\n"))
-# Create a lookup table for gene ID to gene name string
-#http://best-answer.net/easy-way-to-perform-a-lookup-in-r/
-geneNames <- colnames(cellByGene)
-geneIDs <- c(1:length(geneNames))
-geneLookupTable <- data.frame("GeneID" = geneIDs, "Gene" = geneNames)
-write.csv(geneLookupTable, file = "cellGenes.csv", row.names = FALSE)
-
 
 # Step 11. Identify peaks
 # Next we aggregate cells from the each cluster to create an ensemble track for
