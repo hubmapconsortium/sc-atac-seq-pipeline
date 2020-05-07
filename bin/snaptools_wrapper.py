@@ -47,7 +47,7 @@ def run_with_defaults(snaptools_command: str, other_args: List[Union[Path, str]]
     # finding the "base" path of a genome index). If the option is not present,
     # append with the default value
     for option, default, func in SNAPTOOLS_COMMAND_DEFAULTS[snaptools_command]:
-        if snaptools_command in args:
+        if option in args:
             existing_option_index = args.index(option)
             value_index = existing_option_index + 1
             args[value_index] = func(args[value_index])
