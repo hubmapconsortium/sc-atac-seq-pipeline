@@ -62,7 +62,7 @@ def index_if_necessary(
     if reference_genome:
         if alignment_index or size_index:
             message = """
-            Found reference genome and alignment index or size index. Providing a
+            Found reference genome and [alignment index or size index]. Providing a
             reference genome in FASTA format is only necessary if it should be
             indexed by this pipeline; either omit the reference genome or omit
             the precomputed index files.
