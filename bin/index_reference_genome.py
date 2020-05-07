@@ -3,9 +3,9 @@ from argparse import ArgumentParser
 from pathlib import Path
 from shutil import copy
 from subprocess import run
-from typing import Optional
+from typing import List, Optional, Tuple
 
-from utils import normalize_whitespace
+from utils import find_base_index_path, normalize_whitespace
 
 SNAPTOOLS_INDEX_REFERENCE_COMMAND = [
     'snaptools',
@@ -44,7 +44,7 @@ def index_reference(reference_genome: Path):
     print('Running', ' '.join(snaptools_command))
     run(samtools_command)
 
-def extract_alignment_index(alignment_index: Path):
+def extract_alignment_index(alignment_index: Path) -> Path:
     index_dest_dir = Path('index')
     index_dest_dir.mkdir()
     command = [
@@ -53,6 +53,59 @@ def extract_alignment_index(alignment_index: Path):
     ]
     print('Running', ' '.join(command))
     run(command, check=True, cwd=index_dest_dir)
+    return index_dest_dir
+
+def read_alignment_index_seq_lengths(bwa_ann_file: Path) -> List[Tuple[str, int]]:
+    # Returning a list instead of a generator so we can be nice
+    # and show the length in the calling function
+    seq_lengths = []
+    with open(bwa_ann_file) as f:
+        for line in f:
+            pieces = line.strip().split()
+            if pieces[0] != '0' or len(pieces) <= 3:
+                continue
+            sequence_name = pieces[1]
+            if pieces[4] == 'bp':
+                length = int(pieces[3])
+            elif pieces[4].startswith('LN:'):
+                length = int(pieces[4].split(':')[1])
+            seq_lengths.append((sequence_name, length))
+    return seq_lengths
+
+def create_size_index_from_alignment_index(alignment_index_dir: Path) -> Path:
+    """
+    Parses supplementary data in the BWA index to create a sequence length
+    index in the same format as `samtools faidx`. This is *NOT* the same
+    as what `samtools` would produce, and is not usable for everything that
+    a "real" .fai file would be.
+
+    Specifically, we only know the lengths of each sub-sequence, not:
+     * offset in bytes in the reference FASTA file
+     * number of base pairs in each line of a sequence
+     * number of bytes in each line of a sequence
+    so we write 0 values for these. This is is specifically useful for
+    `snaptools snap-pre`, so this temporary file should not be exposed as
+    an output of the overall workflow.
+
+    :param alignment_index_dir: Directory containing a BWA index
+    :return: Path to fai-like file
+    """
+    base_index_path = find_base_index_path(alignment_index_dir)
+    bwa_ann_file = base_index_path.parent / f'{base_index_path.name}.ann'
+    seq_lengths = read_alignment_index_seq_lengths(bwa_ann_file)
+    print('Read lengths for', len(seq_lengths), 'sequences from', bwa_ann_file)
+
+    # no concrete benefit to using Path for a filename in the current directory,
+    # but I like being consistent and using Paths for everything filesystem-related
+    output_file = Path(f'{base_index_path.stem}.fai')
+    with open(output_file, 'w') as f:
+        # This just needs to work in a quick-and-dirty way, so not using
+        # anything more structured like pandas or even the Python CSV module
+        for sequence_name, length in seq_lengths:
+            line_data = [sequence_name, str(length)] + ['0'] * 3
+            print('\t'.join(line_data), file=f)
+
+    return output_file
 
 def index_if_necessary(
         reference_genome: Optional[Path],
@@ -62,7 +115,7 @@ def index_if_necessary(
     if reference_genome:
         if alignment_index or size_index:
             message = """
-            Found reference genome and alignment index or size index. Providing a
+            Found reference genome and [alignment index or size index]. Providing a
             reference genome in FASTA format is only necessary if it should be
             indexed by this pipeline; either omit the reference genome or omit
             the precomputed index files.
@@ -75,17 +128,19 @@ def index_if_necessary(
         raise ValueError('Alignment index is required if providing size index.')
 
     if alignment_index:
-        if not size_index:
+        index_dir = extract_alignment_index(alignment_index)
+        if size_index:
+            size_index_dest = Path() / size_index.name
+            print('Copying', size_index, 'to', size_index_dest)
+            copy(size_index, size_index_dest)
+        else:
             message = """
-            Size index (from `samtools faidx`) is required if providing alignment
-            index. Conversion of BWA index supplementary data to the output format
-            of `samtools faidx` is not yet implemented. 
+            Found alignment index, but no size index (from `samtools faidx`)
+            provided. Creating temporary size index from alignment index.
             """
-            raise NotImplementedError(normalize_whitespace(message))
-        extract_alignment_index(alignment_index)
-        size_index_dest = Path() / size_index.name
-        print('Copying', size_index, 'to', size_index_dest)
-        copy(size_index, size_index_dest)
+            print(normalize_whitespace(message))
+            size_index = create_size_index_from_alignment_index(index_dir)
+            print('Wrote dummy genome size index to:', size_index)
 
 if __name__ == '__main__':
     p = ArgumentParser()
