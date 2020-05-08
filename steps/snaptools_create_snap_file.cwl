@@ -27,6 +27,7 @@ $schemas:
 
 requirements:
   MultipleInputFeatureRequirement: {}
+  SubworkflowFeatureRequirement: {}
 
 inputs:
   reference_genome_fasta: File?
@@ -39,6 +40,13 @@ inputs:
   blacklist_bed: File?
   tmp_folder: string?
   alignment_threads: int?
+
+  encode_blacklist: File?
+  gene_track: File?
+  gene_annotation: File?
+  preferred_barcodes: File?
+  promoters: File?
+
 
 outputs:
   bam_file:
@@ -63,6 +71,35 @@ outputs:
       type: array
       items: File
     outputSource: snaptools_fastqc_tool/report_files
+
+  analysis_motif_file:
+    type: File
+    outputSource: snapanalysis_setup_and_analyze/analysis_motif_file
+
+  analysis_CSV_files:
+    type: File[]
+    outputSource: snapanalysis_setup_and_analyze/analysis_CSV_files
+
+  analysis_BED_files:
+    type: File[]
+    outputSource: snapanalysis_setup_and_analyze/analysis_BED_files
+
+  analysis_PDF_files:
+    type: File[]
+    outputSource: snapanalysis_setup_and_analyze/analysis_PDF_files
+
+  analysis_RDS_objects:
+    type: File[]
+    outputSource: snapanalysis_setup_and_analyze/analysis_RDS_objects
+
+  analysis_TXT_files:
+    type: File[]
+    outputSource: snapanalysis_setup_and_analyze/analysis_TXT_files
+
+  analysis_MTX_files:
+    type: File[]
+    outputSource: snapanalysis_setup_and_analyze/analysis_MTX_files
+
 
 steps:
   snaptools_index_ref_genome:
@@ -125,3 +162,18 @@ steps:
     in:
       snap_file: snaptools_preprocess_reads/snap_file
     out: [snap_file_w_cell_by_bin]
+
+
+  snapanalysis_setup_and_analyze:
+    run: snapanalysis_setup_and_analyze.cwl
+    in:
+      input_snap: snaptools_create_cell_by_bin_matrix/snap_file_w_cell_by_bin
+      preferred_barcodes: preferred_barcodes
+      encode_blacklist: encode_blacklist
+      gene_track: gene_track
+      gene_annotation: gene_annotation
+      promoters: promoters
+
+    out:
+      [analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files,
+      analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files]

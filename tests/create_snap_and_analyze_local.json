@@ -1,28 +1,6 @@
 {
-  "input_reference_genome": {
-        "class": "File",
-        "path": "Homo_sapiens_assembly38.fasta"
-  },
-  "reference_genome_index": {
-        "class": "File",
-        "path": "hg38_index.tar.gz"
-  },
   "sequence_directory": {
         "class": "Directory",
         "path": "./."
-  },
-
-
-  "encode_blacklist": {
-        "class": "File",
-        "path": "hg38.blacklist.bed"
-  },
-  "gene_track": {
-        "class": "File",
-        "path": "gencode.v32.annotation.bed"
-    },
-  "promoters": {
-        "class": "File",
-        "path": "hg38.promoters.bed"
-    }
+  }
 }
