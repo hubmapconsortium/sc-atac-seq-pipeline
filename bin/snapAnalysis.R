@@ -70,6 +70,23 @@ option_list = list(
 opt_parser = OptionParser(option_list=option_list)
 opt = parse_args(opt_parser)
 
+# I expected the action "store_true" to store TRUE if the option is given
+# and FALSE if not -- the element is missing entirely from the list if the
+# option is omitted >:(
+if (is.null(opt$test)) {
+  thresholds = list(
+    fragment_min=2000,
+    umi_min=1000,
+    mito_ratio_max=0.5
+  )
+} else {
+  thresholds = list(
+    fragment_min=0,
+    umi_min=0,
+    mito_ratio_max=1
+  )
+}
+
 if (is.null(opt$input_snap)){
   print_help(opt_parser)
   stop("--input_snap argument must be supplied (input file).", call.=FALSE)
@@ -173,8 +190,8 @@ plotBarcode(x.sp, pdf.file.name = "BarcodeQualityControlDistributionBefore.pdf",
 x.sp = filterCells(
     obj=x.sp,
     subset.names=c("fragment.num", "UMI", "mito.ratio"),
-    low.thresholds=c(2000, 1000, 0),
-    high.thresholds=c(Inf, Inf, 0.5)
+    low.thresholds=c(thresholds$fragment_min, thresholds$umi_min, 0),
+    high.thresholds=c(Inf, Inf, thresholds$mito_ratio_max)
 )
 plotBarcode(x.sp, pdf.file.name = "BarcodeQualityControlDistributionAfter.pdf", col="grey", border="grey")
 
