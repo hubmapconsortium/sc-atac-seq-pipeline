@@ -8,7 +8,7 @@ requirements:
   DockerRequirement:
     dockerPull: "seandonahue5311/atac:v0.2"
 
-baseCommand: /opt/sort_index_frag.py
+baseCommand: /opt/bulk/sort_index_frag.py
 
 inputs:
   input_bam:
