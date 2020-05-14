@@ -15,6 +15,9 @@ supplementary_data_path = '/opt/supplementary-data'
 default_gene_track = ospj(supplementary_data_path, 'gencode.v32.annotation.bed')
 default_encode_blacklist = ospj(supplementary_data_path, 'hg38.blacklist.bed')
 default_promoters = ospj(supplementary_data_path, 'hg38.promoters.bed')
+
+snaptools_path = '/usr/local/bin/snaptools'
+macs2_path = '/usr/local/bin/macs2'
 # /TODO move/refactor this
 
 option_list = list(
@@ -453,57 +456,65 @@ message(sprintf("Identifying peaks\n"))
 # "MACS2" and "snaptools" preinstalled and excutable.
 # https://rdrr.io/github/r3fang/SnapATAC/man/runMACS.html
 runMACS(
-  obj=x.sp[which(x.sp@cluster==1),],
-  output.prefix="Peaks.1",
-  path.to.snaptools="/usr/local/bin/snaptools",
-  path.to.macs="/usr/local/bin/macs2",
+  obj=x.sp,
+  output.prefix="overall",
+  path.to.snaptools=snaptools_path,
+  path.to.macs=macs2_path,
   #gsize: effective genome size. 'hs' for human, 'mm' for mouse, 'ce' for C. elegans, 'dm' for fruitfly (default: None)
   gsize="hs",
   buffer.size=500,
   num.cores=opt$processes,
   macs.options="--nomodel --shift 37 --ext 73 --qval 1e-2 -B --SPMR --call-summits",
   tmp.folder=tempdir()
-  )
+)
 
 # call peaks for all cluster with more than 100 cells
-clusters.sel = names(table(x.sp@cluster))[which(table(x.sp@cluster) > 200)]
-peaks.ls = mclapply(seq(clusters.sel), function(i){
-  print(clusters.sel[i])
-  runMACS(
-      obj=x.sp[which(x.sp@cluster==clusters.sel[i]),],
-      output.prefix=paste0("Peaks_", gsub(" ", "_", clusters.sel)[i]),
-      path.to.snaptools="/usr/local/bin/snaptools",
-      path.to.macs="/usr/local/bin/macs2",
+cluster_counts = tablepaste0("cluster_", cluster)(x.sp@cluster)
+clusters_sel = names(cluster_counts)[which(cluster_counts > 100)]
+peaks.ls = lapply(
+  clusters_sel,
+  function(cluster) {
+    cat(paste(c('Running MACS2 for cluster', cluster, '\n')))
+    runMACS(
+      obj=x.sp[which(x.sp@cluster==cluster),],
+      output.prefix=paste0('cluster_', cluster),
+      path.to.snaptools=snaptools_path,
+      path.to.macs=macs2_path,
       gsize="hs", # mm, hs, etc
       buffer.size=500,
       num.cores=opt$processes,
       macs.options="--nomodel --shift 100 --ext 200 --qval 5e-2 -B --SPMR",
       tmp.folder=tempdir()
- )
-}, mc.cores=5)
+    )
+  }
+)
 
-#assuming all .narrowPeak files in the current folder are generated from the clusters
-peaks.names = system("ls | grep narrowPeak", intern=TRUE)
-peak.gr.ls = lapply(peaks.names, function(x){
-  peak.df = read.table(x)
-  GRanges(peak.df[,1], IRanges(peak.df[,2], peak.df[,3]))
-})
+# TODO: possibly construct file names ourselves since we know exactly which
+# ones should exist, given the 'clusters_sel' vector above
+cluster_peak_files = list.files(pattern='cluster_\\d+_peaks\\.narrowPeak')
+peak.gr.ls = lapply(
+  cluster_peak_files,
+  function(filename) {
+    peak.df = read.table(filename, col.names=as.character(1:10))
+    GRanges(peak.df[,1], IRanges(peak.df[,2], peak.df[,3]))
+  }
+)
 peak.gr = reduce(Reduce(c, peak.gr.ls))
-peak.gr
 
 message(sprintf("Creating a cell by peak matrix\n"))
-# Create a cell-by-peak matrix
-# Using merged peak list as a reference, we next create a cell-by-peak matrix using the original snap file.
 
 peaks.df = as.data.frame(peak.gr)[,1:3]
 
-write.table(peaks.df,file = "peaks.combined.bed",append=FALSE,
-    quote= FALSE,sep="\t", eol = "\n", na = "NA", dec = ".",
-    row.names = FALSE, col.names = FALSE, qmethod = c("escape", "double"),
-    fileEncoding = "")
-
+write.table(
+  peaks.df,
+  file="peaks.combined.bed",
+  quote=FALSE,
+  sep="\t",
+  dec=".",
+  row.names=FALSE,
+  col.names=FALSE
+)
 
 write.csv(peaks.df, file = "peaksAllCells.csv", row.names = FALSE)
 
 saveRDS(x.sp, file="peaks_snap.rds")
-
