@@ -17,26 +17,14 @@ inputs:
   tmp_folder: string?
 
   encode_blacklist: File
-  alignment_threads: int?
+  threads: int?
   if_sort: string?
 
 outputs:
 
-  zipped_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
-    outputSource: bulk_process/zipped_files
-
-  report_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
-    outputSource: bulk_process/report_files
+  fastqc_dir:
+    type: Directory
+    outputSource: fastqc/fastqc_dir
 
   bam_file:
     type:
@@ -67,6 +55,15 @@ outputs:
     outputSource: bulk_analysis/bed_graphs
 
 steps:
+
+  fastqc:
+    run: fastqc.cwl
+    in:
+      fastq_dir: sequence_directory
+      threads: threads
+    out:
+      fastqc_dir
+
   gather_sequence_bundles:
     run: bulk_gather_sequence_bundles.cwl
     in:
@@ -86,11 +83,11 @@ steps:
      input_fastq2: gather_sequence_bundles/fastq2_files
      blacklist_bed: blacklist_bed
      tmp_folder: tmp_folder
-     alignment_threads: alignment_threads
+     threads: threads
      if_sort: if_sort
 
     out:
-      [zipped_files, report_files, bam_file]
+      [bam_file]
 
 
   bulk_analysis:
