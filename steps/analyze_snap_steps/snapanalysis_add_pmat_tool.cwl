@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: "hubmap/sc-atac-seq"
+    dockerPull: "hubmap/sc-atac-seq-grch38"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
@@ -64,7 +64,7 @@ inputs:
     doc: The BED file that contains peak information.
 
   buffer_size:
-    type: string?
+    type: int?
     inputBinding:
       position: 3
       prefix: --buffer-size
@@ -84,7 +84,7 @@ inputs:
       position: 5
       prefix: --verbose
     default: "TRUE"
-    doc: A boolen tag; if true output the progress.
+    doc: A boolean tag; if true output the progress.
 
 outputs:
   snap_file_w_peaks:

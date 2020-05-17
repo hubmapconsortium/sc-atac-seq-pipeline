@@ -141,6 +141,7 @@ dmypy.json
 *.bdg
 *.bed
 *.csv
+*.fai
 *.html
 *.mtx
 *.narrowPeak
@@ -151,3 +152,4 @@ dmypy.json
 *.zip
 barcodes.txt
 bins.txt
+genes.txt

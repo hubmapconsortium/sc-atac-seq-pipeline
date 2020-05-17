@@ -28,15 +28,16 @@ $schemas:
 
 
 inputs:
-  input_reference_genome: File
-  reference_genome_index: File?
+  reference_genome_fasta: File?
+  alignment_index: File?
+  size_index: File?
   genome_name: string?
   sequence_directory: Directory
   blacklist_bed: File?
   tmp_folder: string?
 
-  encode_blacklist: File
-  gene_track: File
+  encode_blacklist: File?
+  gene_track: File?
   gene_annotation: File?
   preferred_barcodes: File?
   promoters: File?
@@ -50,7 +51,7 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: snaptools_create_snap_file/zipped_files
+    outputSource: create_and_analyze_snap_file/zipped_files
 
   report_files:
     type:
@@ -58,19 +59,23 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: snaptools_create_snap_file/report_files
+    outputSource: create_and_analyze_snap_file/report_files
 
   bam_file:
     type: File[]
-    outputSource: snaptools_create_snap_file/bam_file
+    outputSource: create_and_analyze_snap_file/bam_file
 
   snap_file:
     type: File[]
-    outputSource: snaptools_create_snap_file/snap_file
+    outputSource: create_and_analyze_snap_file/snap_file
 
   snap_qc_file:
     type: File[]
-    outputSource: snaptools_create_snap_file/snap_qc_file
+    outputSource: create_and_analyze_snap_file/snap_qc_file
+
+  analysis_motif_file:
+    type: File[]
+    outputSource: create_and_analyze_snap_file/analysis_motif_file
 
   analysis_CSV_files:
     type:
@@ -78,7 +83,7 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: snapanalysis_setup_and_analyze/analysis_CSV_files
+    outputSource: create_and_analyze_snap_file/analysis_CSV_files
 
   analysis_BED_files:
     type:
@@ -86,7 +91,7 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: snapanalysis_setup_and_analyze/analysis_BED_files
+    outputSource: create_and_analyze_snap_file/analysis_BED_files
 
   analysis_PDF_files:
     type:
@@ -94,7 +99,7 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: snapanalysis_setup_and_analyze/analysis_PDF_files
+    outputSource: create_and_analyze_snap_file/analysis_PDF_files
 
   analysis_RDS_objects:
     type:
@@ -102,7 +107,7 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: snapanalysis_setup_and_analyze/analysis_RDS_objects
+    outputSource: create_and_analyze_snap_file/analysis_RDS_objects
 
   analysis_TXT_files:
     type:
@@ -110,7 +115,7 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: snapanalysis_setup_and_analyze/analysis_TXT_files
+    outputSource: create_and_analyze_snap_file/analysis_TXT_files
 
   analysis_MTX_files:
     type:
@@ -118,7 +123,7 @@ outputs:
       items:
          type: array
          items: File
-    outputSource: snapanalysis_setup_and_analyze/analysis_MTX_files
+    outputSource: create_and_analyze_snap_file/analysis_MTX_files
 
 requirements:
   SubworkflowFeatureRequirement: {}
@@ -132,13 +137,14 @@ steps:
     out:
       [fastq1_files, fastq2_files, barcode_fastq_files]
 
-  snaptools_create_snap_file:
+  create_and_analyze_snap_file:
     scatter: [input_fastq1, input_fastq2, input_barcode_fastq]
     scatterMethod: dotproduct
     run: steps/snaptools_create_snap_file.cwl
     in:
-     input_reference_genome: input_reference_genome
-     reference_genome_index: reference_genome_index
+     reference_genome_fasta: reference_genome_fasta
+     alignment_index: alignment_index
+     size_index: size_index
      genome_name: genome_name
      input_fastq1: gather_sequence_bundles/fastq1_files
      input_fastq2: gather_sequence_bundles/fastq2_files
@@ -147,22 +153,13 @@ steps:
      tmp_folder: tmp_folder
      alignment_threads: alignment_threads
 
-    out:
-      [zipped_files, report_files, bam_file, snap_file, snap_qc_file]
-
-
-  snapanalysis_setup_and_analyze:
-    scatter: [input_snap]
-    scatterMethod: dotproduct
-    run: steps/snapanalysis_setup_and_analyze.cwl
-    in:
-      input_snap: snaptools_create_snap_file/snap_file
-      preferred_barcodes: preferred_barcodes
-      encode_blacklist: encode_blacklist
-      gene_track: gene_track
-      gene_annotation: gene_annotation
-      promoters: promoters
+     preferred_barcodes: preferred_barcodes
+     encode_blacklist: encode_blacklist
+     gene_track: gene_track
+     gene_annotation: gene_annotation
+     promoters: promoters
 
     out:
-      #[analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files]
-      [analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files]
+      [zipped_files, report_files, bam_file, snap_file, snap_qc_file,
+      analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files,
+      analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files]
