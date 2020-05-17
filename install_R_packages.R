@@ -26,6 +26,7 @@ BiocManager::install(
     c(
 		'BSgenome.Hsapiens.NCBI.GRCh38',
 		'rhdf5',
+		'JASPAR2016',
 		'BSgenome.Hsapiens.UCSC.hg38',
 		'rtracklayer',
 		'JASPAR2016',

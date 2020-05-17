@@ -8,8 +8,9 @@ requirements:
   MultipleInputFeatureRequirement: {}
 
 inputs:
-  input_reference_genome: File
-  reference_genome_index: File?
+  reference_genome_fasta: File?
+  alignment_index: File?
+  size_index: File?
   genome_name: string?
   input_fastq1: File
   input_fastq2: File
@@ -49,21 +50,16 @@ steps:
   snaptools_index_ref_genome:
     run: create_snap_steps/snaptools_index_ref_genome_tool.cwl
     in:
-      input_fasta: input_reference_genome
-      reference_genome_index: reference_genome_index
+      input_fasta: reference_genome_fasta
+      alignment_index: alignment_index
+      size_index: size_index
     out:
-      [genome_index]
-
-  snaptools_create_ref_genome_size_file:
-    run: create_snap_steps/snaptools_create_ref_genome_size_file_tool.cwl
-    in:
-      ref_genome: input_reference_genome
-    out: [genome_sizes]
+      [genome_alignment_index, genome_size_index]
 
   snaptools_align_paired_end:
     run: create_snap_steps/snaptools_align_paired_end_tool.cwl
     in:
-      input_reference: snaptools_index_ref_genome/genome_index
+      alignment_index: snaptools_index_ref_genome/genome_alignment_index
       input_fastq1: input_fastq1
       input_fastq2: input_fastq2
       tmp_folder: tmp_folder
