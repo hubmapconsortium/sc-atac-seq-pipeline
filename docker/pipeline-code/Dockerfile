@@ -1,10 +1,5 @@
-FROM rocker/r-ver:3.6.3
+FROM hubmap/rocker-r-grch38:latest
 
-LABEL maintainer="jshands@ucsc.edu"
-
-# Use an env var so user is not requested to provide a
-# time zone for tzdata
-# https://stackoverflow.com/questions/44331836/apt-get-install-tzdata-noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
@@ -22,10 +17,8 @@ RUN apt-get update \
     python3-dev \
     python3-pip \
     tabix \
-    wget \
     zlib1g-dev \
  && rm -rf /var/lib/apt/lists
-
 
 # Make sure a 'python' command is available so bedtools will install, as required in
 # https://github.com/arq5x/bedtools2/blob/58e9973af1b3f5e3b26e5584aad7dc7b720f8765/Makefile#L192
