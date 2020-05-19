@@ -469,7 +469,7 @@ runMACS(
 )
 
 # call peaks for all cluster with more than 100 cells
-cluster_counts = tablepaste0("cluster_", cluster)(x.sp@cluster)
+cluster_counts = table(x.sp@cluster)
 clusters_sel = names(cluster_counts)[which(cluster_counts > 100)]
 peaks.ls = lapply(
   clusters_sel,

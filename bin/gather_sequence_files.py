@@ -77,7 +77,7 @@ def main(directory: Path):
         r2_fastq_path = fspath(r2_fastq_file)
         r3_fastq_path = fspath(r3_fastq_file)
 
-        json_template_dict = { 'fastq1':r1_fastq_path, 'fastq2':r2_fastq_path, 'fastq3':r3_fastq_path }
+        json_template_dict = { 'fastq1':r1_fastq_path, 'fastq2':r3_fastq_path, 'fastq3':r2_fastq_path }
         json_template_with_substitutes = SEQUENCES_TEMPLATE.substitute(json_template_dict)
 
         # Convert string representation of dictionary to an python dictionary
