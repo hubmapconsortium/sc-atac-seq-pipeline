@@ -179,5 +179,4 @@ outputs:
     outputBinding:
       glob: "*.hdf5"
 
-
 baseCommand: [Rscript, /opt/snapAnalysis.R]

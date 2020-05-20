@@ -84,9 +84,16 @@ inputs:
 
 
 outputs:
-  motif_file:
+  CSV_files:
+    type:
+      type: array
+      items: File
+    outputBinding:
+      glob: "*.csv"
+
+  RData_file:
     type: File
     outputBinding:
-      glob: "cellMotif.csv"
+      glob: "chromvar_data.RData"
 
 baseCommand: [Rscript, /opt/snapMotifAnalysis.R]

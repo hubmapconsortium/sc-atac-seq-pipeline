@@ -72,10 +72,21 @@ outputs:
       items: File
     outputSource: snapanalysis_analyze/MTX_files
 
-  analysis_motif_file:
-    type: File
-    outputSource: snapanalysis_motif/motif_file
+  analysis_HDF5_files:
+    type:
+      type: array
+      items: File
+    outputSource: snapanalysis_analyze/HDF5_files
 
+  motif_CSV_files:
+    type:
+      type: array
+      items: File
+    outputSource: snapanalysis_motif/CSV_files
+
+  motif_RData_file:
+    type: File
+    outputSource: snapanalysis_motif/RData_file
 
 steps:
   snapanalysis_select_barcode:
@@ -112,6 +123,6 @@ steps:
       snap_file: snapanalysis_add_pmat_tool/snap_file_w_peaks
       snap_rds: snapanalysis_analyze/snap_rds
     out:
-      [motif_file]
+      [CSV_files, RData_file]
 
 

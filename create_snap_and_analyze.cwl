@@ -73,10 +73,6 @@ outputs:
     type: File[]
     outputSource: create_and_analyze_snap_file/snap_qc_file
 
-  analysis_motif_file:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_motif_file
-
   analysis_CSV_files:
     type:
       type: array
@@ -133,6 +129,20 @@ outputs:
          items: File
     outputSource: create_and_analyze_snap_file/analysis_HDF5_files
 
+  motif_CSV_files:
+    type:
+      type: array
+      items:
+        type: array
+        items: File
+    outputSource: create_and_analyze_snap_file/motif_CSV_files
+
+  motif_RData_file:
+    type:
+      type: array
+      items: File
+    outputSource: create_and_analyze_snap_file/motif_RData_file
+
 requirements:
   SubworkflowFeatureRequirement: {}
   ScatterFeatureRequirement: {}
@@ -170,6 +180,6 @@ steps:
 
     out:
       [zipped_files, report_files, bam_file, fragment_file, snap_file, snap_qc_file,
-      analysis_motif_file, analysis_CSV_files, analysis_BED_files,
-      analysis_PDF_files, analysis_HDF5_files,
-      analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files]
+      analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_HDF5_files,
+      analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files,
+      motif_CSV_files, motif_RData_file]
