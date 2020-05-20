@@ -41,8 +41,6 @@ requirements:
     coresMin: 1
     ramMin: 1024
     outdirMin: 100000
-  NetworkAccess:
-    networkAccess: true
   # Set the environment variable for the location of
   # the R environment file. In this file will be set
   # the location of the R temporary working directory
