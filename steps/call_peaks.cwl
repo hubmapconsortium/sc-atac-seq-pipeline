@@ -3,7 +3,7 @@
 class: CommandLineTool
 id: call_peaks.cwl
 label: call peaks
-cwlVersion: v1.1
+cwlVersion: v1.0
 
 requirements:
   DockerRequirement:

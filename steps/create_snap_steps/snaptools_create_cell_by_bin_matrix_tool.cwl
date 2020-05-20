@@ -3,7 +3,7 @@
 class: CommandLineTool
 id: snaptools_create_cell_by_bin_matrix
 label: snaptools create cell by bin matrix
-cwlVersion: v1.1
+cwlVersion: v1.0
 
 s:author:
   - class: s:Person

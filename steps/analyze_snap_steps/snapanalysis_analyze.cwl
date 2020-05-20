@@ -3,7 +3,7 @@
 class: CommandLineTool
 id: snapanalysis_analyze
 label: snap analysis analyze
-cwlVersion: v1.1
+cwlVersion: v1.0
 
 s:author:
   - class: s:Person

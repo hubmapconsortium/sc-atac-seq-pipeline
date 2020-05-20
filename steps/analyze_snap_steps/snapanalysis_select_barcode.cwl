@@ -3,7 +3,7 @@
 class: CommandLineTool
 id: snapanalysis_select_barcode
 label: snapanalysis select barcode
-cwlVersion: v1.1
+cwlVersion: v1.0
 
 s:author:
   - class: s:Person

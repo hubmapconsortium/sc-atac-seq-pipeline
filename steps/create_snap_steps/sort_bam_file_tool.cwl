@@ -3,7 +3,7 @@
 class: CommandLineTool
 id: sort_bam_file_tool
 label: sort bam file
-cwlVersion: v1.1
+cwlVersion: v1.0
 
 requirements:
   DockerRequirement:

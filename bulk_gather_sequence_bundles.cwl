@@ -3,7 +3,7 @@
 class: CommandLineTool
 id: gather_sequence_bundles
 label: gather sequence bundles
-cwlVersion: v1.1
+cwlVersion: v1.0
 
 s:author:
   - class: s:Person

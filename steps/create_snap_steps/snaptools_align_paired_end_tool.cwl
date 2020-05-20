@@ -3,7 +3,7 @@
 class: CommandLineTool
 id: snaptools_align_paired_end
 label: snaptools align paired end reads
-cwlVersion: v1.1
+cwlVersion: v1.0
 
 s:author:
   - class: s:Person

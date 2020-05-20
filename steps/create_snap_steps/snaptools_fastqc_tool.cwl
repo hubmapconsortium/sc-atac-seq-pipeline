@@ -3,7 +3,7 @@
 class: CommandLineTool
 id: snaptools_fastqc_tool
 label: snaptools fastqc tool
-cwlVersion: v1.1
+cwlVersion: v1.0
 
 s:author:
   - class: s:Person

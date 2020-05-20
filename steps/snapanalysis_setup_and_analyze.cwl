@@ -1,4 +1,4 @@
-cwlVersion: v1.1
+cwlVersion: v1.0
 class: Workflow
 
 # label: A workflow that analyzes a SNAP file as outlined at: https://github.com/r3fang/SnapATAC

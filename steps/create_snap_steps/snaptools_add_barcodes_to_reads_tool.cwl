@@ -3,7 +3,7 @@
 class: CommandLineTool
 id: snaptools_add_barcodes_to_reads_tool
 label: snaptools add barcodes to reads
-cwlVersion: v1.1
+cwlVersion: v1.0
 
 s:author:
   - class: s:Person

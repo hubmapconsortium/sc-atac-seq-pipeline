@@ -4,7 +4,7 @@
 class: CommandLineTool
 id: motif_and_tf_analysis.cwl
 label: motif and tf analysis
-cwlVersion: v1.1
+cwlVersion: v1.0
 
 requirements:
   DockerRequirement:
