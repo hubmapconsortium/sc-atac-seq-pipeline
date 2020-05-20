@@ -61,6 +61,10 @@ outputs:
          items: File
     outputSource: create_and_analyze_snap_file/report_files
 
+  fragment_file:
+    type: File[]
+    outputSource: create_and_analyze_snap_file/fragment_file
+
   bam_file:
     type: File[]
     outputSource: create_and_analyze_snap_file/bam_file
