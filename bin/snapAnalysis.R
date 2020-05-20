@@ -3,6 +3,7 @@ library(optparse)
 library(SnapATAC)
 library(rtracklayer)
 library(GenomicRanges)
+library(rhdf5)
 
 
 ospj = function(...) {
@@ -433,12 +434,12 @@ x.sp = runMagic(
   step.size=3
 )
 
-message(sprintf("Writing the cell by gene data to a Matrix Market format file\n"))
+message(sprintf("Writing the cell by gene data to cell_by_gene.hdf5\n"))
 # Write cell by gene sparse matrix in Matrix Market format not CSV format
 #write.csv(cellByGene, file = "cellByGeneData.csv")
 # barcodes are the same as above
-write.table(dimnames(x.sp@gmat)[[2]], 'genes.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
-writeMM(x.sp@gmat, file="cellByGene.mtx")
+h5createFile('cell_by_gene.hdf5')
+h5write(as.matrix(x.sp@gmat), 'cell_by_gene.hdf5', 'cell_by_gene')
 
 # Step 11. Identify peaks
 # Next we aggregate cells from the each cluster to create an ensemble track for

@@ -172,5 +172,12 @@ outputs:
     outputBinding:
       glob: "*.mtx"
 
+  HDF5_files:
+    type:
+      type: array
+      items: File
+    outputBinding:
+      glob: "*.hdf5"
+
 
 baseCommand: [Rscript, /opt/snapAnalysis.R]
