@@ -32,13 +32,6 @@ SNAPTOOLS_COMMAND_DEFAULTS: Dict[str, List[CommandData]] = {
     ],
 }
 
-SNAPTOOLS_ALIGN_COMMAND = [
-    'snaptools',
-    'align-paired-end',
-    '--input-reference',
-    '{base_index_path}',
-]
-
 def run_with_defaults(snaptools_command: str, other_args: List[Union[Path, str]]):
     args = other_args.copy()
 
