@@ -142,6 +142,7 @@ dmypy.json
 *.bed
 *.csv
 *.fai
+*.hdf5
 *.html
 *.mtx
 *.narrowPeak
