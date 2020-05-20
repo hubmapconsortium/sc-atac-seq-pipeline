@@ -408,6 +408,11 @@ plotViz(
   legend.add=FALSE
 )
 
+message("Saving UMAP coordinates and cluster assignments as CSV")
+dim_reduced_data = data.frame(x.sp@umap, row.names=x.sp@barcode)
+dim_reduced_data$cluster = as.numeric(x.sp@cluster)
+write.csv(dim_reduced_data, file='umap_coords_clusters.csv')
+
 message(paste("Reading gene track from", opt$gene_track))
 genes = read.table(opt$gene_track)
 genes.gr = GRanges(genes[,1],
