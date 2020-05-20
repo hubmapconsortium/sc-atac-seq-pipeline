@@ -439,7 +439,7 @@ message(sprintf("Writing the cell by gene data to cell_by_gene.hdf5\n"))
 #write.csv(cellByGene, file = "cellByGeneData.csv")
 # barcodes are the same as above
 h5createFile('cell_by_gene.hdf5')
-h5write(as.matrix(x.sp@gmat), 'cell_by_gene.hdf5', 'cell_by_gene')
+h5write(t(as.matrix(x.sp@gmat)), 'cell_by_gene.hdf5', 'cell_by_gene')
 
 # Step 11. Identify peaks
 # Next we aggregate cells from the each cluster to create an ensemble track for
