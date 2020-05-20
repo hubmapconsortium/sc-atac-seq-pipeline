@@ -47,7 +47,7 @@ x.sp = addPmatToSnap(x.sp)
 
 # Remove unwanted chromosomes, otherwise chromVAR throws the error with the message
 # 'trying to load regions beyond the boundaries of non-circular sequence'
-message(sprintf("Removing unwanted and mismatched chromosomes from peak matrix\n"))
+message("Removing unwanted and mismatched chromosomes from peak matrix")
 # Provides seqlevels function
 #chr.exclude = seqlevels(x.sp@feature)[grep("random|chrM|chrUn", seqlevels(x.sp@feature))];
 
@@ -65,39 +65,45 @@ x.sp = makeBinary(x.sp, mat="pmat")
 
 # SnapATAC also incorporates chromVAR (Schep et al) for motif variability analysis.
 
-x.sp@mmat = runChromVAR(
-    obj=x.sp,
-    input.mat="pmat",
-    genome=BSgenome.Hsapiens.NCBI.GRCh38,
-    min.count=10,
-    species="Homo sapiens"
+rse <- SummarizedExperiment(
+  assays = list(counts = t(x.sp@pmat)),
+  rowRanges = x.sp@peak,
+  colData = DataFrame(Cell_Type=1:nrow(x.sp@pmat), depth=Matrix::rowSums(x.sp@pmat))
+)
+rse <- addGCBias(rse, genome=BSgenome.Hsapiens.NCBI.GRCh38)
+motifs <- getJasparMotifs(collection = "CORE")
+motif_mm <- matchMotifs(motifs, rse, genome=BSgenome.Hsapiens.NCBI.GRCh38)
+dev <- computeDeviations(object=rse, annotations=motif_mm)
+dev_mat = t(assay(dev))
+
+deviation_scores = deviationScores(dev)
+deviation_score_filename = 'chromvar_deviation_scores.csv'
+message(paste('Saving deviation scores to', deviation_score_filename))
+write.csv(deviation_scores, file=deviation_score_filename, na='')
+
+variability_scores = computeVariability(dev)
+variability_score_filename = 'chromvar_variability_scores.csv'
+message(paste('Saving deviation scores to', variability_score_filename))
+write.csv(variability_scores, file=variability_score_filename, na='')
+
+pdf('output.pdf', width=7, height=16)
+heatmap(scores, col=brewer.pal(11, 'RdBu'), scale='none', na.rm=TRUE)
+dev.off()
+
+save(
+  rse,
+  motif_mm,
+  dev,
+  dev_mat,
+  deviation_scores,
+  variability_scores,
+  file='chromvar_data.RData'
 )
 
-message(sprintf("Writing the motif data to CSV\n"))
+message("Writing the motif data to CSV")
 
 write.csv(
-  x.sp@mmat,
+  dev_mat,
   file="cellMotif.csv",
   na=''
 )
-#writeMM(obj = cellMotifData, file = "cellMotif.mtx")
-
-
-#motif_i = "MA0497.1_MEF2C";
-#dat = data.frame(x=x.sp@metaData[,"cluster"], y=x.sp@mmat[,motif_i]);
-#p1 <- ggplot(dat, aes(x=x, y=y, fill=x)) +
-#        theme_classic() +
-#        geom_violin() +
-#        xlab("cluster") +
-#        ylab("motif enrichment") +
-#        ggtitle(motif_i) +
-#        theme(
-#	      plot.margin = margin(5,1,5,1, "cm"),
-#              axis.text.x = element_text(angle = 90, hjust = 1),
-#              axis.ticks.x=element_blank(),
-#	      legend.position = "none"
-#   	      );
-#
-#plot_file_name=sprintf("Motif_%s_Enrichment_Per_Cluster", motif_i)
-#ggsave(filename=plot_file_name, plot=p1)
-
