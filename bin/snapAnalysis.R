@@ -106,7 +106,7 @@ if (!is.null(opt$selected_barcodes)) {
   # percentage of reads mapped to promoters per cell
   # https://github.com/r3fang/SnapATAC/issues/139
 
-  message(sprintf("Selecting barcodes base on coverage and promoter ratio\n"))
+  message("Selecting barcodes base on coverage and promoter ratio")
   gtf.gr <- rtracklayer::import(opt$gene_annotation)
   gene.gr <- gtf.gr[gtf.gr$type == "gene"]
 
@@ -197,7 +197,7 @@ idy = which(bin.cov <= bin.cutoff & bin.cov > 0)
 x.sp = x.sp[, idy, mat="bmat"]
 
 
-message(sprintf("Creating coverage histogram\n"))
+message("Creating coverage histogram")
 pdf(file="CoverageHistogram.pdf")
 hist(
   bin.cov[bin.cov > 0],
@@ -210,7 +210,7 @@ dev.off()
 
 # Bin filtering
 # Filter out any bins overlapping with the ENCODE blacklist to prevent from potential artifacts.
-message(sprintf("Doing bin filtering\n"))
+message("Doing bin filtering")
 
 # Read the black list table and ignore missing columns
 # NOTE: ignoring missing columns could cause a problem
@@ -226,7 +226,7 @@ black_list.gr = GRanges(
 #if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]}
 
 # Second, we remove unwanted chromosomes.
-message(sprintf("Removing unwanted random and M chromosomes\n"))
+message("Removing unwanted random and M chromosomes")
 chrrandomM.exclude = seqlevels(x.sp@feature)[grep("random|chrM", seqlevels(x.sp@feature))]
 chrrandomM.exclude
 idy = grep(paste(chrrandomM.exclude, collapse="|"), x.sp@feature)
@@ -262,7 +262,7 @@ if(length(idy) > 0){x.sp = x.sp[,-idy, mat="bmat"]}
 idempty <- which(Matrix::rowSums(x.sp@bmat) == 0)
 
 if(length(idempty) > 0){
-    message(sprintf("Removing rows with all zeros from bmat\n"))
+    message("Removing rows with all zeros from bmat")
     x.sp <- x.sp[-idempty,, mat='bmat']
 }
 
@@ -270,7 +270,7 @@ write.table(dimnames(x.sp@bmat)[[1]], 'barcodes.txt', col.names=FALSE, row.names
 write.table(dimnames(x.sp@bmat)[[2]], 'bins.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
 writeMM(x.sp@bmat, 'filtered_cell_by_bin.mtx')
 
-message(sprintf("Computing diffusion maps\n"))
+message("Computing diffusion maps")
 x.sp = runDiffusionMaps(
   obj=x.sp,
   input.mat="bmat",
@@ -374,11 +374,11 @@ cellClusterAssignment$BarcodeID <- dimnames(x.sp@bmat)[[1]]
 names(cellClusterAssignment)[1] <- 'Cluster'
 # write it to csv and only quote the Barcode in column 3
 #write.csv(cellClusterAssignment, file = "cellClusterAssignment.csv", quote = c(3), row.names = FALSE)
-message(sprintf("Writing cell cluster assignment csv\n"))
+message("Writing cell cluster assignment csv")
 write.csv(cellClusterAssignment, file = "cellClusterAssignment.csv", quote = FALSE, row.names = FALSE)
 
 ## Step 8. Visualization
-message(sprintf("Creating embedding UMAP plot\n"))
+message("Creating embedding UMAP plot")
 x.sp = runViz(
   obj=x.sp,
   tmp.folder=tempdir(),
@@ -408,16 +408,17 @@ plotViz(
   legend.add=FALSE
 )
 
-message(sprintf("Creating cell by gene matrix\n"))
+message(paste("Reading gene track from", opt$gene_track))
 genes = read.table(opt$gene_track)
 genes.gr = GRanges(genes[,1],
   IRanges(genes[,2], genes[,3]), name=genes[,4]
 )
 
-message(sprintf("Writing gene ranges to csv\n"))
+message("Writing gene ranges to csv")
 genes_df = as(genes.gr, "data.frame")
 write.csv(genes_df, file = "GenesRanges.csv", row.names = FALSE)
 
+message("Creating cell by gene matrix")
 x.sp = createGmatFromMat(
   obj=x.sp,
   input.mat="bmat",
@@ -427,7 +428,7 @@ x.sp = createGmatFromMat(
 )
 
 # smooth the cell-by-gene matrix
-message(sprintf("Smoothing the cell-by-gene matrix\n"))
+message("Smoothing cell-by-gene matrix")
 x.sp = runMagic(
   obj=x.sp,
   input.mat="gmat",
@@ -435,7 +436,7 @@ x.sp = runMagic(
 )
 
 cell_by_gene_filename = 'cell_by_gene.hdf5'
-message(paste("Writing the cell by gene data to", cell_by_gene_filename))
+message(paste("Writing cell by gene data to", cell_by_gene_filename))
 # Write cell by gene sparse matrix in Matrix Market format not CSV format
 #write.csv(cellByGene, file = "cellByGeneData.csv")
 # barcodes are the same as above
@@ -453,7 +454,7 @@ h5write(x.sp@barcode, cell_by_gene_filename, 'row_names')
 # atac_v1_adult_brain_fresh_5k.1_peaks.narrowPeak and
 # atac_v1_adult_brain_fresh_5k.1_treat_pileup.bdg. bdg file can be compressed
 # to bigWig file using bedGraphToBigWig for IGV or Genome Browser visulization.
-message(sprintf("Identifying peaks\n"))
+message("Identifying peaks")
 
 # Identify peaks using selected cells. Fragments belonging to a subset of cells
 # are extracted and used to identify peaks using MACS2. This function requires
@@ -478,7 +479,7 @@ clusters_sel = names(cluster_counts)[which(cluster_counts > 100)]
 peaks.ls = lapply(
   clusters_sel,
   function(cluster) {
-    cat(paste(c('Running MACS2 for cluster', cluster, '\n')))
+    message(paste('Running MACS2 for cluster', cluster))
     runMACS(
       obj=x.sp[which(x.sp@cluster==cluster),],
       output.prefix=paste0('cluster_', cluster),
@@ -505,7 +506,7 @@ peak.gr.ls = lapply(
 )
 peak.gr = reduce(Reduce(c, peak.gr.ls))
 
-message(sprintf("Creating a cell by peak matrix\n"))
+message("Creating a cell by peak matrix")
 
 peaks.df = as.data.frame(peak.gr)[,1:3]
 
