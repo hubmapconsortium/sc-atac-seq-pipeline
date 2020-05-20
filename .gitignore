@@ -137,6 +137,7 @@ dmypy.json
 *.Rproj
 
 # Data files
+*.RData
 *.bam
 *.bdg
 *.bed
