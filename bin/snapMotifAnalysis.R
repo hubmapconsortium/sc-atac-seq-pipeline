@@ -86,10 +86,6 @@ variability_score_filename = 'chromvar_variability_scores.csv'
 message(paste('Saving deviation scores to', variability_score_filename))
 write.csv(variability_scores, file=variability_score_filename, na='')
 
-pdf('output.pdf', width=7, height=16)
-heatmap(scores, col=brewer.pal(11, 'RdBu'), scale='none', na.rm=TRUE)
-dev.off()
-
 save(
   rse,
   motif_mm,
