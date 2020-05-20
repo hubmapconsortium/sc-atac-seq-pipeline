@@ -152,6 +152,7 @@ steps:
      blacklist_bed: blacklist_bed
      tmp_folder: tmp_folder
      alignment_threads: alignment_threads
+     processes: alignment_threads
 
      preferred_barcodes: preferred_barcodes
      encode_blacklist: encode_blacklist

@@ -103,6 +103,14 @@ inputs:
       prefix: --promoters
     doc: A BED file of promoters.
 
+  processes:
+    type: int?
+    inputBinding:
+      position: 7
+      prefix: --processes
+    default: 1
+    doc: Number of processes to use
+
   #tmpdir:
   #  type: string?
   #  inputBinding:

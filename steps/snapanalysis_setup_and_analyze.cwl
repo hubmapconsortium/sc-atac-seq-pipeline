@@ -33,6 +33,7 @@ inputs:
   preferred_barcodes: File?
   promoters: File?
   input_snap: File
+  processes: int?
 
 outputs:
   analysis_CSV_files:
@@ -40,7 +41,7 @@ outputs:
       type: array
       items: File
     outputSource: snapanalysis_analyze/CSV_files
- 
+
   analysis_BED_files:
     type:
       type: array
@@ -73,7 +74,7 @@ outputs:
 
   analysis_motif_file:
     type: File
-    outputSource: snapanalysis_motif/motif_file 
+    outputSource: snapanalysis_motif/motif_file
 
 
 steps:
@@ -93,6 +94,7 @@ steps:
       gene_track: gene_track
       gene_annotation: gene_annotation
       promoters: promoters
+      processes: processes
     out:
       [snap_rds, peaks_combined_bed, CSV_files, BED_files, PDF_files, RDS_objects, TXT_files, MTX_files]
 
@@ -103,7 +105,7 @@ steps:
       peak_file: snapanalysis_analyze/peaks_combined_bed
     out:
       [snap_file_w_peaks]
- 
+
   snapanalysis_motif:
     run: analyze_snap_steps/snapanalysis_motif.cwl
     in:
