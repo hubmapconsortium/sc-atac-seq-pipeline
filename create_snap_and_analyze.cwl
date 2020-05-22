@@ -42,24 +42,13 @@ inputs:
   preferred_barcodes: File?
   promoters: File?
 
-  alignment_threads: int?
+  threads: int?
 
 outputs:
-  zipped_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
-    outputSource: create_and_analyze_snap_file/zipped_files
 
-  report_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
-    outputSource: create_and_analyze_snap_file/report_files
+  fastqc_dir:
+    type: Directory
+    outputSource: fastqc/fastqc_dir
 
   bam_file:
     type: File[]
@@ -130,6 +119,15 @@ requirements:
   ScatterFeatureRequirement: {}
 
 steps:
+
+  fastqc:
+    run: fastqc.cwl
+    in:
+      fastq_dir: sequence_directory
+      threads: threads
+    out:
+      [fastqc_dir]
+
   gather_sequence_bundles:
     run: gather_sequence_bundles.cwl
     in:
@@ -151,7 +149,7 @@ steps:
      input_barcode_fastq: gather_sequence_bundles/barcode_fastq_files
      blacklist_bed: blacklist_bed
      tmp_folder: tmp_folder
-     alignment_threads: alignment_threads
+     threads: threads
 
      preferred_barcodes: preferred_barcodes
      encode_blacklist: encode_blacklist
@@ -160,6 +158,6 @@ steps:
      promoters: promoters
 
     out:
-      [zipped_files, report_files, bam_file, snap_file, snap_qc_file,
+      [bam_file, snap_file, snap_qc_file,
       analysis_motif_file, analysis_CSV_files, analysis_BED_files, analysis_PDF_files,
       analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files]

@@ -16,8 +16,7 @@ inputs:
   input_fastq2: File
   blacklist_bed: File?
   tmp_folder: string?
-  alignment_threads: int?
-  num_cores: int?
+  threads: int?
   if_sort: string?
 
 outputs:
@@ -26,26 +25,8 @@ outputs:
     type: File
     outputSource: snaptools_remove_blacklist/rmsk_bam
 
-  zipped_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/zipped_files
-
-  report_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/report_files
-
 
 steps:
-
-  snaptools_fastqc_tool:
-    run: create_snap_steps/snaptools_fastqc_tool.cwl
-    in:
-      sequence_files: [input_fastq1, input_fastq2]
-    out: [zipped_files, report_files]
 
   snaptools_index_ref_genome:
     run: create_snap_steps/snaptools_index_ref_genome_tool.cwl
@@ -63,7 +44,7 @@ steps:
       input_fastq1: input_fastq1
       input_fastq2: input_fastq2
       tmp_folder: tmp_folder
-      num_threads: alignment_threads
+      num_threads: threads
       if_sort: if_sort
 
     out: [paired_end_bam]
