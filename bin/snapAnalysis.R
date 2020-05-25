@@ -502,6 +502,14 @@ peaks.ls = lapply(
 # TODO: possibly construct file names ourselves since we know exactly which
 # ones should exist, given the 'clusters_sel' vector above
 cluster_peak_files = list.files(pattern='cluster_\\d+_peaks\\.narrowPeak')
+if (length(clusters_sel) == 0L) {
+    message("No clusters with enough cells; using overall peaks")
+    cluster_peak_files = list.files(pattern='overall_peaks.narrowPeak')
+}
+
+message("Cluster peak files:")
+cluster_peak_files
+
 peak.gr.ls = lapply(
   cluster_peak_files,
   function(filename) {
