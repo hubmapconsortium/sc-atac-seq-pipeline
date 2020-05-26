@@ -63,7 +63,7 @@ steps:
       fastq_dir: sequence_directory
       threads: threads
     out:
-      fastqc_dir
+      [fastqc_dir]
 
   gather_sequence_bundles:
     run: bulk_gather_sequence_bundles.cwl

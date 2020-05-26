@@ -3,7 +3,7 @@ class: CommandLineTool
 label: Runs fastQC on each fastq file in fastq directory
 hints:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq:latest
+    dockerPull: hubmap/sc-atac-seq-grch38:fastqc-threads-test
 baseCommand: /opt/fastqc_wrapper.py
 
 inputs:
