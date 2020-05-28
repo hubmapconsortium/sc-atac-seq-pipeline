@@ -14,10 +14,8 @@ inputs:
   size_index: File?
   genome_name: string?
   sequence_directory: Directory
-  blacklist_bed: File?
   tmp_folder: string?
-
-  encode_blacklist: File
+  encode_blacklist: File?
   threads: int?
   if_sort: string?
 
@@ -83,7 +81,7 @@ steps:
       genome_name: genome_name
       input_fastq1: gather_sequence_bundles/fastq1_files
       input_fastq2: gather_sequence_bundles/fastq2_files
-      blacklist_bed: blacklist_bed
+      encode_blacklist: encode_blacklist
       tmp_folder: tmp_folder
       threads: threads
       if_sort: if_sort

@@ -14,7 +14,7 @@ inputs:
   genome_name: string?
   input_fastq1: File
   input_fastq2: File
-  blacklist_bed: File?
+  encode_blacklist: File?
   tmp_folder: string?
   threads: int?
   if_sort: string?
@@ -59,5 +59,6 @@ steps:
     run: create_snap_steps/snaptools_remove_blacklist.cwl
     in:
       bam_file: sort_bam_file/sorted_paired_end_bam
-      bed_file: blacklist_bed
+      bed_file: encode_blacklist
+      alignment_index: snaptools_index_ref_genome/genome_alignment_index
     out: [rmsk_bam]

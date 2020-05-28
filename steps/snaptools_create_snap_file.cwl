@@ -37,7 +37,6 @@ inputs:
   input_fastq1: File
   input_fastq2: File
   input_barcode_fastq: File?
-  blacklist_bed: File?
   tmp_folder: string?
   threads: int?
 
@@ -124,7 +123,8 @@ steps:
     run: create_snap_steps/snaptools_remove_blacklist.cwl
     in:
       bam_file: snaptools_align_paired_end/paired_end_bam
-      bed_file: blacklist_bed
+      bed_file: encode_blacklist
+      alignment_index: snaptools_index_ref_genome/genome_alignment_index
     out: [rmsk_bam]
 
   snaptools_create_fragment_file:
