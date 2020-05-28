@@ -20,11 +20,11 @@ if [[ "$*" == *--bed-file* ]]
 fi
 
 #If the user provided a blacklist file, or is using the default alignment_index, remove blacklist
-if [ "$*" == *--bed-file* ] || [ "$*" == *grch38_index.tar.gz* ]
+if [[ "$*" == *--bed-file* ]] || [[ "$*" != *--alignment-index* ]]
 then
   echo "Removing blacklisted regions"
   # Get the PG tags from the header
-  # SnapTools snapPre needs this
+  # SnapTools snapPre needs thisgrch38_index.tar.gz
   # and bedtools intersect strips it from the header
   samtools view -H ${2} | grep @PG > pg.txt
 
@@ -42,4 +42,4 @@ then
 #If the user provided an alignment_index but not a blacklist file, don't remove anything
 else
   cp ${2} rmsk.bam
-  echo "Skipping blacklist removal; no genome BED file with the blacklisted regions to be removed provided"
+fi
