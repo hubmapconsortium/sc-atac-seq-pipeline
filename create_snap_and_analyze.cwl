@@ -151,7 +151,6 @@ steps:
      threads: threads
 
      preferred_barcodes: preferred_barcodes
-     encode_blacklist: encode_blacklist
      gene_track: gene_track
      gene_annotation: gene_annotation
      promoters: promoters
