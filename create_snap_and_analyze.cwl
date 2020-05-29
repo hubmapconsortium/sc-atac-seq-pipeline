@@ -42,7 +42,7 @@ inputs:
   preferred_barcodes: File?
   promoters: File?
 
-  alignment_threads: int?
+  threads: int?
 
 outputs:
   zipped_files:
@@ -70,7 +70,7 @@ outputs:
     outputSource: create_and_analyze_snap_file/bam_file
 
   alignment_qc_report:
-    type: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/alignment_qc_report
 
   snap_file:
@@ -177,8 +177,8 @@ steps:
      input_barcode_fastq: gather_sequence_bundles/barcode_fastq_files
      blacklist_bed: blacklist_bed
      tmp_folder: tmp_folder
-     alignment_threads: alignment_threads
-     processes: alignment_threads
+     threads: threads
+     processes: threads
 
      preferred_barcodes: preferred_barcodes
      encode_blacklist: encode_blacklist
