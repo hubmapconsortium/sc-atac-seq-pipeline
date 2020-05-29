@@ -9,15 +9,16 @@ requirements:
   ScatterFeatureRequirement: {}
 
 inputs:
-  input_reference_genome: File
-  reference_genome_index: File?
+  reference_genome_fasta: File?
+  alignment_index: File?
+  size_index: File?
   genome_name: string?
   sequence_directory: Directory
   blacklist_bed: File?
   tmp_folder: string?
 
   encode_blacklist: File
-  alignment_threads: int?
+  threads: int?
   if_sort: string?
 
 outputs:
@@ -43,6 +44,12 @@ outputs:
       type: array
       items: File
     outputSource: bulk_process/bam_file
+
+  alignment_qc_report:
+    type:
+      type: array
+      items: File
+    outputSource: bulk_process/alignment_qc_report
 
   peaks_table:
     type: File
@@ -79,18 +86,19 @@ steps:
     scatterMethod: dotproduct
     run: steps/bulk_process.cwl
     in:
-     input_reference_genome: input_reference_genome
-     reference_genome_index: reference_genome_index
+     reference_genome_fasta: reference_genome_fasta
+     alignment_index: alignment_index
+     size_index: size_index
      genome_name: genome_name
      input_fastq1: gather_sequence_bundles/fastq1_files
      input_fastq2: gather_sequence_bundles/fastq2_files
      blacklist_bed: blacklist_bed
      tmp_folder: tmp_folder
-     alignment_threads: alignment_threads
+     threads: threads
      if_sort: if_sort
 
     out:
-      [zipped_files, report_files, bam_file]
+      [zipped_files, report_files, bam_file, alignment_qc_report]
 
 
   bulk_analysis:

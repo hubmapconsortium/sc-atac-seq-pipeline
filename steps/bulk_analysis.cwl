@@ -41,11 +41,3 @@ steps:
     in:
       bam_files: bam_files
     out: [peaks_table, narrow_peaks, summits_bed, r_script, bed_graphs]
-
-  motif_and_tf_analysis:
-    run: motif_and_tf_analysis.cwl
-    in:
-      narrow_peaks: call_peaks/narrow_peaks
-      bam_files: bam_files
-    out: []
-#    out: [motifs, scores]

@@ -69,6 +69,10 @@ outputs:
     type: File[]
     outputSource: create_and_analyze_snap_file/bam_file
 
+  alignment_qc_report:
+    type: File
+    outputSource: create_and_analyze_snap_file/alignment_qc_report
+
   snap_file:
     type: File[]
     outputSource: create_and_analyze_snap_file/snap_file
@@ -183,7 +187,7 @@ steps:
      promoters: promoters
 
     out:
-      [zipped_files, report_files, bam_file, fragment_file, snap_file, snap_qc_file,
+      [zipped_files, report_files, bam_file, alignment_qc_report, fragment_file, snap_file, snap_qc_file,
       analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_HDF5_files,
       analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files,
       motif_CSV_files, motif_RData_file]

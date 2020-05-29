@@ -53,6 +53,9 @@ outputs:
   bam_file:
     type: File
     outputSource: snaptools_remove_blacklist/rmsk_bam
+  alignment_qc_report:
+    type: File
+    outputSource: alignment_qc/alignment_qc_report
   fragment_file:
     type: File
     outputSource: snaptools_create_fragment_file/fragment_file
@@ -143,6 +146,12 @@ steps:
       num_threads: alignment_threads
 
     out: [paired_end_bam]
+
+  alignment_qc:
+    run: create_snap_steps/alignment_qc
+    in:
+      bam_file: snaptools_align_paired_end/paired_end_bam
+    out: [alignment_qc_report]
 
   snaptools_remove_blacklist:
     run: create_snap_steps/snaptools_remove_blacklist.cwl
