@@ -28,4 +28,5 @@ script:
      # output (stdout or stderr)
      # E.g argument of 30 means if no output is recieved from the worklfow 
      # for 30 minutes travis will fail the workflow (default is 10 minutes)
-     travis_wait 30 ./run_sc_atac_seq_tests.sh
+     #travis_wait 30 ./run_sc_atac_seq_tests.sh
+     ./run_sc_atac_seq_tests.sh
