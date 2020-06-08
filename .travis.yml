@@ -25,6 +25,7 @@ script:
      pwd
      ls -al
      # Have Travis CI wait for a set time even if the workflows do not provide
-     # output for a number seconds
-     #travis_wait 55 ./$TEST_SUITE
-     ./run_sc_atac_seq_tests.sh
+     # output (stdout or stderr)
+     # E.g argument of 30 means if no output is recieved from the worklfow 
+     # for 30 minutes travis will fail the workflow (default is 10 minutes)
+     travis_wait 30 ./run_sc_atac_seq_tests.sh
