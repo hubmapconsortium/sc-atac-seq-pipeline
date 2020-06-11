@@ -41,6 +41,7 @@ inputs:
   tmp_folder: string?
   alignment_threads: int?
   processes: int?
+  bin_size_list: int[]?
 
   encode_blacklist: File?
   gene_track: File?
@@ -169,6 +170,7 @@ steps:
     run: create_snap_steps/snaptools_create_cell_by_bin_matrix_tool.cwl
     in:
       snap_file: snaptools_preprocess_reads/snap_file
+      bin_size_list: bin_size_list
     out: [snap_file_w_cell_by_bin]
 
 
