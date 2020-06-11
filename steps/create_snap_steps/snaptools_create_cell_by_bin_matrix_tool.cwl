@@ -60,7 +60,7 @@ inputs:
     inputBinding:
       prefix: --bin-size-list
       position: 2
-    default: [5000, 10000]
+    default: [50, 1000, 5000, 10000]
     doc: A list of bin size(s) to create in the cell-by-bin count matrix.
 
   tmp_folder:
