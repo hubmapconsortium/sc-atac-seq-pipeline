@@ -35,6 +35,7 @@ inputs:
   sequence_directory: Directory
   blacklist_bed: File?
   tmp_folder: string?
+  bin_size_list: int[]?
 
   encode_blacklist: File?
   gene_track: File?
@@ -175,6 +176,7 @@ steps:
      tmp_folder: tmp_folder
      alignment_threads: alignment_threads
      processes: alignment_threads
+     bin_size_list: bin_size_list
 
      preferred_barcodes: preferred_barcodes
      encode_blacklist: encode_blacklist
