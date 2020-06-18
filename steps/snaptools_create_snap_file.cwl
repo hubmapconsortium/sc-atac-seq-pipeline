@@ -39,7 +39,7 @@ inputs:
   input_barcode_fastq: File?
   blacklist_bed: File?
   tmp_folder: string?
-  alignment_threads: int?
+  threads: int?
   processes: int?
   bin_size_list: int[]?
 
@@ -54,6 +54,9 @@ outputs:
   bam_file:
     type: File
     outputSource: snaptools_remove_blacklist/rmsk_bam
+  alignment_qc_report:
+    type: File
+    outputSource: alignment_qc/alignment_qc_report
   fragment_file:
     type: File
     outputSource: snaptools_create_fragment_file/fragment_file
@@ -141,9 +144,16 @@ steps:
       input_fastq1: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq1
       input_fastq2: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq2
       tmp_folder: tmp_folder
-      num_threads: alignment_threads
+      num_threads: threads
 
     out: [paired_end_bam]
+
+  alignment_qc:
+    run: create_snap_steps/alignment_qc.cwl
+    in:
+      bam_file: snaptools_align_paired_end/paired_end_bam
+      threads: threads
+    out: [alignment_qc_report]
 
   snaptools_remove_blacklist:
     run: create_snap_steps/snaptools_remove_blacklist.cwl

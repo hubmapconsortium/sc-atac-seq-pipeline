@@ -43,7 +43,7 @@ inputs:
   preferred_barcodes: File?
   promoters: File?
 
-  alignment_threads: int?
+  threads: int?
 
 outputs:
   zipped_files:
@@ -69,6 +69,10 @@ outputs:
   bam_file:
     type: File[]
     outputSource: create_and_analyze_snap_file/bam_file
+
+  alignment_qc_report:
+    type: File[]
+    outputSource: create_and_analyze_snap_file/alignment_qc_report
 
   snap_file:
     type: File[]
@@ -174,8 +178,8 @@ steps:
      input_barcode_fastq: gather_sequence_bundles/barcode_fastq_files
      blacklist_bed: blacklist_bed
      tmp_folder: tmp_folder
-     alignment_threads: alignment_threads
-     processes: alignment_threads
+     threads: threads
+     processes: threads
      bin_size_list: bin_size_list
 
      preferred_barcodes: preferred_barcodes
@@ -185,7 +189,7 @@ steps:
      promoters: promoters
 
     out:
-      [zipped_files, report_files, bam_file, fragment_file, snap_file, snap_qc_file,
+      [zipped_files, report_files, bam_file, alignment_qc_report, fragment_file, snap_file, snap_qc_file,
       analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_HDF5_files,
       analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files,
       motif_CSV_files, motif_RData_file]

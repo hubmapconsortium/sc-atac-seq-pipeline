@@ -8,14 +8,15 @@ requirements:
   MultipleInputFeatureRequirement: {}
 
 inputs:
-  input_reference_genome: File
-  reference_genome_index: File?
+  reference_genome_fasta: File?
+  alignment_index: File?
+  size_index: File?
   genome_name: string?
   input_fastq1: File
   input_fastq2: File
   blacklist_bed: File?
   tmp_folder: string?
-  alignment_threads: int?
+  threads: int?
   num_cores: int?
   if_sort: string?
 
@@ -24,6 +25,10 @@ outputs:
   bam_file:
     type: File
     outputSource: snaptools_remove_blacklist/rmsk_bam
+
+  alignment_qc_report:
+    type: File
+    outputSource: alignment_qc/alignment_qc_report
 
   zipped_files:
     type:
@@ -49,28 +54,30 @@ steps:
   snaptools_index_ref_genome:
     run: create_snap_steps/snaptools_index_ref_genome_tool.cwl
     in:
-      input_fasta: input_reference_genome
-      reference_genome_index: reference_genome_index
+      input_fasta: reference_genome_fasta
+      alignment_index: alignment_index
+      size_index: size_index
     out:
-      [genome_index]
-
-  snaptools_create_ref_genome_size_file:
-    run: create_snap_steps/snaptools_create_ref_genome_size_file_tool.cwl
-    in:
-      ref_genome: input_reference_genome
-    out: [genome_sizes]
+      [genome_alignment_index, genome_size_index]
 
   snaptools_align_paired_end:
     run: create_snap_steps/snaptools_align_paired_end_tool.cwl
     in:
-      input_reference: snaptools_index_ref_genome/genome_index
+      input_reference: snaptools_index_ref_genome/genome_alignment_index
       input_fastq1: input_fastq1
       input_fastq2: input_fastq2
       tmp_folder: tmp_folder
-      num_threads: alignment_threads
+      num_threads: threads
       if_sort: if_sort
 
     out: [paired_end_bam]
+
+  alignment_qc:
+    run: create_snap_steps/alignment_qc.cwl
+    in:
+      bam_file: snaptools_align_paired_end/paired_end_bam
+      threads: threads
+    out: [alignment_qc_report]
 
   sort_bam_file:
     run: create_snap_steps/sort_bam_file_tool.cwl
