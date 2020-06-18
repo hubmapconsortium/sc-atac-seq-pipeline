@@ -1,0 +1,107 @@
+[
+	{
+		"pattern": "alignment_qc\\.json",
+		"description": "Alignment quality control metrics, in JSON format",
+		"edam_ontology_term": "EDAM_1.24.format_3464"
+	},
+	{
+		"pattern": "BarcodeQualityControlDistributionAfter\\.pdf",
+		"description": "",
+		"edam_ontology_term": "EDAM_1.24.format_3508"
+	},
+	{
+		"pattern": "BarcodeQualityControlDistributionBefore\\.pdf",
+		"description": "",
+		"edam_ontology_term": "EDAM_1.24.format_3508"
+	},
+	{
+		"pattern": "barcodes\\.txt",
+		"description": "Row labels (cell barcodes) of filtered_cell_by_bin.mtx",
+		"edam_ontology_term": "EDAM_1.24.format_3475"
+	},
+	{
+		"pattern": "Bins\\.csv",
+		"description": "All genome bins",
+		"edam_ontology_term": "EDAM_1.24.format_3752"
+	},
+	{
+		"pattern": "bins\\.txt",
+		"description": "Column labels (genome bins) of filtered_cell_by_bin.mtx",
+		"edam_ontology_term": "EDAM_1.24.format_3475"
+	},
+	{
+		"pattern": "(?P<filename>.*)_fastqc\\.html",
+		"description": "FastQC report for {filename}.fastq, HTML version",
+		"edam_ontology_term": "EDAM_1.24.format_2331"
+	},
+	{
+		"pattern": "(?P<filename>.*)_fastqc\\.zip",
+		"description": "FastQC report for {filename}.fastq, zip version",
+		"edam_ontology_term": "EDAM_1.24.format_2333"
+	},
+	{
+		"pattern": "cell_by_gene\\.hdf5",
+		"description": "Cell by gene matrix (smoothed with MAGIC), in HDF5 format",
+		"edam_ontology_term": "EDAM_1.24.format_3590"
+	},
+	{
+		"pattern": "cellMotif\\.csv",
+		"description": "Motif enrichment, per-cell",
+		"edam_ontology_term": "EDAM_1.24.format_3752"
+	},
+	{
+		"pattern": "chromvar_deviation_scores\\.csv",
+		"description": "Per-cell deviation scores from chromVAR",
+		"edam_ontology_term": "EDAM_1.24.format_3752"
+	},
+	{
+		"pattern": "chromvar_variability_scores\\.csv",
+		"description": "Per-cell variability scores from chromVAR",
+		"edam_ontology_term": "EDAM_1.24.format_3752"
+	},
+	{
+		"pattern": "filtered_cell_by_bin\\.mtx",
+		"description": "Cell by bin matrix, after cell filtering, in MTX format",
+		"edam_ontology_term": "EDAM_1.24.format_3916"
+	},
+	{
+		"pattern": "frags\\.sort\\.bed\\.gz",
+		"description": "Fragment file from Sinto",
+		"edam_ontology_term": "EDAM_1.24.format_3003"
+	},
+	{
+		"pattern": "GenesRanges\\.csv",
+		"description": "Gene ranges used for peak calling",
+		"edam_ontology_term": "EDAM_1.24.format_3752"
+	},
+	{
+		"pattern": "peaks\\.combined\\.bed",
+		"description": "Peaks called across entire data set",
+		"edam_ontology_term": "EDAM_1.24.format_3003"
+	},
+	{
+		"pattern": "PromotorRatioLogPlot\\.pdf",
+		"description": "Log-log plot of promoter ratios",
+		"edam_ontology_term": "EDAM_1.24.format_3508"
+	},
+	{
+		"pattern": "rmsk\\.bam",
+		"description": "Aligned reads",
+		"edam_ontology_term": "EDAM_1.24.format_2572"
+	},
+	{
+		"pattern": "snaptools\\.snap\\.qc",
+		"description": "QC results from SnapTools",
+		"edam_ontology_term": "EDAM_1.24.data_3671"
+	},
+	{
+		"pattern": "snaptools\\.snap",
+		"description": "SNAP file (HDF5 convention) from SnapTools",
+		"edam_ontology_term": "EDAM_1.24.format_3590"
+	},
+	{
+		"pattern": "umap_coords_clusters\\.csv",
+		"description": "Per-cell UMAP coordinates and cluster assignments",
+		"edam_ontology_term": "EDAM_1.24.format_3752"
+	}
+]
