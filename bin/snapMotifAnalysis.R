@@ -63,6 +63,9 @@ x.sp = x.sp[, which(peaks_to_keep), mat="pmat"]
 
 x.sp = makeBinary(x.sp, mat="pmat")
 
+peak_counts = colSums(x.sp@pmat)
+x.sp = x.sp[, peak_counts > 0, mat="pmat"]
+
 # SnapATAC also incorporates chromVAR (Schep et al) for motif variability analysis.
 
 rse <- SummarizedExperiment(
