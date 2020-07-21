@@ -14,30 +14,16 @@ inputs:
   size_index: File?
   genome_name: string?
   sequence_directory: Directory
-  blacklist_bed: File?
   tmp_folder: string?
-
-  encode_blacklist: File
+  encode_blacklist: File?
   threads: int?
   if_sort: string?
 
 outputs:
 
-  zipped_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
-    outputSource: bulk_process/zipped_files
-
-  report_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
-    outputSource: bulk_process/report_files
+  fastqc_dir:
+    type: Directory
+    outputSource: fastqc/fastqc_dir
 
   bam_file:
     type:
@@ -74,6 +60,15 @@ outputs:
     outputSource: bulk_analysis/bed_graphs
 
 steps:
+
+  fastqc:
+    run: fastqc.cwl
+    in:
+      fastq_dir: sequence_directory
+      threads: threads
+    out:
+      [fastqc_dir]
+
   gather_sequence_bundles:
     run: bulk_gather_sequence_bundles.cwl
     in:
@@ -86,16 +81,16 @@ steps:
     scatterMethod: dotproduct
     run: steps/bulk_process.cwl
     in:
-     reference_genome_fasta: reference_genome_fasta
-     alignment_index: alignment_index
-     size_index: size_index
-     genome_name: genome_name
-     input_fastq1: gather_sequence_bundles/fastq1_files
-     input_fastq2: gather_sequence_bundles/fastq2_files
-     blacklist_bed: blacklist_bed
-     tmp_folder: tmp_folder
-     threads: threads
-     if_sort: if_sort
+      reference_genome_fasta: reference_genome_fasta
+      alignment_index: alignment_index
+      size_index: size_index
+      genome_name: genome_name
+      input_fastq1: gather_sequence_bundles/fastq1_files
+      input_fastq2: gather_sequence_bundles/fastq2_files
+      encode_blacklist: encode_blacklist
+      tmp_folder: tmp_folder
+      threads: threads
+      if_sort: if_sort
 
     out:
       [zipped_files, report_files, bam_file, alignment_qc_report]

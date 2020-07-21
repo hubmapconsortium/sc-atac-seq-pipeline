@@ -33,7 +33,6 @@ inputs:
   size_index: File?
   genome_name: string?
   sequence_directory: Directory
-  blacklist_bed: File?
   tmp_folder: string?
   bin_size_list: int[]?
 
@@ -46,21 +45,10 @@ inputs:
   threads: int?
 
 outputs:
-  zipped_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
-    outputSource: create_and_analyze_snap_file/zipped_files
 
-  report_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
-    outputSource: create_and_analyze_snap_file/report_files
+  fastqc_dir:
+    type: Directory
+    outputSource: fastqc/fastqc_dir
 
   fragment_file:
     type: File[]
@@ -157,6 +145,15 @@ requirements:
   ScatterFeatureRequirement: {}
 
 steps:
+
+  fastqc:
+    run: fastqc.cwl
+    in:
+      fastq_dir: sequence_directory
+      threads: threads
+    out:
+      [fastqc_dir]
+
   gather_sequence_bundles:
     run: gather_sequence_bundles.cwl
     in:
@@ -176,14 +173,12 @@ steps:
      input_fastq1: gather_sequence_bundles/fastq1_files
      input_fastq2: gather_sequence_bundles/fastq2_files
      input_barcode_fastq: gather_sequence_bundles/barcode_fastq_files
-     blacklist_bed: blacklist_bed
+     encode_blacklist: encode_blacklist
      tmp_folder: tmp_folder
      threads: threads
-     processes: threads
      bin_size_list: bin_size_list
 
      preferred_barcodes: preferred_barcodes
-     encode_blacklist: encode_blacklist
      gene_track: gene_track
      gene_annotation: gene_annotation
      promoters: promoters
@@ -193,3 +188,4 @@ steps:
       analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_HDF5_files,
       analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files,
       motif_CSV_files, motif_RData_file]
+

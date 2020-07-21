@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: "biocontainers/macs:v2.1.2.1-1-deb_cv1"
+    dockerPull: "hubmap/sc-atac-seq"
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024

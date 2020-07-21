@@ -57,6 +57,13 @@ inputs:
       prefix: --bed-file
     doc: The genome BED file with the blacklisted regions to be removed.
 
+  alignment_index:
+    type: Directory?
+    inputBinding:
+      position: 3
+      prefix: --alignment-index
+    doc: The alignment index to be
+
 
 outputs:
   rmsk_bam:

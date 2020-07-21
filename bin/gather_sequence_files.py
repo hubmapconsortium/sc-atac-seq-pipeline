@@ -9,6 +9,7 @@ import json
 FASTQ_EXTENSIONS = [
     'fastq',
     'fastq.gz',
+    'fq.gz',
 ]
 
 
