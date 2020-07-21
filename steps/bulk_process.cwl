@@ -29,18 +29,6 @@ outputs:
     type: File
     outputSource: alignment_qc/alignment_qc_report
 
-  zipped_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/zipped_files
-
-  report_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/report_files
-
 steps:
 
   snaptools_index_ref_genome:
@@ -55,7 +43,7 @@ steps:
   snaptools_align_paired_end:
     run: create_snap_steps/snaptools_align_paired_end_tool.cwl
     in:
-      input_reference: snaptools_index_ref_genome/genome_alignment_index
+      alignment_index: snaptools_index_ref_genome/genome_alignment_index
       input_fastq1: input_fastq1
       input_fastq2: input_fastq2
       tmp_folder: tmp_folder

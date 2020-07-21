@@ -93,7 +93,7 @@ steps:
       if_sort: if_sort
 
     out:
-      [zipped_files, report_files, bam_file, alignment_qc_report]
+      [bam_file, alignment_qc_report]
 
 
   bulk_analysis:
