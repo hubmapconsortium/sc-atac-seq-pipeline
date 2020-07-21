@@ -37,7 +37,7 @@ RUN Rscript /opt/install_R_packages.R \
 WORKDIR /opt
 
 ENV SAMTOOLS_VERSION=1.10
-RUN curl -O https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 \
+RUN curl -L -O https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 \
  && tar -xf samtools-${SAMTOOLS_VERSION}.tar.bz2 \
  && cd samtools-${SAMTOOLS_VERSION} \
  && ./configure \
@@ -46,7 +46,7 @@ RUN curl -O https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VE
  && rm -rf /opt/samtools-${SAMTOOLS_VERSION} /opt/samtools-${SAMTOOLS_VERSION}.tar.bz2
 
 ENV BWA_VERSION=0.7.17
-RUN curl -o bwa-${BWA_VERSION}.tar.bz2 https://sourceforge.net/projects/bio-bwa/files/bwa-${BWA_VERSION}.tar.bz2/download \
+RUN curl -L -o bwa-${BWA_VERSION}.tar.bz2 https://sourceforge.net/projects/bio-bwa/files/bwa-${BWA_VERSION}.tar.bz2/download \
  && tar -xf bwa-${BWA_VERSION}.tar.bz2 \
  && cd bwa-${BWA_VERSION} \
  && make \
@@ -55,7 +55,7 @@ RUN curl -o bwa-${BWA_VERSION}.tar.bz2 https://sourceforge.net/projects/bio-bwa/
 
 ENV BEDTOOLS_VERSION=2.29.1
 # Install bedtools
-RUN curl -o bedtools-${BEDTOOLS_VERSION}.tar.gz https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools-${BEDTOOLS_VERSION}.tar.gz \
+RUN curl -L -o bedtools-${BEDTOOLS_VERSION}.tar.gz https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools-${BEDTOOLS_VERSION}.tar.gz \
  && tar -xf bedtools-${BEDTOOLS_VERSION}.tar.gz \
  && cd bedtools2 \
  && make \
