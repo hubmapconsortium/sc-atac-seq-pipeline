@@ -9,6 +9,7 @@ RUN apt-get update \
     git \
     libbz2-dev \
     libcurl4-openssl-dev \
+    libglpk-dev \
     libgsl-dev \
     liblzma-dev \
     libncurses-dev \
@@ -26,8 +27,7 @@ RUN apt-get update \
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
 COPY requirements.txt /opt
-RUN python3 -m pip install "Cython==0.29.17" --install-option="--no-cython-compile" \
- && python3 -m pip install -r /opt/requirements.txt \
+RUN python3 -m pip install -r /opt/requirements.txt \
  && rm -rf /root/.cache/pip /opt/requirements.txt
 
 COPY install_R_packages.R /opt

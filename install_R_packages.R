@@ -25,16 +25,13 @@ install_github('r3fang/SnapATAC')
 BiocManager::install(
     c(
 		'BSgenome.Hsapiens.NCBI.GRCh38',
-		'rhdf5',
-		'JASPAR2016',
-		'BSgenome.Hsapiens.UCSC.hg38',
-		'rtracklayer',
 		'JASPAR2016',
 		'RFLPtools',
 		'SummarizedExperiment',
 		'chromVAR',
 		'dplyr',
 		'motifmatchr',
+		'rhdf5',
 		'rmarkdown',
 		'rtracklayer'
 	),
