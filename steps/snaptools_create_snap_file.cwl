@@ -37,10 +37,8 @@ inputs:
   input_fastq1: File
   input_fastq2: File
   input_barcode_fastq: File?
-  blacklist_bed: File?
   tmp_folder: string?
   threads: int?
-  processes: int?
   bin_size_list: int[]?
 
   encode_blacklist: File?
@@ -66,16 +64,6 @@ outputs:
   snap_qc_file:
     type: File
     outputSource: snaptools_preprocess_reads/snap_qc_file
-  zipped_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/zipped_files
-  report_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/report_files
 
   analysis_CSV_files:
     type: File[]
@@ -123,12 +111,6 @@ steps:
     out:
       [genome_alignment_index, genome_size_index]
 
-  snaptools_fastqc_tool:
-    run: create_snap_steps/snaptools_fastqc_tool.cwl
-    in:
-      sequence_files: [input_fastq1, input_fastq2]
-    out: [zipped_files, report_files]
-
   snaptools_add_barcodes_to_reads_tool:
     run: create_snap_steps/snaptools_add_barcodes_to_reads_tool.cwl
     in:
@@ -159,7 +141,8 @@ steps:
     run: create_snap_steps/snaptools_remove_blacklist.cwl
     in:
       bam_file: snaptools_align_paired_end/paired_end_bam
-      bed_file: blacklist_bed
+      bed_file: encode_blacklist
+      alignment_index: snaptools_index_ref_genome/genome_alignment_index
     out: [rmsk_bam]
 
   snaptools_create_fragment_file:

@@ -14,10 +14,9 @@ inputs:
   genome_name: string?
   input_fastq1: File
   input_fastq2: File
-  blacklist_bed: File?
+  encode_blacklist: File?
   tmp_folder: string?
   threads: int?
-  num_cores: int?
   if_sort: string?
 
 outputs:
@@ -30,26 +29,7 @@ outputs:
     type: File
     outputSource: alignment_qc/alignment_qc_report
 
-  zipped_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/zipped_files
-
-  report_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/report_files
-
-
 steps:
-
-  snaptools_fastqc_tool:
-    run: create_snap_steps/snaptools_fastqc_tool.cwl
-    in:
-      sequence_files: [input_fastq1, input_fastq2]
-    out: [zipped_files, report_files]
 
   snaptools_index_ref_genome:
     run: create_snap_steps/snaptools_index_ref_genome_tool.cwl
@@ -63,7 +43,7 @@ steps:
   snaptools_align_paired_end:
     run: create_snap_steps/snaptools_align_paired_end_tool.cwl
     in:
-      input_reference: snaptools_index_ref_genome/genome_alignment_index
+      alignment_index: snaptools_index_ref_genome/genome_alignment_index
       input_fastq1: input_fastq1
       input_fastq2: input_fastq2
       tmp_folder: tmp_folder
@@ -89,5 +69,6 @@ steps:
     run: create_snap_steps/snaptools_remove_blacklist.cwl
     in:
       bam_file: sort_bam_file/sorted_paired_end_bam
-      bed_file: blacklist_bed
+      bed_file: encode_blacklist
+      alignment_index: snaptools_index_ref_genome/genome_alignment_index
     out: [rmsk_bam]

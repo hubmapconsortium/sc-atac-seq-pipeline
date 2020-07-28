@@ -5,9 +5,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
  && apt-get -y install \
     build-essential \
+    fastqc \
     git \
     libbz2-dev \
     libcurl4-openssl-dev \
+    libglpk-dev \
     libgsl-dev \
     liblzma-dev \
     libncurses-dev \
@@ -25,8 +27,7 @@ RUN apt-get update \
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
 COPY requirements.txt /opt
-RUN python3 -m pip install "Cython==0.29.17" --install-option="--no-cython-compile" \
- && python3 -m pip install -r /opt/requirements.txt \
+RUN python3 -m pip install -r /opt/requirements.txt \
  && rm -rf /root/.cache/pip /opt/requirements.txt
 
 COPY install_R_packages.R /opt
@@ -36,7 +37,7 @@ RUN Rscript /opt/install_R_packages.R \
 WORKDIR /opt
 
 ENV SAMTOOLS_VERSION=1.10
-RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 \
+RUN curl -L -O https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 \
  && tar -xf samtools-${SAMTOOLS_VERSION}.tar.bz2 \
  && cd samtools-${SAMTOOLS_VERSION} \
  && ./configure \
@@ -45,7 +46,7 @@ RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSI
  && rm -rf /opt/samtools-${SAMTOOLS_VERSION} /opt/samtools-${SAMTOOLS_VERSION}.tar.bz2
 
 ENV BWA_VERSION=0.7.17
-RUN wget -O bwa-${BWA_VERSION}.tar.bz2 https://sourceforge.net/projects/bio-bwa/files/bwa-${BWA_VERSION}.tar.bz2/download \
+RUN curl -L -o bwa-${BWA_VERSION}.tar.bz2 https://sourceforge.net/projects/bio-bwa/files/bwa-${BWA_VERSION}.tar.bz2/download \
  && tar -xf bwa-${BWA_VERSION}.tar.bz2 \
  && cd bwa-${BWA_VERSION} \
  && make \
@@ -54,7 +55,7 @@ RUN wget -O bwa-${BWA_VERSION}.tar.bz2 https://sourceforge.net/projects/bio-bwa/
 
 ENV BEDTOOLS_VERSION=2.29.1
 # Install bedtools
-RUN wget -O bedtools-${BEDTOOLS_VERSION}.tar.gz https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools-${BEDTOOLS_VERSION}.tar.gz \
+RUN curl -L -o bedtools-${BEDTOOLS_VERSION}.tar.gz https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools-${BEDTOOLS_VERSION}.tar.gz \
  && tar -xf bedtools-${BEDTOOLS_VERSION}.tar.gz \
  && cd bedtools2 \
  && make \

@@ -31,6 +31,7 @@ BiocManager::install(
 		'chromVAR',
 		'dplyr',
 		'motifmatchr',
+		'rhdf5',
 		'rmarkdown',
 		'rtracklayer'
 	),
