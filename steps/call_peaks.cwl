@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: "hubmap/sc-atac-seq"
+    dockerPull: hubmap/sc-atac-seq-grch38
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
