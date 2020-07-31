@@ -96,24 +96,4 @@ outputs:
                     return file_array;
                  }
 
-  barcode_fastq_files:
-    type: File[]
-    outputBinding:
-      # This file is written by gather_sequence_files.py
-      glob: "input.json"
-      loadContents: true
-      outputEval: |
-                ${
-                    var bundle_array_str = self[0].contents;
-                    var bundle_array = JSON.parse(bundle_array_str);
-                    var file_array = [];
-                    for (var i =0; i < bundle_array.length; i++) {i
-                        // The dictionary key 'input_barcode_fastq' must match the key used
-                        // in the string template SEQUENCES_TEMPLATE in gather_sequence_files.py
-                        var file = bundle_array[i].input_barcode_fastq;
-                        file_array.push(file);
-                    }
-                    return file_array;
-                 }
-
 baseCommand: [/opt/gather_sequence_files.py]

@@ -36,7 +36,6 @@ inputs:
   genome_name: string?
   input_fastq1: File
   input_fastq2: File
-  input_barcode_fastq: File?
   tmp_folder: string?
   threads: int?
   bin_size_list: int[]?
@@ -116,7 +115,6 @@ steps:
     in:
       input_fastq1: input_fastq1
       input_fastq2: input_fastq2
-      input_barcode_fastq: input_barcode_fastq
     out: [barcode_added_fastq1, barcode_added_fastq2]
 
   snaptools_align_paired_end:

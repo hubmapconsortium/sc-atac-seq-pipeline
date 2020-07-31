@@ -159,10 +159,10 @@ steps:
     in:
       sequence_directory: sequence_directory
     out:
-      [fastq1_files, fastq2_files, barcode_fastq_files]
+      [fastq1_files, fastq2_files]
 
   create_and_analyze_snap_file:
-    scatter: [input_fastq1, input_fastq2, input_barcode_fastq]
+    scatter: [input_fastq1, input_fastq2]
     scatterMethod: dotproduct
     run: steps/snaptools_create_snap_file.cwl
     in:
@@ -172,7 +172,6 @@ steps:
      genome_name: genome_name
      input_fastq1: gather_sequence_bundles/fastq1_files
      input_fastq2: gather_sequence_bundles/fastq2_files
-     input_barcode_fastq: gather_sequence_bundles/barcode_fastq_files
      encode_blacklist: encode_blacklist
      tmp_folder: tmp_folder
      threads: threads
