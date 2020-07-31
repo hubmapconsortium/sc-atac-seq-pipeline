@@ -49,21 +49,18 @@ inputs:
     type: File
     inputBinding:
       position: 1
-      prefix: --input-fastq1
     doc: The first paired end fastq file.
 
   input_fastq2:
     type: File
     inputBinding:
       position: 2
-      prefix: --input-fastq2
     doc: The second paired end fastq file.
 
   output_fastq_prefix:
     type: string?
     inputBinding:
       position: 4
-      prefix: --output-fastq-prefix
     default: "barcode_added"
     doc: The prefix to use for the output fastq files with barcodes added to the read sequence identifier.
 
