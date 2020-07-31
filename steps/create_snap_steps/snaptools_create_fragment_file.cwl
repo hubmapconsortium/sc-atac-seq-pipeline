@@ -6,7 +6,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38:1.1-sciseq
+    dockerPull: hubmap/sc-atac-seq-grch38:1.1.1-sciseq
 
 baseCommand: /opt/bulk/sort_index_frag.py
 
