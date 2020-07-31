@@ -59,13 +59,6 @@ inputs:
       prefix: --input-fastq2
     doc: The second paired end fastq file.
 
-  input_barcode_fastq:
-    type: File?
-    inputBinding:
-      position: 3
-      prefix: --input-barcode-fastq
-    doc: The fastq file containing the cell barcodes.
-
   output_fastq_prefix:
     type: string?
     inputBinding:
@@ -73,7 +66,6 @@ inputs:
       prefix: --output-fastq-prefix
     default: "barcode_added"
     doc: The prefix to use for the output fastq files with barcodes added to the read sequence identifier.
-
 
 outputs:
   barcode_added_fastq1:
@@ -84,6 +76,6 @@ outputs:
   barcode_added_fastq2:
     type: File
     outputBinding:
-      glob: $(inputs.output_fastq_prefix).R3.fastq
+      glob: $(inputs.output_fastq_prefix).R2.fastq
 
-baseCommand: [/opt/add_barcodes_to_reads.pl]
+baseCommand: [/opt/sciseq_add_barcodes_to_read_ids.py]

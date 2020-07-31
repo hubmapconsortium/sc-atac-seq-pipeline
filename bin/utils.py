@@ -1,5 +1,11 @@
+import bz2
+from dataclasses import dataclass
+from enum import Enum
+import gzip
+import lzma
+from os import PathLike
 from pathlib import Path
-from typing import Union
+from typing import Iterable, Tuple, Union
 
 def normalize_whitespace(string: str) -> str:
     return ' '.join(string.split())
@@ -49,3 +55,53 @@ def find_base_index_path(alignment_index: Union[Path, str]) -> Path:
         # Don't care whether it actually exists -- assume it's usable
         # as input to BWA
         return alignment_index
+
+class FileType(Enum):
+    def __new__(cls, filetype, open_function):
+        obj = object.__new__(cls)
+        obj._value_ = filetype
+        obj.open_function = open_function
+        return obj
+
+    GZ = ("gz", gzip.open)
+    BZ2 = ("bz2", bz2.open)
+    XZ = ("xz", lzma.open)
+    TEXT = ("txt", open)
+
+def get_file_type_by_extension(file_path: Path) -> FileType:
+    suffix = file_path.suffix.lstrip(".")
+    try:
+        return FileType(suffix)
+    except ValueError:
+        # No special suffix, assume text
+        return FileType.TEXT
+
+def smart_open(file_path: PathLike, mode="rt", *args, **kwargs):
+    file_type = get_file_type_by_extension(Path(file_path))
+    return file_type.open_function(file_path, mode, *args, **kwargs)
+
+FASTQ_EXTENSIONS = [
+    'fastq',
+    'fastq.gz',
+    'fq',
+    'fq.gz',
+]
+
+@dataclass
+class Read:
+    read_id: str
+    seq: str
+    unused: str
+    qual: str
+
+    def serialize(self):
+        unused = self.unused or '+'
+        return '\n'.join([self.read_id, self.seq, unused, self.qual])
+
+def fastq_reader(fastq_file: Path) -> Iterable[Read]:
+    with smart_open(fastq_file) as f:
+        while True:
+            lines = [f.readline().strip() for _ in range(4)]
+            if not all(lines):
+                return
+            yield Read(*lines)
