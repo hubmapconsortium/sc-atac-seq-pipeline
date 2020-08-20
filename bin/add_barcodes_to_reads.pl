@@ -27,11 +27,11 @@ my $read2_file;
 my $read3_file;
 my $prefix;
 GetOptions(
-	'input-fastq1=s' => \$read1_file, 
-	'input-fastq2=s' => \$read3_file, 
-	'input-barcode-fastq=s' => \$read2_file, 
-	'output-fastq-prefix=s' => \$prefix) 
-	or die "Usage: $0 --input-fastq1 NAME\n"; 
+	'input-fastq1=s' => \$read1_file,
+	'input-fastq2=s' => \$read3_file,
+	'input-barcode-fastq=s' => \$read2_file,
+	'output-fastq-prefix=s' => \$prefix)
+	or die "Usage: $0 --input-fastq1 NAME\n";
 
 
 say $read1_file;
@@ -69,39 +69,15 @@ while(my $r1_1 = <R1>){
   my $r3_2 = <R3>;
   my $r3_3 = <R3>;
   my $r3_4 = <R3>;
-  
+
   my @fields = split / /, $r1_1;
-  
-  #my $barcode4_and_1 = $fields[1];
-  #$barcode4_and_1 =~ s/1:N:0://g;
-  #chomp($barcode4_and_1);
-  #my $barcode4 = substr($barcode4_and_1, 0, 8);
-  #if($illumina_workflow eq "B"){
-  #  $barcode4 = revComp($barcode4);
-  #}
-  #my $barcode1 = substr($barcode4_and_1, 8, 8);
-  
-  my $barcode1 = substr($r2_2, 0, 8);
-  my $barcode2 = substr($r2_2, 38, 8);
-  my $barcode3 = substr($r2_2, 76, 8);
-  my $umi = substr($r2_2, 84, 10);
-  
+
+  my $barcode = substr($r2_2, 0, 16);
+
   $r1_1=~ s/@//g;
   $r3_1=~ s/@//g;
-  
-  #my $cell_barcode = $barcode1 . $barcode2 . $barcode3 . $barcode4;
-  my $cell_barcode = $barcode1 . $barcode2 . $barcode3;
-  my $rc_cell_barcode = revComp($cell_barcode);
 
-  # Don't add the prefix to the read id string because SnapTools
-  # snap-pre will fail to construct a correct snap file.
-  # This probably should be debugged in snap_pre.py 
-  #print R1_OUT "@", $prefix, "_", $rc_cell_barcode, ":$umi:", $r1_1, $r1_2, $r1_3, $r1_4;
-  #print R3_OUT "@", $prefix, "_", $rc_cell_barcode, ":$umi:", $r3_1, $r3_2, $r3_3, $r3_4;
-
-  print R1_OUT "@", $rc_cell_barcode, ":$umi:", $r1_1, $r1_2, $r1_3, $r1_4;
-  print R3_OUT "@", $rc_cell_barcode, ":$umi:", $r3_1, $r3_2, $r3_3, $r3_4;
-
-
+  print R1_OUT "@", $barcode, "::", $r1_1, $r1_2, $r1_3, $r1_4;
+  print R3_OUT "@", $barcode, "::", $r3_1, $r3_2, $r3_3, $r3_4;
 }
 
