@@ -1,3 +1,3 @@
 # requires version 0.2 of multi-docker-build tool
-hubmap/rocker-r-grch38	docker/rocker-r-grch38/Dockerfile	base_directory_build
-hubmap/sc-atac-seq-grch38	docker/pipeline-code/Dockerfile	base_directory_build
+hubmap/rocker-r-grch38-sn	docker/rocker-r-grch38/Dockerfile	base_directory_build
+hubmap/sc-atac-seq-grch38-sn	docker/pipeline-code/Dockerfile	base_directory_build
