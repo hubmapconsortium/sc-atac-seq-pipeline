@@ -6,7 +6,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38-sn:latest
+    dockerPull: hubmap/sc-atac-seq-grch38-sn:1.1-snatac
 
 baseCommand: /opt/bulk/sort_index_frag.py
 
