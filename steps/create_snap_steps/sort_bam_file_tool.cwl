@@ -8,10 +8,6 @@ cwlVersion: v1.1
 requirements:
   DockerRequirement:
     dockerPull: hubmap/sc-atac-seq-grch38:1.1-bulk
-  ResourceRequirement:
-    coresMin: 1
-    ramMin: 1024
-    outdirMin: 100000
 
 inputs:
   unsorted_paired_end_bam:
@@ -24,6 +20,13 @@ inputs:
     inputBinding:
       position: 1
     default: "sorted-snaptools_alignment.bam"
+
+  threads:
+    type: int?
+    inputBinding:
+      position: 2
+      prefix: "--threads"
+    default: 0
 
 outputs:
   sorted_paired_end_bam:
