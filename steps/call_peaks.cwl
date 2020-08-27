@@ -15,10 +15,8 @@ requirements:
 
 inputs:
 
-  bam_files:
-    type:
-      type: array
-      items: File
+  bam_file:
+    type: File
     inputBinding:
       position: 1
       prefix: -t
