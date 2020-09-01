@@ -32,7 +32,7 @@ inputs:
   alignment_index: File?
   size_index: File?
   genome_name: string?
-  sequence_directory: Directory
+  sequence_directory: Directory[]
   blacklist_bed: File?
   tmp_folder: string?
   bin_size_list: int[]?
@@ -47,109 +47,67 @@ inputs:
 
 outputs:
   zipped_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/zipped_files
 
   report_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/report_files
 
   fragment_file:
-    type: File[]
+    type: File
     outputSource: create_and_analyze_snap_file/fragment_file
 
   bam_file:
-    type: File[]
+    type: File
     outputSource: create_and_analyze_snap_file/bam_file
 
   alignment_qc_report:
-    type: File[]
+    type: File
     outputSource: create_and_analyze_snap_file/alignment_qc_report
 
   snap_file:
-    type: File[]
+    type: File
     outputSource: create_and_analyze_snap_file/snap_file
 
   snap_qc_file:
-    type: File[]
+    type: File
     outputSource: create_and_analyze_snap_file/snap_qc_file
 
   analysis_CSV_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/analysis_CSV_files
 
   analysis_BED_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/analysis_BED_files
 
   analysis_PDF_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/analysis_PDF_files
 
   analysis_RDS_objects:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/analysis_RDS_objects
 
   analysis_TXT_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/analysis_TXT_files
 
   analysis_MTX_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/analysis_MTX_files
 
   analysis_HDF5_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/analysis_HDF5_files
 
   motif_CSV_files:
-    type:
-      type: array
-      items:
-        type: array
-        items: File
+    type: File[]
     outputSource: create_and_analyze_snap_file/motif_CSV_files
 
   motif_RData_file:
-    type:
-      type: array
-      items: File
+    type: File
     outputSource: create_and_analyze_snap_file/motif_RData_file
 
 requirements:
@@ -157,25 +115,23 @@ requirements:
   ScatterFeatureRequirement: {}
 
 steps:
-  gather_sequence_bundles:
-    run: gather_sequence_bundles.cwl
+  concat_fastq:
+    run: steps/concat-fastq.cwl
     in:
       sequence_directory: sequence_directory
     out:
-      [fastq1_files, fastq2_files, barcode_fastq_files]
+      [merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
 
   create_and_analyze_snap_file:
-    scatter: [input_fastq1, input_fastq2, input_barcode_fastq]
-    scatterMethod: dotproduct
     run: steps/snaptools_create_snap_file.cwl
     in:
      reference_genome_fasta: reference_genome_fasta
      alignment_index: alignment_index
      size_index: size_index
      genome_name: genome_name
-     input_fastq1: gather_sequence_bundles/fastq1_files
-     input_fastq2: gather_sequence_bundles/fastq2_files
-     input_barcode_fastq: gather_sequence_bundles/barcode_fastq_files
+     input_fastq1: concat_fastq/merged_fastq_r1
+     input_fastq2: concat_fastq/merged_fastq_r2
+     input_barcode_fastq: concat_fastq/merged_fastq_barcode
      blacklist_bed: blacklist_bed
      tmp_folder: tmp_folder
      threads: threads
