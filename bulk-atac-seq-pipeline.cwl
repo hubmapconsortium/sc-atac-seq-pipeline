@@ -25,9 +25,9 @@ outputs:
     type: Directory[]
     outputSource: fastqc/fastqc_dir
 
-  bam_file:
-    type: File
-    outputSource: bulk_process/bam_file
+#  bam_file:
+#    type: File
+#    outputSource: bulk_process/bam_file
 
   alignment_qc_report:
     type: File
