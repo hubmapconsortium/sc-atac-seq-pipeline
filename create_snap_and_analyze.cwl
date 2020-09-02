@@ -54,9 +54,9 @@ outputs:
     type: File[]
     outputSource: create_and_analyze_snap_file/fragment_file
 
-  bam_file:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/bam_file
+#  bam_file:
+#    type: File[]
+#    outputSource: create_and_analyze_snap_file/bam_file
 
   alignment_qc_report:
     type: File[]
