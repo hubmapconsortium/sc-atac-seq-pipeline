@@ -11,6 +11,19 @@ set -u
 set -o xtrace
 #to turn off echo do 'set +o xtrace'
 
+start() { echo travis_fold':'start:$1; echo $1; }
+end() { set +v; echo travis_fold':'end:$1; echo; echo; }
+die() { set +v; echo "$*" 1>&2 ; exit 1; }
+
+start black
+black --check ..
+end black
+
+start isort
+isort --check-only ..
+end isort
+
+start cwltool
    pwd
    #docker version
    #cwltool --version
@@ -32,6 +45,4 @@ set -o xtrace
 #   wget https://storage.googleapis.com/sc-atac-seq-pipeline-testing/hg38.promoters.bed
 
    cwltool --debug --timestamps $CWLTOOL_TMPDIR_PREFIX $CWLTOOL_TMP_OUTDIR_PREFIX  ../create_snap_and_analyze.cwl create_snap_and_analyze_local.json
-  
-
-
+end cwltool
