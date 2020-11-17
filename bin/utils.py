@@ -49,3 +49,16 @@ def find_base_index_path(alignment_index: Union[Path, str]) -> Path:
         # Don't care whether it actually exists -- assume it's usable
         # as input to BWA
         return alignment_index
+
+class Assay(Enum):
+    def __new__(cls, key: str):
+        obj = object.__new__(cls)
+        obj._value_ = key
+        return obj
+
+    def __str__(self):
+        return self.value
+
+    SNARESEQ = 'snareseq'
+    SCISEQ = 'sciseq'
+    SNSEQ = 'snseq'
