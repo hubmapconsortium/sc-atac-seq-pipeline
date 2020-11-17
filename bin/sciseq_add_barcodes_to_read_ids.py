@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 from typing import Union
 
-from utils import Read, fastq_reader, smart_open
+from fastq_utils import Read, fastq_reader, smart_open
 
 # Specific format for SnapTools
 READ_ID_FORMAT = '@{barcode}:{umi}:{previous_read_id}'

@@ -3,7 +3,6 @@ from argparse import ArgumentParser
 from pathlib import Path
 from os import fspath
 from typing import Iterable, Tuple
-from string import Template
 import json
 
 FASTQ_EXTENSIONS = [

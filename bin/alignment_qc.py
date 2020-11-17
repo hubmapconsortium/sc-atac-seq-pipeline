@@ -34,7 +34,7 @@ def main(bam_file: Path, threads:int):
 
     percentiles = [0, 25, 50, 75, 100]
     sub_dict_keys = ["minimum", "25th_quantile", "median", "75th_quantile", "maximum"]
-    five_number_dict = {sub_dict_keys[i]: np.percentile(alignment_qualities, percentiles[i]) for i in range(5)}
+    five_number_dict = {key: np.percentile(alignment_qualities, pc) for key, pc in zip(sub_dict_keys, percentiles)}
 
     qc_report = {"total_reads": total_reads, "mapped_reads": mapped_reads, "unmapped_reads": unmapped_reads, "proportion_mapped": proportion_mapped, \
     "mapping_quality": five_number_dict}
