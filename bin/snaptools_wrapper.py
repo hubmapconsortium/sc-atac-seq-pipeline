@@ -24,13 +24,14 @@ CommandData = Tuple[
 ]
 
 SNAPTOOLS_COMMAND_DEFAULTS: Dict[str, List[CommandData]] = {
-    'align-paired-end': [
-        ('--input-reference', snaptools_defaults.DEFAULT_ALIGNMENT_INDEX, find_base_index_path),
+    "align-paired-end": [
+        ("--input-reference", snaptools_defaults.DEFAULT_ALIGNMENT_INDEX, find_base_index_path),
     ],
-    'snap-pre': [
-        ('--genome-size', snaptools_defaults.DEFAULT_SIZE_INDEX, identity),
+    "snap-pre": [
+        ("--genome-size", snaptools_defaults.DEFAULT_SIZE_INDEX, identity),
     ],
 }
+
 
 def run_with_defaults(snaptools_command: str, other_args: List[Union[Path, str]]):
     args = other_args.copy()
@@ -48,19 +49,20 @@ def run_with_defaults(snaptools_command: str, other_args: List[Union[Path, str]]
             args.append(option)
             args.append(func(default))
 
-    command = ['snaptools', snaptools_command]
+    command = ["snaptools", snaptools_command]
     command.extend(fspath(arg) for arg in args)
 
-    print('Running:', ' '.join(command))
+    print("Running:", " ".join(command))
     run(command, check=True)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     p = ArgumentParser()
-    p.add_argument('snaptools_command')
+    p.add_argument("snaptools_command")
     p.add_argument(
-        'other_arg',
-        nargs='*',
-        help='Arguments to the chosen snaptools command',
+        "other_arg",
+        nargs="*",
+        help="Arguments to the chosen snaptools command",
     )
     args = p.parse_args()
 
