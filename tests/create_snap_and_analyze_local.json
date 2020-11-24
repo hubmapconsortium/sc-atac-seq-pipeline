@@ -1,7 +1,0 @@
-{
-  "sequence_directory": {
-        "class": "Directory",
-        "path": "./."
-  },
-  "bin_size_list": [5000]
-}
