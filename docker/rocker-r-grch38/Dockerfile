@@ -1,10 +1,13 @@
-FROM rocker/r-ver:4.0.2
+FROM rocker/r-ver:3.6.3
+
+#FROM rocker/r-ver:4.0.2
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
  && apt-get -y install \
     curl \
+    xz-utils \
  && rm -rf /var/lib/apt/lists
 
 WORKDIR /opt/supplementary-data
