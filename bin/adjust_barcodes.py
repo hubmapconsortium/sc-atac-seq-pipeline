@@ -3,12 +3,13 @@ from argparse import ArgumentParser
 from pathlib import Path
 from typing import Iterable
 from utils import Assay
+import add_barcodes_to_reads
 
 ADJ_OUTPUT_DIR = Path("adj_fastq")
 
 adj_funcs = {
     #Assay.SLIDESEQ: extract_slideseq_barcodes.main,
-    Assay.SNSEQ: adjust_barcodes.main
+    Assay.ATACSEQ: add_barcodes_to_reads.main
 }
 
 def main(assay: Assay, input_dirs: Iterable[Path]):

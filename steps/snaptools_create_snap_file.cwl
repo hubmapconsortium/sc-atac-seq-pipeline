@@ -28,6 +28,8 @@ $schemas:
 requirements:
   MultipleInputFeatureRequirement: {}
   SubworkflowFeatureRequirement: {}
+  StepInputExpressionRequirement: {}
+  InlineJavascriptRequirement: {}
 
 inputs:
   assay: string
@@ -145,7 +147,7 @@ steps:
     run: adjust-barcodes.cwl
     in:
      assay: assay
-     fastq_dir:
+     directory:
        # https://www.commonwl.org/user_guide/misc/ Connect a solo value to an input that expects an array of that type
        source: [ concat_fastq_dir ]
        linkMerge: merge_nested
@@ -166,14 +168,14 @@ steps:
         source: adjust_barcodes/adj_fastq_dir
         valueFrom: |
            ${
-             return {"class":"File", "location": self[0].location + "/merged_R1.fastq"}
+             return {"class":"File", "location": self.location + "/barcode_added_R1.fastq"}
            }
 
       input_fastq2:
         source: adjust_barcodes/adj_fastq_dir
         valueFrom: |
            ${
-             return {"class":"File", "location": self[0].location + "/merged_R2.fastq"}
+             return {"class":"File", "location": self.location + "/barcode_added_R2.fastq"}
            }
 
 

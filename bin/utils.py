@@ -68,3 +68,4 @@ class Assay(Enum):
     SNARESEQ = "snareseq", 3
     SCISEQ = "sciseq", 2
     SNSEQ = "snseq", 3
+    ATACSEQ = "atacseq", 3
