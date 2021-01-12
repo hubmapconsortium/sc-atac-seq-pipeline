@@ -19,19 +19,25 @@ inputs:
     doc: A directory with sample fastq or fastq.gz files.
 
 outputs:
+  output_directory:
+    type: Directory
+    outputBinding:
+      glob: "concat_output_dir"
+ 
   merged_fastq_r1:
     type: File
     outputBinding:
-      glob: "merged_R1.fastq"
+      glob: "concat_output_dir/merged_R1.fastq"
 
   merged_fastq_r2:
     type: File
     outputBinding:
-      glob: "merged_R2.fastq"
+      glob: "concat_output_dir/merged_R2.fastq"
 
   merged_fastq_barcode:
     type: File
     outputBinding:
-      glob: "merged_barcode.fastq"
+      glob: "concat_output_dir/merged_R3.fastq"
+      outputEval: ${self[0].basename="merged_barcode.fastq"; return self;}
 
 baseCommand: [/opt/concat_fastq.py]
