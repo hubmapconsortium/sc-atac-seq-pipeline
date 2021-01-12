@@ -6,7 +6,7 @@ from typing import Iterable
 
 from fastq_utils import find_grouped_fastq_files
 
-CONCAT_OUTPUT_DIR = "concat_output_dir"
+CONCAT_OUTPUT_DIR = Path("concat_output_dir")
 
 # No point in involving the Python interpreter in this decompression;
 # it'll be a lot faster just to pipe 'gunzip -c' to each file
@@ -15,9 +15,9 @@ GUNZIP_COMMAND_TEMPLATE = [
     "-c",
     "{fastq_file}",
 ]
-MERGED_FASTQ_R1 = Path(CONCAT_OUTPUT_DIR + "/merged_R1.fastq")
-MERGED_FASTQ_R2 = Path(CONCAT_OUTPUT_DIR + "/merged_R2.fastq")
-MERGED_FASTQ_BARCODE = Path(CONCAT_OUTPUT_DIR + "/merged_R3.fastq")
+MERGED_FASTQ_R1 = Path(str(CONCAT_OUTPUT_DIR) + "/merged_R1.fastq")
+MERGED_FASTQ_R2 = Path(str(CONCAT_OUTPUT_DIR) + "/merged_R2.fastq")
+MERGED_FASTQ_BARCODE = Path(str(CONCAT_OUTPUT_DIR) + "/merged_R3.fastq")
 
 
 def decompress_concat_fastq(input_fastq: Path, merged_fastq: Path):
