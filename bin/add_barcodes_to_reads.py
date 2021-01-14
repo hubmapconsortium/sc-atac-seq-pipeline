@@ -41,19 +41,19 @@ def create_and_output_barcode_adjusted_reads(f1r: Read, f2r: Read, umi_seq, barc
 def main(
     assay: Assay,
     fastq_dirs: Iterable[Path],
-    output_dir: Path = Path()
+    output_filename_prefix,
+    output_dir: Path
 ):
 
-    baraddedf1 = output_dir / "barcode_added_R1.fastq"
-    baraddedf2 = output_dir / "barcode_added_R2.fastq"
+    baraddedf1 = output_dir / f'{output_filename_prefix}_R1.fastq'
+    baraddedf2 = output_dir / f'{output_filename_prefix}_R2.fastq'
 
     all_fastqs = chain.from_iterable(
         find_grouped_fastq_files(fastq_dir, assay.fastq_count) for fastq_dir in fastq_dirs
     )
 
     with open(baraddedf1, "w") as barf1addedout, open(baraddedf2, "w") as barf2addedout:
-            #for fastq1_file, fastq2_file, barcode_file in all_fastqs:
-            for fastq1_file, barcode_file, fastq2_file, in all_fastqs:
+            for fastq1_file, fastq2_file, barcode_file in all_fastqs:
 
                 i = 0
                 print("Adding barcodes to", fastq1_file, "and", fastq2_file, "using", barcode_file)
@@ -82,10 +82,15 @@ if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("assay", type=Assay)
     p.add_argument("fastq_dirs", type=Path, nargs="+")
+    p.add_argument('output_filename_prefix')
+    p.add_argument("output_dir", type=Path)
 
     args = p.parse_args()
 
     main(
-        fastq_dirs=args.fastq_dirs
+        args.assay,
+        args.fastq_dirs,
+        args.output_filename_prefix,
+        args.output_dir
     )
 
