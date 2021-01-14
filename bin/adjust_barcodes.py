@@ -8,15 +8,16 @@ import add_barcodes_to_reads
 ADJ_OUTPUT_DIR = Path("adj_fastq")
 
 adj_funcs = {
-    #Assay.SLIDESEQ: extract_slideseq_barcodes.main,
-    Assay.ATACSEQ: add_barcodes_to_reads.main
+    Assay.SNARESEQ: add_barcodes_to_reads.main,
+    Assay.SCISEQ: add_barcodes_to_reads.main,
+    Assay.SNSEQ: add_barcodes_to_reads.main
 }
 
 def main(assay: Assay, input_dirs: Iterable[Path]):
     ADJ_OUTPUT_DIR.mkdir(exist_ok=True, parents=True)
     if assay in adj_funcs:
         print("Calling function to add barcodes")
-        adj_funcs[assay](input_dirs, output_dir=ADJ_OUTPUT_DIR)
+        adj_funcs[assay](assay, input_dirs, output_dir=ADJ_OUTPUT_DIR)
     else:
         print("No barcode adjustment to perform for assay", assay)
 
