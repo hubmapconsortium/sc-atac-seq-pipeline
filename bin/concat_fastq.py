@@ -17,9 +17,9 @@ GUNZIP_COMMAND_TEMPLATE = [
     "-c",
     "{fastq_file}",
 ]
-MERGED_FASTQ_R1 = Path(str(CONCAT_OUTPUT_DIR) + "/merged_R1.fastq")
-MERGED_FASTQ_R2 = Path(str(CONCAT_OUTPUT_DIR) + "/merged_R2.fastq")
-MERGED_FASTQ_BARCODE = Path(str(CONCAT_OUTPUT_DIR) + "/merged_R3.fastq")
+MERGED_FASTQ_R1 = CONCAT_OUTPUT_DIR / "merged_R1.fastq"
+MERGED_FASTQ_R2 = CONCAT_OUTPUT_DIR / "merged_R2.fastq"
+MERGED_FASTQ_BARCODE = CONCAT_OUTPUT_DIR / "merged_R3.fastq"
 
 
 def decompress_concat_fastq(input_fastq: Path, merged_fastq: Path):
