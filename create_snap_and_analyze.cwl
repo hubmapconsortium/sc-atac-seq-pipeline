@@ -120,6 +120,7 @@ steps:
     run: steps/concat-fastq.cwl
     in:
       sequence_directory: sequence_directory
+      assay: assay
     out:
       [output_directory, merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
 
