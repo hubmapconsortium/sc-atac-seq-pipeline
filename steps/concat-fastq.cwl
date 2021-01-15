@@ -44,6 +44,9 @@ outputs:
     type: File?
     outputBinding:
       glob: "concat_output_dir/merged_R3.fastq"
-      outputEval: ${ if((self === null || self.length == 0)) { return null;} else { return self[0].basename="merged_barcode.fastq"; } }
+      # If there is no output file just return null; if there is an R3 file, which
+      # should be the barcode output file,
+      # change the name of the file so it is more easily recognizable and return it
+      outputEval: ${ if((self === null || self.length == 0)) { return null;} else { self[0].basename="merged_barcode.fastq"; return self; } }
 
 baseCommand: [/opt/concat_fastq.py]
