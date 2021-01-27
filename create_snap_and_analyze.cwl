@@ -137,7 +137,6 @@ steps:
 
      input_fastq1: concat_fastq/merged_fastq_r1
      input_fastq2: concat_fastq/merged_fastq_r2
-     #input_barcode_fastq: concat_fastq/merged_fastq_barcode
 
 
      blacklist_bed: blacklist_bed

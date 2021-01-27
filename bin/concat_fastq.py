@@ -52,12 +52,11 @@ def main(directories: Iterable[Path], assay: Assay):
                 r2_fastq = fastqs_list[1]
                 decompress_concat_fastq(r2_fastq, MERGED_FASTQ_R2)
             else:
-                print(
+                raise ValueError(
                     "Could not unzip and concatenate fastqs becuase there are {} of them".format(
                         num_fastqs
                     )
                 )
-                exit(1)
 
 
 if __name__ == "__main__":

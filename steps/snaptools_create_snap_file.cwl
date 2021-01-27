@@ -41,7 +41,6 @@ inputs:
   genome_name: string?
   input_fastq1: File
   input_fastq2: File
-  #input_barcode_fastq: File?
   blacklist_bed: File?
   tmp_folder: string?
   threads: int?
@@ -134,15 +133,6 @@ steps:
       sequence_files: [input_fastq1, input_fastq2]
     out: [zipped_files, report_files]
 
-  #snaptools_add_barcodes_to_reads_tool:
-  #  run: create_snap_steps/snaptools_add_barcodes_to_reads_tool.cwl
-  #  in:
-  #    input_fastq1: input_fastq1
-  #    input_fastq2: input_fastq2
-  #    input_barcode_fastq: input_barcode_fastq
-  #  out: [barcode_added_fastq1, barcode_added_fastq2]
-
-
   adjust_barcodes:
     run: adjust-barcodes.cwl
     in:
@@ -153,10 +143,6 @@ steps:
        linkMerge: merge_nested
     out:
      [adj_fastq_dir]
-
-
-
-
 
 
   snaptools_align_paired_end:
@@ -178,10 +164,6 @@ steps:
              return {"class":"File", "location": self.location + "/barcode_added_R2.fastq"}
            }
 
-
-
-      #input_fastq1: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq1
-      #input_fastq2: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq2
       tmp_folder: tmp_folder
       num_threads: threads
 
