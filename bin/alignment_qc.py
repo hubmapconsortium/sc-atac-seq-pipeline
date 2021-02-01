@@ -38,7 +38,7 @@ def main(bam_file: Path, threads: int):
         (75, "75th_quantile"),
         (100, "maximum"),
     ]
-    five_number_dict = {key: np.percentile(alignment_qualities, pc) for key, pc in percentiles}
+    five_number_dict = {key: np.percentile(alignment_qualities, pc) for pc, key in percentiles}
 
     qc_report = {
         "total_reads": total_reads,

@@ -28,6 +28,7 @@ $schemas:
 
 
 inputs:
+  assay: string
   reference_genome_fasta: File?
   alignment_index: File?
   size_index: File?
@@ -119,19 +120,25 @@ steps:
     run: steps/concat-fastq.cwl
     in:
       sequence_directory: sequence_directory
+      assay: assay
     out:
-      [merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
+      [output_directory, merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
 
   create_and_analyze_snap_file:
     run: steps/snaptools_create_snap_file.cwl
     in:
+     assay: assay
+     concat_fastq_dir: concat_fastq/output_directory
+
      reference_genome_fasta: reference_genome_fasta
      alignment_index: alignment_index
      size_index: size_index
      genome_name: genome_name
+
      input_fastq1: concat_fastq/merged_fastq_r1
      input_fastq2: concat_fastq/merged_fastq_r2
-     input_barcode_fastq: concat_fastq/merged_fastq_barcode
+
+
      blacklist_bed: blacklist_bed
      tmp_folder: tmp_folder
      threads: threads
