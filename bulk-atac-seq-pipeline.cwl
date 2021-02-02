@@ -56,11 +56,10 @@ outputs:
     outputSource: bulk_analysis/bed_graphs
 
 steps:
-
   fastqc:
     scatter: [fastq_dir]
     scatterMethod: dotproduct
-    run: fastqc.cwl
+    run: steps/fastqc.cwl
     in:
       fastq_dir: sequence_directory
       threads: threads

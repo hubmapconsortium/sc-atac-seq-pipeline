@@ -47,13 +47,9 @@ inputs:
   threads: int?
 
 outputs:
-  zipped_files:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/zipped_files
-
-  report_files:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/report_files
+  fastqc_dir:
+    type: Directory[]
+    outputSource: fastqc/fastqc_dir
 
   fragment_file:
     type: File
@@ -116,6 +112,16 @@ requirements:
   ScatterFeatureRequirement: {}
 
 steps:
+  fastqc:
+    scatter: [fastq_dir]
+    scatterMethod: dotproduct
+    run: steps/fastqc.cwl
+    in:
+      fastq_dir: sequence_directory
+      threads: threads
+    out:
+      [fastqc_dir]
+
   concat_fastq:
     run: steps/concat-fastq.cwl
     in:
@@ -152,7 +158,7 @@ steps:
      promoters: promoters
 
     out:
-      [zipped_files, report_files, bam_file, alignment_qc_report, fragment_file, snap_file, snap_qc_file,
+      [bam_file, alignment_qc_report, fragment_file, snap_file, snap_qc_file,
       analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_HDF5_files,
       analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files,
       motif_CSV_files, motif_RData_file]

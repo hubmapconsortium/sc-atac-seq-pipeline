@@ -70,16 +70,6 @@ outputs:
   snap_qc_file:
     type: File
     outputSource: snaptools_preprocess_reads/snap_qc_file
-  zipped_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/zipped_files
-  report_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/report_files
 
   analysis_CSV_files:
     type: File[]
@@ -127,12 +117,6 @@ steps:
     out:
       [genome_alignment_index, genome_size_index]
 
-  snaptools_fastqc_tool:
-    run: create_snap_steps/snaptools_fastqc_tool.cwl
-    in:
-      sequence_files: [input_fastq1, input_fastq2]
-    out: [zipped_files, report_files]
-
   adjust_barcodes:
     run: adjust-barcodes.cwl
     in:
@@ -143,7 +127,6 @@ steps:
        linkMerge: merge_nested
     out:
      [adj_fastq_dir]
-
 
   snaptools_align_paired_end:
     run: create_snap_steps/snaptools_align_paired_end_tool.cwl
@@ -203,7 +186,6 @@ steps:
       snap_file: snaptools_preprocess_reads/snap_file
       bin_size_list: bin_size_list
     out: [snap_file_w_cell_by_bin]
-
 
   snapanalysis_setup_and_analyze:
     run: snapanalysis_setup_and_analyze.cwl
