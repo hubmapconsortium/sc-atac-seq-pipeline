@@ -74,7 +74,6 @@ outputs:
     outputBinding:
       glob: "*.zip"
     doc: Individual graph files and additional data files containing the raw data from which plots were drawn.
-      
   report_files:
     type:
       type: array

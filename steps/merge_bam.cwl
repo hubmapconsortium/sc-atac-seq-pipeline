@@ -1,24 +1,26 @@
 #!/usr/bin/env cwl-runner
-
 class: CommandLineTool
-label: snaptools create fragment file
+id: merge_bam.cwl
+label: Merge alignment output
 cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
     dockerPull: hubmap/sc-atac-seq-grch38
 
-baseCommand: /opt/bulk/sort_index_frag.py
+arguments:
+  - merged.bam
 
 inputs:
-  input_bam:
-    type: File
+  bam_files:
+    type: File[]
     inputBinding:
       position: 1
-    doc: The bam file to use
 
 outputs:
-  fragment_file:
+  merged_bam:
     type: File
     outputBinding:
-      glob: "*.sort.bed.gz"
+      glob: "merged.bam"
+
+baseCommand: [samtools, merge]

@@ -143,6 +143,8 @@ dmypy.json
 *.bed
 *.csv
 *.fai
+*.fastq
+*.fastq.gz
 *.hdf5
 *.html
 *.mtx

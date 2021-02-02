@@ -5,10 +5,8 @@ class: Workflow
 # doc: A workflow that analyzes processed bulk ATAC seq data
 
 inputs:
-  bam_files:
-    type:
-      type: array
-      items: File
+  bam_file:
+    type: File
 
 outputs:
 
@@ -39,5 +37,5 @@ steps:
   call_peaks:
     run: call_peaks.cwl
     in:
-      bam_files: bam_files
+      bam_file: bam_file
     out: [peaks_table, narrow_peaks, summits_bed, r_script, bed_graphs]
