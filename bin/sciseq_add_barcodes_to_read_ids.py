@@ -2,9 +2,9 @@
 from argparse import ArgumentParser
 from itertools import chain
 from pathlib import Path
-from typing import Iterable, Mapping, Set, Union
+from typing import Iterable, Union
 
-from fastq_utils import Read, fastq_reader, find_grouped_fastq_files, revcomp
+from fastq_utils import Read, fastq_reader, find_grouped_fastq_files
 
 from utils import Assay
 
@@ -34,15 +34,12 @@ def convert_fastq(input_path: Path, output_path: Union[str, Path]):
             print(new_read.serialize(), file=f)
 
 
-def main(assay: Assay, fastq_dirs: Iterable[Path], output_filename_prefix, output_dir: Path):
+def main(assay: Assay, fastq_dirs: Iterable[Path], output_filename_prefix: str, output_dir: Path):
     all_fastqs = chain.from_iterable(
         find_grouped_fastq_files(fastq_dir, assay.fastq_count) for fastq_dir in fastq_dirs
     )
 
-    for (
-        fastq_r1,
-        fastq_r2,
-    ) in all_fastqs:
+    for fastq_r1, fastq_r2 in all_fastqs:
         convert_fastq(fastq_r1, output_dir / f"{output_filename_prefix}_R1.fastq")
         convert_fastq(fastq_r2, output_dir / f"{output_filename_prefix}_R2.fastq")
 
@@ -51,7 +48,7 @@ if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("assay", type=Assay)
     p.add_argument("output_filename_prefix")
-    p.add_argument("output_dir")
+    p.add_argument("output_dir", type=Path)
     p.add_argument("fastq_dirs", type=Path, nargs="+")
 
     args = p.parse_args()

@@ -53,9 +53,7 @@ def main(directories: Iterable[Path], assay: Assay):
                 decompress_concat_fastq(r2_fastq, MERGED_FASTQ_R2)
             else:
                 raise ValueError(
-                    "Could not unzip and concatenate fastqs becuase there are {} of them".format(
-                        num_fastqs
-                    )
+                    f"Could not unzip and concatenate fastqs becuase there are {num_fastqs} of them"
                 )
 
 
