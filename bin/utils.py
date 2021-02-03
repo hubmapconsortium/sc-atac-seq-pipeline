@@ -1,11 +1,15 @@
+from enum import Enum
 from pathlib import Path
 from typing import Union
 
+
 def normalize_whitespace(string: str) -> str:
-    return ' '.join(string.split())
+    return " ".join(string.split())
+
 
 def identity(x):
     return x
+
 
 def find_base_index_path(alignment_index: Union[Path, str]) -> Path:
     """
@@ -42,10 +46,25 @@ def find_base_index_path(alignment_index: Union[Path, str]) -> Path:
     # just use one
     alignment_index = Path(alignment_index)
     if alignment_index.is_dir():
-        bwt_files = list(alignment_index.glob('*.bwt'))
+        bwt_files = list(alignment_index.glob("*.bwt"))
         assert len(bwt_files) == 1
         return alignment_index / bwt_files[0].stem
     else:
         # Don't care whether it actually exists -- assume it's usable
         # as input to BWA
         return alignment_index
+
+
+class Assay(Enum):
+    def __new__(cls, key: str, fastq_count: int):
+        obj = object.__new__(cls)
+        obj._value_ = key
+        obj.fastq_count = fastq_count
+        return obj
+
+    def __str__(self):
+        return self.value
+
+    SNARESEQ = "snareseq", 3
+    SCISEQ = "sciseq", 2
+    SNSEQ = "snseq", 3

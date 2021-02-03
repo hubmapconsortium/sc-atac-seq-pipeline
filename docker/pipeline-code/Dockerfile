@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
  && apt-get -y install \
     build-essential \
+    fastqc \
     git \
     libbz2-dev \
     libcurl4-openssl-dev \
@@ -17,6 +18,7 @@ RUN apt-get update \
     python3-dev \
     python3-pip \
     tabix \
+    tk \
     zlib1g-dev \
  && rm -rf /var/lib/apt/lists
 

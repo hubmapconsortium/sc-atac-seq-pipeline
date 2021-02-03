@@ -1,3 +1,4 @@
-# requires version 0.2 of multi-docker-build tool
-hubmap/rocker-r-grch38	docker/rocker-r-grch38/Dockerfile	base_directory_build
-hubmap/sc-atac-seq-grch38	docker/pipeline-code/Dockerfile	base_directory_build
+# requires version 0.4 or newer of multi-docker-build tool
+hubmap/rocker-r-grch38      docker/rocker-r-grch38/Dockerfile base_directory_build
+hubmap/sc-atac-seq-grch38   docker/pipeline-code/Dockerfile   base_directory_build
+hubmap/sc-atac-barcode-adj  docker/barcode-adj/Dockerfile     base_directory_build

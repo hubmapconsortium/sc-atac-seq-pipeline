@@ -13,42 +13,24 @@ inputs:
   alignment_index: File?
   size_index: File?
   genome_name: string?
-  sequence_directory: Directory
-  blacklist_bed: File?
+  sequence_directory: Directory[]
   tmp_folder: string?
-
-  encode_blacklist: File
+  encode_blacklist: File?
   threads: int?
   if_sort: string?
 
 outputs:
 
-  zipped_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
-    outputSource: bulk_process/zipped_files
-
-  report_files:
-    type:
-      type: array
-      items:
-         type: array
-         items: File
-    outputSource: bulk_process/report_files
+  fastqc_dir:
+    type: Directory[]
+    outputSource: fastqc/fastqc_dir
 
   bam_file:
-    type:
-      type: array
-      items: File
+    type: File
     outputSource: bulk_process/bam_file
 
   alignment_qc_report:
-    type:
-      type: array
-      items: File
+    type: File
     outputSource: bulk_process/alignment_qc_report
 
   peaks_table:
@@ -74,6 +56,16 @@ outputs:
     outputSource: bulk_analysis/bed_graphs
 
 steps:
+  fastqc:
+    scatter: [fastq_dir]
+    scatterMethod: dotproduct
+    run: steps/fastqc.cwl
+    in:
+      fastq_dir: sequence_directory
+      threads: threads
+    out:
+      [fastqc_dir]
+
   gather_sequence_bundles:
     run: bulk_gather_sequence_bundles.cwl
     in:
@@ -81,30 +73,51 @@ steps:
     out:
       [fastq1_files, fastq2_files]
 
-  bulk_process:
+  index_ref_genome:
+    run: steps/create_snap_steps/snaptools_index_ref_genome_tool.cwl
+    in:
+      input_fasta: reference_genome_fasta
+      alignment_index: alignment_index
+      size_index: size_index
+    out:
+      [genome_alignment_index, genome_size_index]
+
+  align_paired_end:
     scatter: [input_fastq1, input_fastq2]
     scatterMethod: dotproduct
+    run: steps/create_snap_steps/snaptools_align_paired_end_tool.cwl
+    in:
+      alignment_index: index_ref_genome/genome_alignment_index
+      input_fastq1: gather_sequence_bundles/fastq1_files
+      input_fastq2: gather_sequence_bundles/fastq2_files
+      tmp_folder: tmp_folder
+      num_threads: threads
+      if_sort: if_sort
+
+    out: [paired_end_bam]
+
+  merge_bam:
+    run: steps/merge_bam.cwl
+    in:
+      bam_files: align_paired_end/paired_end_bam
+    out: [merged_bam]
+
+  bulk_process:
     run: steps/bulk_process.cwl
     in:
-     reference_genome_fasta: reference_genome_fasta
-     alignment_index: alignment_index
-     size_index: size_index
-     genome_name: genome_name
-     input_fastq1: gather_sequence_bundles/fastq1_files
-     input_fastq2: gather_sequence_bundles/fastq2_files
-     blacklist_bed: blacklist_bed
-     tmp_folder: tmp_folder
-     threads: threads
-     if_sort: if_sort
+      merged_bam: merge_bam/merged_bam
+      alignment_index: index_ref_genome/genome_alignment_index
+      encode_blacklist: encode_blacklist
+      threads: threads
 
     out:
-      [zipped_files, report_files, bam_file, alignment_qc_report]
+      [bam_file, alignment_qc_report]
 
 
   bulk_analysis:
     run: steps/bulk_analysis.cwl
     in:
-      bam_files: bulk_process/bam_file
+      bam_file: bulk_process/bam_file
 
     out:
       [peaks_table, narrow_peaks, summits_bed, bed_graphs, r_script]

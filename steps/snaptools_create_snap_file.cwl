@@ -28,15 +28,19 @@ $schemas:
 requirements:
   MultipleInputFeatureRequirement: {}
   SubworkflowFeatureRequirement: {}
+  StepInputExpressionRequirement: {}
+  InlineJavascriptRequirement: {}
 
 inputs:
+  assay: string
+  concat_fastq_dir: Directory
+
   reference_genome_fasta: File?
   alignment_index: File?
   size_index: File?
   genome_name: string?
   input_fastq1: File
   input_fastq2: File
-  input_barcode_fastq: File?
   blacklist_bed: File?
   tmp_folder: string?
   threads: int?
@@ -66,16 +70,6 @@ outputs:
   snap_qc_file:
     type: File
     outputSource: snaptools_preprocess_reads/snap_qc_file
-  zipped_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/zipped_files
-  report_files:
-    type:
-      type: array
-      items: File
-    outputSource: snaptools_fastqc_tool/report_files
 
   analysis_CSV_files:
     type: File[]
@@ -123,26 +117,36 @@ steps:
     out:
       [genome_alignment_index, genome_size_index]
 
-  snaptools_fastqc_tool:
-    run: create_snap_steps/snaptools_fastqc_tool.cwl
+  adjust_barcodes:
+    run: adjust-barcodes.cwl
     in:
-      sequence_files: [input_fastq1, input_fastq2]
-    out: [zipped_files, report_files]
-
-  snaptools_add_barcodes_to_reads_tool:
-    run: create_snap_steps/snaptools_add_barcodes_to_reads_tool.cwl
-    in:
-      input_fastq1: input_fastq1
-      input_fastq2: input_fastq2
-      input_barcode_fastq: input_barcode_fastq
-    out: [barcode_added_fastq1, barcode_added_fastq2]
+     assay: assay
+     directory:
+       # https://www.commonwl.org/user_guide/misc/ Connect a solo value to an input that expects an array of that type
+       source: [ concat_fastq_dir ]
+       linkMerge: merge_nested
+    out:
+     [adj_fastq_dir]
 
   snaptools_align_paired_end:
     run: create_snap_steps/snaptools_align_paired_end_tool.cwl
     in:
       alignment_index: snaptools_index_ref_genome/genome_alignment_index
-      input_fastq1: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq1
-      input_fastq2: snaptools_add_barcodes_to_reads_tool/barcode_added_fastq2
+
+      input_fastq1:
+        source: adjust_barcodes/adj_fastq_dir
+        valueFrom: |
+           ${
+             return {"class":"File", "location": self.location + "/barcode_added_R1.fastq"}
+           }
+
+      input_fastq2:
+        source: adjust_barcodes/adj_fastq_dir
+        valueFrom: |
+           ${
+             return {"class":"File", "location": self.location + "/barcode_added_R2.fastq"}
+           }
+
       tmp_folder: tmp_folder
       num_threads: threads
 
@@ -182,7 +186,6 @@ steps:
       snap_file: snaptools_preprocess_reads/snap_file
       bin_size_list: bin_size_list
     out: [snap_file_w_cell_by_bin]
-
 
   snapanalysis_setup_and_analyze:
     run: snapanalysis_setup_and_analyze.cwl
