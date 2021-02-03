@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: "biocontainers/macs:v2.1.2.1-1-deb_cv1"
+    dockerPull: hubmap/sc-atac-seq-grch38
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
@@ -15,10 +15,8 @@ requirements:
 
 inputs:
 
-  bam_files:
-    type:
-      type: array
-      items: File
+  bam_file:
+    type: File
     inputBinding:
       position: 1
       prefix: -t

@@ -29,6 +29,12 @@ after which the pipeline can be invoked as:
 
 `cwltool create_snap_and_analyze.cwl create_snap_and_analyze.json`
 
+To build the Docker images run
+
+`build_docker_containers`
+
+from the sc-atac-seq directory. The build could take up to an hour.
+
 # Supplementary Data
 The HuBMAP sc-atac-seq pipeline uses the Genome Reference Consortium human genome,
 build 38 (GRCh38).  A BWA generated set of index files is required for the
