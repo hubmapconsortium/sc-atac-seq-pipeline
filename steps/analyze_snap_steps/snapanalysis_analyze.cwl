@@ -158,25 +158,24 @@ outputs:
     outputBinding:
       glob: "*.rds"
 
-  TXT_files:
-    type:
-      type: array
-      items: File
+  cell_by_gene_matrix:
+    type: File
     outputBinding:
-      glob: "*.txt"
+      glob: "cell_by_gene.hdf5"
 
-  MTX_files:
-    type:
-      type: array
-      items: File
+  cell_by_bin_mtx:
+    type: File
     outputBinding:
-      glob: "*.mtx"
+      glob: "filtered_cell_by_bin.mtx"
 
-  HDF5_files:
-    type:
-      type: array
-      items: File
+  cell_by_bin_barcodes:
+    type: File
     outputBinding:
-      glob: "*.hdf5"
+      glob: "barcodes.txt"
+
+  cell_by_bin_bins:
+    type: File
+    outputBinding:
+      glob: "bins.txt"
 
 baseCommand: [Rscript, /opt/snapAnalysis.R]

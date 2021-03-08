@@ -60,23 +60,21 @@ outputs:
       items: File
     outputSource: snapanalysis_analyze/RDS_objects
 
-  analysis_TXT_files:
-    type:
-      type: array
-      items: File
-    outputSource: snapanalysis_analyze/TXT_files
+  cell_by_gene_matrix:
+    type: File
+    outputSource: snapanalysis_analyze/cell_by_gene_matrix
 
-  analysis_MTX_files:
-    type:
-      type: array
-      items: File
-    outputSource: snapanalysis_analyze/MTX_files
+  cell_by_bin_mtx:
+    type: File
+    outputSource: snapanalysis_analyze/cell_by_bin_mtx
 
-  analysis_HDF5_files:
-    type:
-      type: array
-      items: File
-    outputSource: snapanalysis_analyze/HDF5_files
+  cell_by_bin_barcodes:
+    type: File
+    outputSource: snapanalysis_analyze/cell_by_bin_barcodes
+
+  cell_by_bin_bins:
+    type: File
+    outputSource: snapanalysis_analyze/cell_by_bin_bins
 
   motif_CSV_files:
     type:
@@ -107,7 +105,16 @@ steps:
       promoters: promoters
       processes: processes
     out:
-      [snap_rds, peaks_combined_bed, CSV_files, HDF5_files, BED_files, PDF_files, RDS_objects, TXT_files, MTX_files]
+      - snap_rds
+      - peaks_combined_bed
+      - CSV_files
+      - BED_files
+      - PDF_files
+      - RDS_objects
+      - cell_by_gene_matrix
+      - cell_by_bin_mtx
+      - cell_by_bin_barcodes
+      - cell_by_bin_bins
 
   snapanalysis_add_pmat_tool:
     run: analyze_snap_steps/snapanalysis_add_pmat_tool.cwl
