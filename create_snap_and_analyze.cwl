@@ -178,3 +178,5 @@ steps:
       - cell_by_bin_mtx
       - cell_by_bin_barcodes
       - cell_by_bin_bins
+      - cell_by_bin_h5ad
+      - cell_by_gene_h5ad

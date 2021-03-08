@@ -158,6 +158,11 @@ outputs:
     outputBinding:
       glob: "*.rds"
 
+  umap_coords_csv:
+    type: File
+    outputBinding:
+      glob: "umap_coords_clusters.csv"
+
   cell_by_gene_matrix:
     type: File
     outputBinding:

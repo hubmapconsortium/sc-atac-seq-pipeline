@@ -60,6 +60,10 @@ outputs:
       items: File
     outputSource: snapanalysis_analyze/RDS_objects
 
+  umap_coords_csv:
+    type: File
+    outputSource: snapanalysis_analyze/umap_coords_csv
+
   cell_by_gene_matrix:
     type: File
     outputSource: snapanalysis_analyze/cell_by_gene_matrix
@@ -86,6 +90,14 @@ outputs:
     type: File
     outputSource: snapanalysis_motif/RData_file
 
+  cell_by_bin_h5ad:
+    type: File
+    outputSource: convert_to_h5ad/cell_by_bin_h5ad
+
+  cell_by_gene_h5ad:
+    type: File
+    outputSource: convert_to_h5ad/cell_by_gene_h5ad
+
 steps:
   snapanalysis_select_barcode:
     run: analyze_snap_steps/snapanalysis_select_barcode.cwl
@@ -111,6 +123,7 @@ steps:
       - BED_files
       - PDF_files
       - RDS_objects
+      - umap_coords_csv
       - cell_by_gene_matrix
       - cell_by_bin_mtx
       - cell_by_bin_barcodes
@@ -132,4 +145,14 @@ steps:
     out:
       [CSV_files, RData_file]
 
-
+  convert_to_h5ad:
+    run: convert_to_h5ad.cwl
+    in:
+      umap_coords_csv: snapanalysis_analyze/umap_coords_csv
+      cell_by_gene_matrix: snapanalysis_analyze/cell_by_gene_matrix
+      cell_by_bin_mtx: snapanalysis_analyze/cell_by_bin_mtx
+      cell_by_bin_barcodes: snapanalysis_analyze/cell_by_bin_barcodes
+      cell_by_bin_bins: snapanalysis_analyze/cell_by_bin_bins
+    out:
+      - cell_by_bin_h5ad
+      - cell_by_gene_h5ad
