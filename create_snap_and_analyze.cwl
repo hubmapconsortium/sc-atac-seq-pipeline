@@ -5,6 +5,11 @@ class: Workflow
 # https://github.com/r3fang/SnapTools and https://github.com/r3fang/SnapATAC
 # doc: A workflow that analyzes a SNAP file as outlined at: https://github.com/r3fang/SnapATAC
 
+requirements:
+  SubworkflowFeatureRequirement: {}
+  ScatterFeatureRequirement: {}
+  InlineJavascriptRequirement: {}
+
 s:author:
   - class: s:Person
     s:identifier: https://orcid.org/0000-0001-5173-4627
@@ -45,6 +50,7 @@ inputs:
   promoters: File?
 
   threads: int?
+  exclude_bam: boolean?
 
 outputs:
   fastqc_dir:
@@ -56,8 +62,8 @@ outputs:
     outputSource: create_and_analyze_snap_file/fragment_file
 
   bam_file:
-    type: File
-    outputSource: create_and_analyze_snap_file/bam_file
+    type: File?
+    outputSource: maybe_save_bam_file/bam_output
 
   alignment_qc_report:
     type: File
@@ -118,10 +124,6 @@ outputs:
   cell_by_gene_h5ad:
     type: File
     outputSource: create_and_analyze_snap_file/cell_by_gene_h5ad
-
-requirements:
-  SubworkflowFeatureRequirement: {}
-  ScatterFeatureRequirement: {}
 
 steps:
   fastqc:
@@ -187,3 +189,30 @@ steps:
       - cell_by_bin_bins
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
+
+  # thanks to @pvanheus in the CWL gitter instance
+  maybe_save_bam_file:
+    in:
+      bam_input: create_and_analyze_snap_file/bam_file
+      exclude_bam: exclude_bam
+    out:
+      - bam_output
+    run:
+      class: ExpressionTool
+      inputs:
+        bam_input:
+          type: File
+        exclude_bam:
+          type: boolean?
+          default: false
+      outputs:
+        bam_output:
+          type: File?
+      expression: |-
+        ${
+          if (inputs.exclude_bam) {
+            return { 'bam_output': null };
+          } else {
+            return { 'bam_output': inputs.bam_input };
+          }
+        }
