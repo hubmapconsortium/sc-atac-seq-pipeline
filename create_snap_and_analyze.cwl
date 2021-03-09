@@ -5,6 +5,11 @@ class: Workflow
 # https://github.com/r3fang/SnapTools and https://github.com/r3fang/SnapATAC
 # doc: A workflow that analyzes a SNAP file as outlined at: https://github.com/r3fang/SnapATAC
 
+requirements:
+  SubworkflowFeatureRequirement: {}
+  ScatterFeatureRequirement: {}
+  InlineJavascriptRequirement: {}
+
 s:author:
   - class: s:Person
     s:identifier: https://orcid.org/0000-0001-5173-4627
@@ -119,10 +124,6 @@ outputs:
   cell_by_gene_h5ad:
     type: File
     outputSource: create_and_analyze_snap_file/cell_by_gene_h5ad
-
-requirements:
-  SubworkflowFeatureRequirement: {}
-  ScatterFeatureRequirement: {}
 
 steps:
   fastqc:
