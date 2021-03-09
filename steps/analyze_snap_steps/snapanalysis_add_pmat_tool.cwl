@@ -36,7 +36,7 @@ dct:creator:
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38
+    dockerPull: hubmap/sc-atac-seq-grch38:1.3.1
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024
