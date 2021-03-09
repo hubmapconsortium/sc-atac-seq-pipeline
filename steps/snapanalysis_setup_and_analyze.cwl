@@ -60,23 +60,25 @@ outputs:
       items: File
     outputSource: snapanalysis_analyze/RDS_objects
 
-  analysis_TXT_files:
-    type:
-      type: array
-      items: File
-    outputSource: snapanalysis_analyze/TXT_files
+  umap_coords_csv:
+    type: File
+    outputSource: snapanalysis_analyze/umap_coords_csv
 
-  analysis_MTX_files:
-    type:
-      type: array
-      items: File
-    outputSource: snapanalysis_analyze/MTX_files
+  cell_by_gene_matrix:
+    type: File
+    outputSource: snapanalysis_analyze/cell_by_gene_matrix
 
-  analysis_HDF5_files:
-    type:
-      type: array
-      items: File
-    outputSource: snapanalysis_analyze/HDF5_files
+  cell_by_bin_mtx:
+    type: File
+    outputSource: snapanalysis_analyze/cell_by_bin_mtx
+
+  cell_by_bin_barcodes:
+    type: File
+    outputSource: snapanalysis_analyze/cell_by_bin_barcodes
+
+  cell_by_bin_bins:
+    type: File
+    outputSource: snapanalysis_analyze/cell_by_bin_bins
 
   motif_CSV_files:
     type:
@@ -87,6 +89,14 @@ outputs:
   motif_RData_file:
     type: File
     outputSource: snapanalysis_motif/RData_file
+
+  cell_by_bin_h5ad:
+    type: File
+    outputSource: convert_to_h5ad/cell_by_bin_h5ad
+
+  cell_by_gene_h5ad:
+    type: File
+    outputSource: convert_to_h5ad/cell_by_gene_h5ad
 
 steps:
   snapanalysis_select_barcode:
@@ -107,7 +117,17 @@ steps:
       promoters: promoters
       processes: processes
     out:
-      [snap_rds, peaks_combined_bed, CSV_files, HDF5_files, BED_files, PDF_files, RDS_objects, TXT_files, MTX_files]
+      - snap_rds
+      - peaks_combined_bed
+      - CSV_files
+      - BED_files
+      - PDF_files
+      - RDS_objects
+      - umap_coords_csv
+      - cell_by_gene_matrix
+      - cell_by_bin_mtx
+      - cell_by_bin_barcodes
+      - cell_by_bin_bins
 
   snapanalysis_add_pmat_tool:
     run: analyze_snap_steps/snapanalysis_add_pmat_tool.cwl
@@ -125,4 +145,14 @@ steps:
     out:
       [CSV_files, RData_file]
 
-
+  convert_to_h5ad:
+    run: convert_to_h5ad.cwl
+    in:
+      umap_coords_csv: snapanalysis_analyze/umap_coords_csv
+      cell_by_gene_matrix: snapanalysis_analyze/cell_by_gene_matrix
+      cell_by_bin_mtx: snapanalysis_analyze/cell_by_bin_mtx
+      cell_by_bin_barcodes: snapanalysis_analyze/cell_by_bin_barcodes
+      cell_by_bin_bins: snapanalysis_analyze/cell_by_bin_bins
+    out:
+      - cell_by_bin_h5ad
+      - cell_by_gene_h5ad

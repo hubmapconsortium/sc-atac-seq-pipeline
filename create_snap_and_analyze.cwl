@@ -87,18 +87,6 @@ outputs:
     type: File[]
     outputSource: create_and_analyze_snap_file/analysis_RDS_objects
 
-  analysis_TXT_files:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_TXT_files
-
-  analysis_MTX_files:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_MTX_files
-
-  analysis_HDF5_files:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_HDF5_files
-
   motif_CSV_files:
     type: File[]
     outputSource: create_and_analyze_snap_file/motif_CSV_files
@@ -106,6 +94,30 @@ outputs:
   motif_RData_file:
     type: File
     outputSource: create_and_analyze_snap_file/motif_RData_file
+
+  cell_by_gene_matrix:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_gene_matrix
+
+  cell_by_bin_mtx:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_bin_mtx
+
+  cell_by_bin_barcodes:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_bin_barcodes
+
+  cell_by_bin_bins:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_bin_bins
+
+  cell_by_bin_h5ad:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_bin_h5ad
+
+  cell_by_gene_h5ad:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_gene_h5ad
 
 requirements:
   SubworkflowFeatureRequirement: {}
@@ -158,7 +170,20 @@ steps:
      promoters: promoters
 
     out:
-      [bam_file, alignment_qc_report, fragment_file, snap_file, snap_qc_file,
-      analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_HDF5_files,
-      analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files,
-      motif_CSV_files, motif_RData_file]
+      - bam_file
+      - alignment_qc_report
+      - fragment_file
+      - snap_file
+      - snap_qc_file
+      - analysis_CSV_files
+      - analysis_BED_files
+      - analysis_PDF_files
+      - analysis_RDS_objects
+      - motif_CSV_files
+      - motif_RData_file
+      - cell_by_gene_matrix
+      - cell_by_bin_mtx
+      - cell_by_bin_barcodes
+      - cell_by_bin_bins
+      - cell_by_bin_h5ad
+      - cell_by_gene_h5ad

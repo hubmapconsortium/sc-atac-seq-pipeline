@@ -432,6 +432,16 @@ x.sp = createGmatFromMat(
   num.cores=opt$processes
 )
 
+cell_by_gene_filename = 'cell_by_gene.hdf5'
+message(paste("Writing cell by gene data to", cell_by_gene_filename))
+# Write cell by gene sparse matrix in Matrix Market format not CSV format
+#write.csv(cellByGene, file = "cellByGeneData.csv")
+# barcodes are the same as above
+h5createFile(cell_by_gene_filename)
+h5write(t(as.matrix(x.sp@gmat)), cell_by_gene_filename, 'cell_by_gene_raw', level=0)
+h5write(dimnames(x.sp@gmat)[[2]], cell_by_gene_filename, 'col_names')
+h5write(x.sp@barcode, cell_by_gene_filename, 'row_names')
+
 # smooth the cell-by-gene matrix
 message("Smoothing cell-by-gene matrix")
 x.sp = runMagic(
@@ -440,15 +450,7 @@ x.sp = runMagic(
   step.size=3
 )
 
-cell_by_gene_filename = 'cell_by_gene.hdf5'
-message(paste("Writing cell by gene data to", cell_by_gene_filename))
-# Write cell by gene sparse matrix in Matrix Market format not CSV format
-#write.csv(cellByGene, file = "cellByGeneData.csv")
-# barcodes are the same as above
-h5createFile(cell_by_gene_filename)
 h5write(t(as.matrix(x.sp@gmat)), cell_by_gene_filename, 'cell_by_gene', level=0)
-h5write(dimnames(x.sp@gmat)[[2]], cell_by_gene_filename, 'col_names')
-h5write(x.sp@barcode, cell_by_gene_filename, 'row_names')
 
 # Step 11. Identify peaks
 # Next we aggregate cells from the each cluster to create an ensemble track for
