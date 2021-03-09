@@ -5,6 +5,11 @@ class: Workflow
 # https://github.com/r3fang/SnapTools and https://github.com/r3fang/SnapATAC
 # doc: A workflow that analyzes a SNAP file as outlined at: https://github.com/r3fang/SnapATAC
 
+requirements:
+  SubworkflowFeatureRequirement: {}
+  ScatterFeatureRequirement: {}
+  InlineJavascriptRequirement: {}
+
 s:author:
   - class: s:Person
     s:identifier: https://orcid.org/0000-0001-5173-4627
@@ -45,6 +50,7 @@ inputs:
   promoters: File?
 
   threads: int?
+  exclude_bam: boolean?
 
 outputs:
   fastqc_dir:
@@ -56,8 +62,8 @@ outputs:
     outputSource: create_and_analyze_snap_file/fragment_file
 
   bam_file:
-    type: File
-    outputSource: create_and_analyze_snap_file/bam_file
+    type: File?
+    outputSource: maybe_save_bam_file/bam_output
 
   alignment_qc_report:
     type: File
@@ -87,18 +93,6 @@ outputs:
     type: File[]
     outputSource: create_and_analyze_snap_file/analysis_RDS_objects
 
-  analysis_TXT_files:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_TXT_files
-
-  analysis_MTX_files:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_MTX_files
-
-  analysis_HDF5_files:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_HDF5_files
-
   motif_CSV_files:
     type: File[]
     outputSource: create_and_analyze_snap_file/motif_CSV_files
@@ -107,9 +101,29 @@ outputs:
     type: File
     outputSource: create_and_analyze_snap_file/motif_RData_file
 
-requirements:
-  SubworkflowFeatureRequirement: {}
-  ScatterFeatureRequirement: {}
+  cell_by_gene_matrix:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_gene_matrix
+
+  cell_by_bin_mtx:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_bin_mtx
+
+  cell_by_bin_barcodes:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_bin_barcodes
+
+  cell_by_bin_bins:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_bin_bins
+
+  cell_by_bin_h5ad:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_bin_h5ad
+
+  cell_by_gene_h5ad:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_gene_h5ad
 
 steps:
   fastqc:
@@ -158,7 +172,47 @@ steps:
      promoters: promoters
 
     out:
-      [bam_file, alignment_qc_report, fragment_file, snap_file, snap_qc_file,
-      analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_HDF5_files,
-      analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files,
-      motif_CSV_files, motif_RData_file]
+      - bam_file
+      - alignment_qc_report
+      - fragment_file
+      - snap_file
+      - snap_qc_file
+      - analysis_CSV_files
+      - analysis_BED_files
+      - analysis_PDF_files
+      - analysis_RDS_objects
+      - motif_CSV_files
+      - motif_RData_file
+      - cell_by_gene_matrix
+      - cell_by_bin_mtx
+      - cell_by_bin_barcodes
+      - cell_by_bin_bins
+      - cell_by_bin_h5ad
+      - cell_by_gene_h5ad
+
+  # thanks to @pvanheus in the CWL gitter instance
+  maybe_save_bam_file:
+    in:
+      bam_input: create_and_analyze_snap_file/bam_file
+      exclude_bam: exclude_bam
+    out:
+      - bam_output
+    run:
+      class: ExpressionTool
+      inputs:
+        bam_input:
+          type: File
+        exclude_bam:
+          type: boolean?
+          default: false
+      outputs:
+        bam_output:
+          type: File?
+      expression: |-
+        ${
+          if (inputs.exclude_bam) {
+            return { 'bam_output': null };
+          } else {
+            return { 'bam_output': inputs.bam_input };
+          }
+        }

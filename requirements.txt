@@ -1,3 +1,4 @@
+anndata==0.7.5
 MACS2==2.2.7.1
 sinto==0.4.3
 git+https://github.com/hubmapconsortium/SnapTools@v1.4.8-hbm1

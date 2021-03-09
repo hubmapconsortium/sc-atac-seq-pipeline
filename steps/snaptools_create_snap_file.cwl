@@ -87,17 +87,25 @@ outputs:
     type: File[]
     outputSource: snapanalysis_setup_and_analyze/analysis_RDS_objects
 
-  analysis_TXT_files:
-    type: File[]
-    outputSource: snapanalysis_setup_and_analyze/analysis_TXT_files
+  umap_coords_csv:
+    type: File
+    outputSource: snapanalysis_setup_and_analyze/umap_coords_csv
 
-  analysis_MTX_files:
-    type: File[]
-    outputSource: snapanalysis_setup_and_analyze/analysis_MTX_files
+  cell_by_gene_matrix:
+    type: File
+    outputSource: snapanalysis_setup_and_analyze/cell_by_gene_matrix
 
-  analysis_HDF5_files:
-    type: File[]
-    outputSource: snapanalysis_setup_and_analyze/analysis_HDF5_files
+  cell_by_bin_mtx:
+    type: File
+    outputSource: snapanalysis_setup_and_analyze/cell_by_bin_mtx
+
+  cell_by_bin_barcodes:
+    type: File
+    outputSource: snapanalysis_setup_and_analyze/cell_by_bin_barcodes
+
+  cell_by_bin_bins:
+    type: File
+    outputSource: snapanalysis_setup_and_analyze/cell_by_bin_bins
 
   motif_CSV_files:
     type: File[]
@@ -106,6 +114,14 @@ outputs:
   motif_RData_file:
     type: File
     outputSource: snapanalysis_setup_and_analyze/motif_RData_file
+
+  cell_by_bin_h5ad:
+    type: File
+    outputSource: snapanalysis_setup_and_analyze/cell_by_bin_h5ad
+
+  cell_by_gene_h5ad:
+    type: File
+    outputSource: snapanalysis_setup_and_analyze/cell_by_gene_h5ad
 
 steps:
   snaptools_index_ref_genome:
@@ -198,6 +214,16 @@ steps:
       promoters: promoters
 
     out:
-      [analysis_CSV_files, analysis_BED_files, analysis_PDF_files, analysis_HDF5_files,
-      analysis_RDS_objects, analysis_TXT_files, analysis_MTX_files,
-      motif_CSV_files, motif_RData_file]
+      - analysis_CSV_files
+      - analysis_BED_files
+      - analysis_PDF_files
+      - analysis_RDS_objects
+      - umap_coords_csv
+      - cell_by_gene_matrix
+      - cell_by_bin_mtx
+      - cell_by_bin_barcodes
+      - cell_by_bin_bins
+      - motif_CSV_files
+      - motif_RData_file
+      - cell_by_bin_h5ad
+      - cell_by_gene_h5ad
