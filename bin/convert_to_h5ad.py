@@ -71,3 +71,11 @@ if __name__ == "__main__":
     p.add_argument("cell_by_bin_barcodes", type=Path)
     p.add_argument("cell_by_bin_bins", type=Path)
     args = p.parse_args()
+
+    main(
+        args.umap_coords_csv,
+        args.cell_by_gene_matrix,
+        args.cell_by_bin_mtx,
+        args.cell_by_bin_barcodes,
+        args.cell_by_bin_bins,
+    )
