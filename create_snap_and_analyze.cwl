@@ -111,6 +111,13 @@ outputs:
     type: File
     outputSource: create_and_analyze_snap_file/cell_by_bin_bins
 
+  cell_by_bin_h5ad:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_bin_h5ad
+
+  cell_by_gene_h5ad:
+    type: File
+    outputSource: create_and_analyze_snap_file/cell_by_gene_h5ad
 
 requirements:
   SubworkflowFeatureRequirement: {}
