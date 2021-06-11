@@ -1,0 +1,46 @@
+[
+	{
+		"pattern": "alignment_qc\\.json",
+		"description": "Alignment quality control metrics, in JSON format",
+		"edam_ontology_term": "EDAM_1.24.format_3464"
+	},
+	{
+		"pattern": "(?P<filename>.*)_fastqc\\.html",
+		"description": "FastQC report for {filename}.fastq, HTML version",
+		"edam_ontology_term": "EDAM_1.24.format_2331"
+	},
+	{
+		"pattern": "(?P<filename>.*)_fastqc\\.zip",
+		"description": "FastQC report for {filename}.fastq, zip version",
+		"edam_ontology_term": "EDAM_1.24.format_2333"
+	},
+	{
+		"pattern": "rmsk\\.bam",
+		"description": "Aligned reads",
+		"edam_ontology_term": "EDAM_1.24.format_2572"
+	},
+    {
+        "pattern": "NA_peaks\\.xls",
+        "description": "Tabular file containing peak data",
+        "edam_ontology_term" : "EDAM_1.24.format_3648"
+
+    },
+    {
+        "pattern": "NA_peaks\\.narrowPeak",
+        "description": "BED6+4 format file which contains peak locations, peak summit, p-value, and q-value",
+        "edam_ontology_term" : "EDAM_1.24.format_3613"
+
+    },
+    {
+        "pattern": "NA_summits\\.bed",
+        "description": "BED file containing summit locations for every peak",
+        "edam_ontology_term" : "EDAM_1.24.format_3003"
+
+    },
+    {
+        "pattern": "NA_model\\.r",
+        "description": "An r script for generating a pdf of model based on data",
+        "edam_ontology_term" : "EDAM_1.25.format_3999"
+
+    }
+]
