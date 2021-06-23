@@ -101,22 +101,6 @@ outputs:
     type: File
     outputSource: create_and_analyze_snap_file/motif_RData_file
 
-  cell_by_gene_matrix:
-    type: File
-    outputSource: create_and_analyze_snap_file/cell_by_gene_matrix
-
-  cell_by_bin_mtx:
-    type: File
-    outputSource: create_and_analyze_snap_file/cell_by_bin_mtx
-
-  cell_by_bin_barcodes:
-    type: File
-    outputSource: create_and_analyze_snap_file/cell_by_bin_barcodes
-
-  cell_by_bin_bins:
-    type: File
-    outputSource: create_and_analyze_snap_file/cell_by_bin_bins
-
   cell_by_bin_h5ad:
     type: File
     outputSource: create_and_analyze_snap_file/cell_by_bin_h5ad
@@ -183,10 +167,6 @@ steps:
       - analysis_RDS_objects
       - motif_CSV_files
       - motif_RData_file
-      - cell_by_gene_matrix
-      - cell_by_bin_mtx
-      - cell_by_bin_barcodes
-      - cell_by_bin_bins
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
 

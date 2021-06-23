@@ -163,10 +163,15 @@ outputs:
     outputBinding:
       glob: "umap_coords_clusters.csv"
 
-  cell_by_gene_matrix:
+  cell_by_gene_raw_mtx:
     type: File
     outputBinding:
-      glob: "cell_by_gene.hdf5"
+      glob: "cell_by_gene_raw.mtx"
+
+  cell_by_gene_smoothed_hdf5:
+    type: File
+    outputBinding:
+      glob: "cell_by_gene_smoothed.hdf5"
 
   cell_by_bin_mtx:
     type: File

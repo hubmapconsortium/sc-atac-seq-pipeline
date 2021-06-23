@@ -91,22 +91,6 @@ outputs:
     type: File
     outputSource: snapanalysis_setup_and_analyze/umap_coords_csv
 
-  cell_by_gene_matrix:
-    type: File
-    outputSource: snapanalysis_setup_and_analyze/cell_by_gene_matrix
-
-  cell_by_bin_mtx:
-    type: File
-    outputSource: snapanalysis_setup_and_analyze/cell_by_bin_mtx
-
-  cell_by_bin_barcodes:
-    type: File
-    outputSource: snapanalysis_setup_and_analyze/cell_by_bin_barcodes
-
-  cell_by_bin_bins:
-    type: File
-    outputSource: snapanalysis_setup_and_analyze/cell_by_bin_bins
-
   motif_CSV_files:
     type: File[]
     outputSource: snapanalysis_setup_and_analyze/motif_CSV_files
@@ -219,10 +203,6 @@ steps:
       - analysis_PDF_files
       - analysis_RDS_objects
       - umap_coords_csv
-      - cell_by_gene_matrix
-      - cell_by_bin_mtx
-      - cell_by_bin_barcodes
-      - cell_by_bin_bins
       - motif_CSV_files
       - motif_RData_file
       - cell_by_bin_h5ad

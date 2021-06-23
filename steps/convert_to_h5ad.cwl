@@ -11,7 +11,11 @@ inputs:
     type: File
     inputBinding:
       position: 0
-  cell_by_gene_matrix:
+  cell_by_gene_raw_mtx:
+    type: File
+    inputBinding:
+      position: 1
+  cell_by_gene_smoothed_hdf5:
     type: File
     inputBinding:
       position: 2
