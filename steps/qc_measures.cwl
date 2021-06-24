@@ -1,8 +1,8 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-id: sort_bam_file_tool
-label: sort bam file
+id: qc_measures
+label: alignment/etc. QC
 cwlVersion: v1.1
 
 requirements:
@@ -10,28 +10,25 @@ requirements:
     dockerPull: hubmap/sc-atac-seq-grch38
 
 inputs:
-  unsorted_paired_end_bam:
+  bam_file:
     type: File
     inputBinding:
       position: 0
 
-  sorted_bam_name:
-    type: string
+  peak_file:
+    type: File
     inputBinding:
       position: 1
-    default: "sorted-snaptools_alignment.bam"
 
-  threads:
-    type: int?
+  cell_by_bin_h5ad:
+    type: File
     inputBinding:
       position: 2
-      prefix: "--threads"
-    default: 0
 
 outputs:
-  sorted_paired_end_bam:
+  qc_report:
     type: File
     outputBinding:
-      glob: $(inputs.sorted_bam_name)
+      glob: qc_report.json
 
-baseCommand: /opt/bulk/sort_bam_file.py
+baseCommand: /opt/qc_measures.py

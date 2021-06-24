@@ -3,7 +3,7 @@ class: CommandLineTool
 label: Assay-specific adjustment of cell barcodes
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38:1.3.2
+    dockerPull: hubmap/sc-atac-seq-grch38:latest
 baseCommand: /opt/convert_to_h5ad.py
 
 inputs:
@@ -11,7 +11,11 @@ inputs:
     type: File
     inputBinding:
       position: 0
-  cell_by_gene_matrix:
+  cell_by_gene_raw_mtx:
+    type: File
+    inputBinding:
+      position: 1
+  cell_by_gene_smoothed_hdf5:
     type: File
     inputBinding:
       position: 2
