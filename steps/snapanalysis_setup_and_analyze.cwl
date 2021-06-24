@@ -1,31 +1,6 @@
 cwlVersion: v1.1
 class: Workflow
 
-# label: A workflow that analyzes a SNAP file as outlined at: https://github.com/r3fang/SnapATAC
-# doc: A workflow that analyzes a SNAP file as outlined at: https://github.com/r3fang/SnapATAC
-
-s:author:
-  - class: s:Person
-    s:identifier: https://orcid.org/0000-0001-5173-4627
-    s:email: jshands@ucsc.edu
-    s:name: Walter Shands
-
-s:codeRepository: https://github.com/wshands/SnapATAC/tree/feature/snap-analysis
-s:dateCreated: "2019-12-03"
-s:license: https://spdx.org/licenses/Apache-2.0
-
-s:keywords: edam:topic_0091 , edam:topic_0622
-s:programmingLanguage: Python
-
-$namespaces:
-  s: https://schema.org/
-  edam: http://edamontology.org/
-
-$schemas:
-  - https://schema.org/docs/schema_org_rdfa.html
-  - http://edamontology.org/EDAM_1.18.owl
-
-
 inputs:
   encode_blacklist: File?
   gene_track: File?
@@ -42,12 +17,6 @@ outputs:
       items: File
     outputSource: snapanalysis_analyze/CSV_files
 
-  analysis_BED_files:
-    type:
-      type: array
-      items: File
-    outputSource: snapanalysis_analyze/BED_files
-
   analysis_PDF_files:
     type:
       type: array
@@ -59,6 +28,10 @@ outputs:
       type: array
       items: File
     outputSource: snapanalysis_analyze/RDS_objects
+
+  peaks_bed_file:
+    type: File
+    outputSource: snapanalysis_analyze/peaks_bed_file
 
   umap_coords_csv:
     type: File
@@ -104,9 +77,9 @@ steps:
       - snap_rds
       - peaks_combined_bed
       - CSV_files
-      - BED_files
       - PDF_files
       - RDS_objects
+      - peaks_bed_file
       - umap_coords_csv
       - cell_by_gene_raw_mtx
       - cell_by_gene_smoothed_hdf5

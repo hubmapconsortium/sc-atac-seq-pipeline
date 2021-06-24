@@ -1,36 +1,10 @@
 cwlVersion: v1.1
 class: Workflow
 
-# label: A workflow that creates and analyzes a SNAP file as outlined at:
-# https://github.com/r3fang/SnapTools and https://github.com/r3fang/SnapATAC
-# doc: A workflow that analyzes a SNAP file as outlined at: https://github.com/r3fang/SnapATAC
-
 requirements:
   SubworkflowFeatureRequirement: {}
   ScatterFeatureRequirement: {}
   InlineJavascriptRequirement: {}
-
-s:author:
-  - class: s:Person
-    s:identifier: https://orcid.org/0000-0001-5173-4627
-    s:email: jshands@ucsc.edu
-    s:name: Walter Shands
-
-s:codeRepository: https://github.com/wshands/SnapATAC/tree/feature/snap-analysis
-s:dateCreated: "2020-02-15"
-s:license: https://spdx.org/licenses/Apache-2.0
-
-s:keywords: edam:topic_0091 , edam:topic_0622
-s:programmingLanguage: Python
-
-$namespaces:
-  s: https://schema.org/
-  edam: http://edamontology.org/
-
-$schemas:
-  - https://schema.org/docs/schema_org_rdfa.html
-  - http://edamontology.org/EDAM_1.18.owl
-
 
 inputs:
   assay: string
@@ -65,9 +39,9 @@ outputs:
     type: File?
     outputSource: maybe_save_bam_file/bam_output
 
-  alignment_qc_report:
+  qc_report:
     type: File
-    outputSource: create_and_analyze_snap_file/alignment_qc_report
+    outputSource: qc_measures/qc_report
 
   snap_file:
     type: File
@@ -80,10 +54,6 @@ outputs:
   analysis_CSV_files:
     type: File[]
     outputSource: create_and_analyze_snap_file/analysis_CSV_files
-
-  analysis_BED_files:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_BED_files
 
   analysis_PDF_files:
     type: File[]
@@ -157,18 +127,26 @@ steps:
 
     out:
       - bam_file
-      - alignment_qc_report
       - fragment_file
       - snap_file
       - snap_qc_file
       - analysis_CSV_files
-      - analysis_BED_files
       - analysis_PDF_files
       - analysis_RDS_objects
+      - peaks_bed_file
       - motif_CSV_files
       - motif_RData_file
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
+
+  qc_measures:
+    run: steps/qc_measures.cwl
+    in:
+      bam_file: create_and_analyze_snap_file/bam_file
+      peak_file: create_and_analyze_snap_file/peaks_bed_file
+      cell_by_bin_h5ad: create_and_analyze_snap_file/cell_by_bin_h5ad
+    out:
+      - qc_report
 
   # thanks to @pvanheus in the CWL gitter instance
   maybe_save_bam_file:

@@ -1,17 +1,13 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-id: alignment_qc_tool
-label: alignment qc
+id: qc_measures
+label: alignment/etc. QC
 cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
     dockerPull: hubmap/sc-atac-seq-grch38
-  ResourceRequirement:
-    coresMin: 1
-    ramMin: 1024
-    outdirMin: 100000
 
 inputs:
   bam_file:
@@ -19,16 +15,20 @@ inputs:
     inputBinding:
       position: 0
 
-  threads:
-    type: int?
+  peak_file:
+    type: File
     inputBinding:
       position: 1
-    default: 1
+
+  cell_by_bin_h5ad:
+    type: File
+    inputBinding:
+      position: 2
 
 outputs:
-  alignment_qc_report:
+  qc_report:
     type: File
     outputBinding:
-      glob: alignment_qc.json
+      glob: qc_report.json
 
-baseCommand: /opt/alignment_qc.py
+baseCommand: /opt/qc_measures.py
