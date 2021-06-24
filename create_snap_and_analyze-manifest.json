@@ -1,23 +1,21 @@
 [
 	{
-		"pattern": "alignment_qc\\.json",
-		"description": "Alignment quality control metrics, in JSON format",
-		"edam_ontology_term": "EDAM_1.24.format_3464"
+		"pattern": "qc_report\\.json",
+		"description": "Quality control report, in JSON format",
+		"edam_ontology_term": "EDAM_1.24.format_3464",
+		"is_qa_qc": true
 	},
 	{
 		"pattern": "BarcodeQualityControlDistributionAfter\\.pdf",
 		"description": "",
-		"edam_ontology_term": "EDAM_1.24.format_3508"
+		"edam_ontology_term": "EDAM_1.24.format_3508",
+		"is_qa_qc": true
 	},
 	{
 		"pattern": "BarcodeQualityControlDistributionBefore\\.pdf",
 		"description": "",
-		"edam_ontology_term": "EDAM_1.24.format_3508"
-	},
-	{
-		"pattern": "barcodes\\.txt",
-		"description": "Row labels (cell barcodes) of filtered_cell_by_bin.mtx",
-		"edam_ontology_term": "EDAM_1.24.format_3475"
+		"edam_ontology_term": "EDAM_1.24.format_3508",
+		"is_qa_qc": true
 	},
 	{
 		"pattern": "Bins\\.csv",
@@ -25,24 +23,16 @@
 		"edam_ontology_term": "EDAM_1.24.format_3752"
 	},
 	{
-		"pattern": "bins\\.txt",
-		"description": "Column labels (genome bins) of filtered_cell_by_bin.mtx",
-		"edam_ontology_term": "EDAM_1.24.format_3475"
-	},
-	{
 		"pattern": "(?P<filename>.*)_fastqc\\.html",
 		"description": "FastQC report for {filename}.fastq, HTML version",
-		"edam_ontology_term": "EDAM_1.24.format_2331"
+		"edam_ontology_term": "EDAM_1.24.format_2331",
+		"is_qa_qc": true
 	},
 	{
 		"pattern": "(?P<filename>.*)_fastqc\\.zip",
 		"description": "FastQC report for {filename}.fastq, zip version",
-		"edam_ontology_term": "EDAM_1.24.format_2333"
-	},
-	{
-		"pattern": "cell_by_gene\\.hdf5",
-		"description": "Cell by gene matrix (sparse, and smoothed with MAGIC), in HDF5 format",
-		"edam_ontology_term": "EDAM_1.24.format_3590"
+		"edam_ontology_term": "EDAM_1.24.format_2333",
+		"is_qa_qc": true
 	},
 	{
 		"pattern": "cell_by_gene\\.h5ad",
@@ -68,11 +58,6 @@
 		"pattern": "chromvar_variability_scores\\.csv",
 		"description": "Per-cell variability scores from chromVAR",
 		"edam_ontology_term": "EDAM_1.24.format_3752"
-	},
-	{
-		"pattern": "filtered_cell_by_bin\\.mtx",
-		"description": "Cell by bin matrix, after cell filtering, in MTX format",
-		"edam_ontology_term": "EDAM_1.24.format_3916"
 	},
 	{
 		"pattern": "frags\\.sort\\.bed\\.gz",

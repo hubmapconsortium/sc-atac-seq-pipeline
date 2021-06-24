@@ -9,12 +9,14 @@ RUN apt-get update \
     git \
     libbz2-dev \
     libcurl4-openssl-dev \
+    libhdf5-dev \
     libgsl-dev \
     liblzma-dev \
     libncurses-dev \
     libpng-dev \
     libssl-dev \
     libxml2-dev \
+    pkg-config \
     python3-dev \
     python3-pip \
     tabix \
