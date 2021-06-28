@@ -447,7 +447,7 @@ x.sp = runMagic(
 smooth_cell_by_gene_filename = 'cell_by_gene_smoothed.hdf5'
 message(paste("Writing smoothed cell by gene data to", smooth_cell_by_gene_filename))
 h5createFile(smooth_cell_by_gene_filename)
-h5write(as.matrix(x.sp@gmat), smooth_cell_by_gene_filename, 'cell_by_gene', level=0)
+h5write(as.matrix(x.sp@gmat), smooth_cell_by_gene_filename, 'cell_by_gene_smoothed', level=0)
 h5write(dimnames(x.sp@gmat)[[2]], smooth_cell_by_gene_filename, 'genes')
 h5write(x.sp@barcode, smooth_cell_by_gene_filename, 'barcodes')
 
