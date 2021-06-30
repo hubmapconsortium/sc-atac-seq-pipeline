@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38
+    dockerPull: hubmap/sc-atac-seq-grch38:1.4.2
   InlineJavascriptRequirement: {}
 
 inputs:
@@ -29,7 +29,7 @@ outputs:
     type: Directory
     outputBinding:
       glob: "concat_output_dir"
- 
+
   merged_fastq_r1:
     type: File
     outputBinding:
