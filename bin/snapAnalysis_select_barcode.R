@@ -15,7 +15,7 @@ if (!is.null(opt$preferred_barcodes)){
 
   #Step 1. Barcode selection
     #We select high-quality barcodes based on two criteria:
-      #1) number of unique fragments 
+      #1) number of unique fragments
       #2) fragments in promoter ratio
 
   message(sprintf("Selecting barcodes from CSV file\n"));
