@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38:1.4.2
+    dockerPull: hubmap/sc-atac-seq-grch38
 
 arguments:
   - position: 1
