@@ -120,7 +120,7 @@ def main(
         "median_proportion_reads_in_peaks": median_reads_in_peaks_mean,
     }
 
-    with open("alignment_qc.json", "w") as text_file:
+    with open("qc_report.json", "w") as text_file:
         json.dump(qc_report, text_file, indent=4)
 
 
