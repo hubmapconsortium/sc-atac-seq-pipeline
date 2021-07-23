@@ -29,10 +29,6 @@ outputs:
     type: File
     outputSource: bulk_process/bam_file
 
-  alignment_qc_report:
-    type: File
-    outputSource: bulk_process/alignment_qc_report
-
   peaks_table:
     type: File
     outputSource: bulk_analysis/peaks_table
@@ -54,6 +50,10 @@ outputs:
       type: array
       items: File
     outputSource: bulk_analysis/bed_graphs
+
+  qc_report:
+    type: File
+    outputSource: qc_measures/qc_report
 
 steps:
   fastqc:
@@ -111,7 +111,7 @@ steps:
       threads: threads
 
     out:
-      [bam_file, alignment_qc_report]
+      [bam_file]
 
 
   bulk_analysis:
@@ -121,3 +121,10 @@ steps:
 
     out:
       [peaks_table, narrow_peaks, summits_bed, bed_graphs, r_script]
+
+  qc_measures:
+    run: steps/qc_measures.cwl
+    in:
+      bam_file: bulk_process/merged_bam
+      peak_file: bulk_analysis/summits_bed
+    out: [qc_report]
