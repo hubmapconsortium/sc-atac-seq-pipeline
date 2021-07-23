@@ -19,7 +19,7 @@ def main(
     bam_file: Path,
     peak_file: Path,
     annotations_file: Path,
-    cell_by_bin_file: Path=None,
+    cell_by_bin_file: Path = None,
 ):
     logging.info("Building exon/transcript index")
     # TODO: fix htseq                      ↓↓↓
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("bam_file", type=Path)
     p.add_argument("peak_file", type=Path)
-    p.add_argument("cell_by_bin_file", type=Path, nargs='?')
+    p.add_argument("cell_by_bin_file", type=Path, nargs="?")
     p.add_argument("--annotations-file", type=Path, default=default_annotation_file)
     p.add_argument("--verbose", action="store_true")
     args = p.parse_args()
