@@ -125,6 +125,6 @@ steps:
   qc_measures:
     run: steps/qc_measures.cwl
     in:
-      bam_file: bulk_process/merged_bam
+      bam_file: merge_bam/merged_bam
       peak_file: bulk_analysis/summits_bed
     out: [qc_report]
