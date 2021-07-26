@@ -18,17 +18,7 @@ outputs:
     type: File
     outputSource: snaptools_remove_blacklist/rmsk_bam
 
-  alignment_qc_report:
-    type: File
-    outputSource: alignment_qc/alignment_qc_report
-
 steps:
-  alignment_qc:
-    run: create_snap_steps/alignment_qc.cwl
-    in:
-      bam_file: merged_bam
-      threads: threads
-    out: [alignment_qc_report]
 
   sort_bam_file:
     run: create_snap_steps/sort_bam_file_tool.cwl

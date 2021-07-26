@@ -1,0 +1,7 @@
+version: 1.2
+workflows:
+  - subclass: CWL
+    primaryDescriptorPath: /create_snap_and_analyze.cwl
+    testParameterFiles:
+      - /create_snap_and_analyze.json
+    name: HuBMAP_scATAC-seq_Pipeline

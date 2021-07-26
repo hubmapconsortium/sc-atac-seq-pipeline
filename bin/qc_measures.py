@@ -18,8 +18,8 @@ default_annotation_file = Path("/opt/supplementary-data/gencode.v32.annotation.g
 def main(
     bam_file: Path,
     peak_file: Path,
-    cell_by_bin_file: Path,
     annotations_file: Path,
+    cell_by_bin_file: Path = None,
 ):
     logging.info("Building exon/transcript index")
     # TODO: fix htseq                      ↓↓↓
@@ -105,10 +105,7 @@ def main(
     ]
     five_number_dict = {key: np.percentile(alignment_qualities, pc) for pc, key in percentiles}
 
-    cell_by_bin = anndata.read_h5ad(cell_by_bin_file)
-
     qc_report = {
-        "barcodes_passing_qc": cell_by_bin.shape[0],
         "total_reads": total_reads,
         "mapped_reads": mapped_reads,
         "unmapped_reads": unmapped_reads,
@@ -120,6 +117,10 @@ def main(
         "median_proportion_reads_in_peaks": median_reads_in_peaks_mean,
     }
 
+    if cell_by_bin_file:
+        cell_by_bin = anndata.read_h5ad(cell_by_bin_file)
+        qc_report["barcodes_passing_qc"] = cell_by_bin.shape[0]
+
     with open("qc_report.json", "w") as text_file:
         json.dump(qc_report, text_file, indent=4)
 
@@ -128,7 +129,7 @@ if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("bam_file", type=Path)
     p.add_argument("peak_file", type=Path)
-    p.add_argument("cell_by_bin_file", type=Path)
+    p.add_argument("cell_by_bin_file", type=Path, nargs="?")
     p.add_argument("--annotations-file", type=Path, default=default_annotation_file)
     p.add_argument("--verbose", action="store_true")
     args = p.parse_args()
@@ -139,6 +140,6 @@ if __name__ == "__main__":
     main(
         bam_file=args.bam_file,
         peak_file=args.peak_file,
-        cell_by_bin_file=args.cell_by_bin_file,
         annotations_file=args.annotations_file,
+        cell_by_bin_file=args.cell_by_bin_file,
     )

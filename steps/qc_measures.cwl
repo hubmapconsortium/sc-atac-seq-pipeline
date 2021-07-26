@@ -21,7 +21,7 @@ inputs:
       position: 1
 
   cell_by_bin_h5ad:
-    type: File
+    type: File?
     inputBinding:
       position: 2
 
