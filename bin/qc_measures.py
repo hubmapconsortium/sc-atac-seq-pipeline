@@ -6,6 +6,7 @@ from collections import Counter
 from os import fspath
 from pathlib import Path
 from statistics import median
+from typing import Optional
 
 import anndata
 import HTSeq
@@ -19,7 +20,7 @@ def main(
     bam_file: Path,
     peak_file: Path,
     annotations_file: Path,
-    cell_by_bin_file: Path = None,
+    cell_by_bin_file: Optional[Path] = None,
 ):
     logging.info("Building exon/transcript index")
     # TODO: fix htseq                      ↓↓↓
