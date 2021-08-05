@@ -1,0 +1,66 @@
+FROM rocker/tidyverse:4.1.0
+# use tidyverse because it includes devtools so we don't need to specifically install it
+# https://hub.docker.com/r/rocker/tidyverse
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+ && apt-get -y install \
+    build-essential \
+    libcairo2-dev \
+    libcurl4-gnutls-dev \
+    libgsl-dev \
+    libmagick++-dev \
+    libxml2-dev \
+    libssl-dev \
+    python3-dev \
+    python3-pip \
+ && rm -rf /var/lib/apt/lists
+
+# Make sure a 'python' command is available so bedtools will install, as required in
+# https://github.com/arq5x/bedtools2/blob/58e9973af1b3f5e3b26e5584aad7dc7b720f8765/Makefile#L192
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
+
+COPY install_ArchR_packages.R /opt
+
+RUN Rscript /opt/install_ArchR_packages.R \
+ && rm /opt/install_ArchR_packages.R
+
+
+COPY archr_requirements.txt /opt
+RUN python3 -m pip install -r /opt/archr_requirements.txt \
+ && rm -rf /root/.cache/pip /opt/archr_requirements.txt
+#
+#
+WORKDIR /opt
+#
+#ENV SAMTOOLS_VERSION=1.10
+#RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 \
+# && tar -xf samtools-${SAMTOOLS_VERSION}.tar.bz2 \
+# && cd samtools-${SAMTOOLS_VERSION} \
+# && ./configure \
+# && make \
+# && make install \
+# && rm -rf /opt/samtools-${SAMTOOLS_VERSION} /opt/samtools-${SAMTOOLS_VERSION}.tar.bz2
+#
+ENV BWA_VERSION=0.7.17
+RUN wget -O bwa-${BWA_VERSION}.tar.bz2 https://sourceforge.net/projects/bio-bwa/files/bwa-${BWA_VERSION}.tar.bz2/download \
+ && tar -xf bwa-${BWA_VERSION}.tar.bz2 \
+ && cd bwa-${BWA_VERSION} \
+ && make \
+ && cp bwa /usr/local/bin \
+ && rm -rf /opt/bwa-${BWA_VERSION} /opt/bwa-${BWA_VERSION}.tar.bz2
+#
+#ENV BEDTOOLS_VERSION=2.29.1
+## Install bedtools
+#RUN wget -O bedtools-${BEDTOOLS_VERSION}.tar.gz https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools-${BEDTOOLS_VERSION}.tar.gz \
+# && tar -xf bedtools-${BEDTOOLS_VERSION}.tar.gz \
+# && cd bedtools2 \
+# && make \
+# && make install \
+# && rm -rf /opt/bedtools-${BEDTOOLS_VERSION}.tar.gz /opt/bedtools2
+#
+
+#COPY bin /opt
+
+CMD ["/bin/bash"]
