@@ -19,10 +19,10 @@ RUN apt-get update \
 # https://github.com/arq5x/bedtools2/blob/58e9973af1b3f5e3b26e5584aad7dc7b720f8765/Makefile#L192
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
-COPY install_ArchR_packages.R /opt
+COPY install_R_packages.R /opt
 
-RUN Rscript /opt/install_ArchR_packages.R \
- && rm /opt/install_ArchR_packages.R
+RUN Rscript /opt/install_R_packages.R \
+ && rm /opt/install_R_packages.R
 
 
 COPY archr_requirements.txt /opt
