@@ -1,4 +1,4 @@
-cwlVersion: v1.1
+cwlVersion: v1.2
 class: Workflow
 
 requirements:
@@ -13,43 +13,22 @@ inputs:
   size_index: File?
   genome_name: string?
   sequence_directory: Directory[]
-  blacklist_bed: File?
-  tmp_folder: string?
-  bin_size_list: int[]?
-
-  encode_blacklist: File?
-  gene_track: File?
-  gene_annotation: File?
-  preferred_barcodes: File?
-  promoters: File?
 
   threads: int?
   exclude_bam: boolean?
 
 outputs:
+  sam_file:
+    type: File
+    outputSource: create_and_analyze_snap_file/unsorted_reads
+
   fastqc_dir:
     type: Directory[]
     outputSource: fastqc/fastqc_dir
 
-  fragment_file:
-    type: File
-    outputSource: create_and_analyze_snap_file/fragment_file
-
   bam_file:
     type: File?
     outputSource: maybe_save_bam_file/bam_output
-
-  qc_report:
-    type: File
-    outputSource: qc_measures/qc_report
-
-  snap_file:
-    type: File
-    outputSource: create_and_analyze_snap_file/snap_file
-
-  snap_qc_file:
-    type: File
-    outputSource: create_and_analyze_snap_file/snap_qc_file
 
   analysis_CSV_files:
     type: File[]
@@ -58,26 +37,6 @@ outputs:
   analysis_PDF_files:
     type: File[]
     outputSource: create_and_analyze_snap_file/analysis_PDF_files
-
-  analysis_RDS_objects:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_RDS_objects
-
-  motif_CSV_files:
-    type: File[]
-    outputSource: create_and_analyze_snap_file/motif_CSV_files
-
-  motif_RData_file:
-    type: File
-    outputSource: create_and_analyze_snap_file/motif_RData_file
-
-  cell_by_bin_h5ad:
-    type: File
-    outputSource: create_and_analyze_snap_file/cell_by_bin_h5ad
-
-  cell_by_gene_h5ad:
-    type: File
-    outputSource: create_and_analyze_snap_file/cell_by_gene_h5ad
 
 steps:
   fastqc:
@@ -112,41 +71,12 @@ steps:
      input_fastq1: concat_fastq/merged_fastq_r1
      input_fastq2: concat_fastq/merged_fastq_r2
 
-
-     blacklist_bed: blacklist_bed
-     tmp_folder: tmp_folder
      threads: threads
-     processes: threads
-     bin_size_list: bin_size_list
-
-     preferred_barcodes: preferred_barcodes
-     encode_blacklist: encode_blacklist
-     gene_track: gene_track
-     gene_annotation: gene_annotation
-     promoters: promoters
-
     out:
+      - unsorted_reads
       - bam_file
-      - fragment_file
-      - snap_file
-      - snap_qc_file
       - analysis_CSV_files
       - analysis_PDF_files
-      - analysis_RDS_objects
-      - peaks_bed_file
-      - motif_CSV_files
-      - motif_RData_file
-      - cell_by_bin_h5ad
-      - cell_by_gene_h5ad
-
-  qc_measures:
-    run: steps/qc_measures.cwl
-    in:
-      bam_file: create_and_analyze_snap_file/bam_file
-      peak_file: create_and_analyze_snap_file/peaks_bed_file
-      cell_by_bin_h5ad: create_and_analyze_snap_file/cell_by_bin_h5ad
-    out:
-      - qc_report
 
   # thanks to @pvanheus in the CWL gitter instance
   maybe_save_bam_file:

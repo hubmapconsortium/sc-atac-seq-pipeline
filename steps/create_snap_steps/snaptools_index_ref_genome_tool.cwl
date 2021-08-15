@@ -3,7 +3,7 @@
 class: CommandLineTool
 id: snaptools_index_ref_genome
 label: snaptools index reference genome
-cwlVersion: v1.1
+cwlVersion: v1.2
 
 requirements:
   DockerRequirement:

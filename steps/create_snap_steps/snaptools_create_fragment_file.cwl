@@ -2,7 +2,7 @@
 
 class: CommandLineTool
 label: snaptools create fragment file
-cwlVersion: v1.1
+cwlVersion: v1.2
 
 requirements:
   DockerRequirement:
