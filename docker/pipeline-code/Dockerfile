@@ -25,9 +25,9 @@ RUN Rscript /opt/install_R_packages.R \
  && rm /opt/install_R_packages.R
 
 
-COPY archr_requirements.txt /opt
-RUN python3 -m pip install -r /opt/archr_requirements.txt \
- && rm -rf /root/.cache/pip /opt/archr_requirements.txt
+COPY requirements.txt /opt
+RUN python3 -m pip install -r /opt/requirements.txt \
+ && rm -rf /root/.cache/pip /opt/requirements.txt
 #
 #
 WORKDIR /opt
