@@ -1,4 +1,6 @@
-FROM rocker/r-ver:3.6.3
+FROM rocker/tidyverse:4.1.0
+# use tidyverse because it includes devtools so we don't need to specifically install it
+# https://hub.docker.com/r/rocker/tidyverse
 
 ENV DEBIAN_FRONTEND=noninteractive
 

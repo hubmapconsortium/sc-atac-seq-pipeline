@@ -5,41 +5,33 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
  && apt-get -y install \
     build-essential \
-    fastqc \
-    git \
-    libbz2-dev \
-    libcurl4-openssl-dev \
-    libhdf5-dev \
+    libcairo2-dev \
+    libcurl4-gnutls-dev \
     libgsl-dev \
-    liblzma-dev \
-    libncurses-dev \
-    libpng-dev \
-    libssl-dev \
+    libmagick++-dev \
     libxml2-dev \
-    pkg-config \
+    libssl-dev \
     python3-dev \
     python3-pip \
-    tabix \
-    tk \
-    zlib1g-dev \
  && rm -rf /var/lib/apt/lists
 
 # Make sure a 'python' command is available so bedtools will install, as required in
 # https://github.com/arq5x/bedtools2/blob/58e9973af1b3f5e3b26e5584aad7dc7b720f8765/Makefile#L192
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
-COPY requirements.txt /opt
-RUN python3 -m pip install "Cython==0.29.17" --install-option="--no-cython-compile" \
- && python3 -m pip install numpy \
- && python3 -m pip install -r /opt/requirements.txt \
- && rm -rf /root/.cache/pip /opt/requirements.txt
+COPY install_ArchR_packages.R /opt
 
-COPY install_R_packages.R /opt
-RUN Rscript /opt/install_R_packages.R \
- && rm /opt/install_R_packages.R
+RUN Rscript /opt/install_ArchR_packages.R \
+ && rm /opt/install_ArchR_packages.R
 
+
+COPY archr_requirements.txt /opt
+RUN python3 -m pip install -r /opt/archr_requirements.txt \
+ && rm -rf /root/.cache/pip /opt/archr_requirements.txt
+#
+#
 WORKDIR /opt
-
+#
 ENV SAMTOOLS_VERSION=1.10
 RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 \
  && tar -xf samtools-${SAMTOOLS_VERSION}.tar.bz2 \
