@@ -7,6 +7,7 @@ RUN apt-get update \
     build-essential \
     libcairo2-dev \
     libcurl4-gnutls-dev \
+    libncurses-dev \
     libgsl-dev \
     libmagick++-dev \
     libxml2-dev \
@@ -29,14 +30,18 @@ COPY requirements.txt /opt
 RUN python3 -m pip install -r /opt/requirements.txt \
  && rm -rf /root/.cache/pip /opt/requirements.txt
 #
+
+RUN apt-get update \
+ && apt-get -y install \
+    libncurses-dev
 #
 WORKDIR /opt
 #
 ENV SAMTOOLS_VERSION=1.10
 RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSION}/samtools-${SAMTOOLS_VERSION}.tar.bz2 \
- && tar -xf samtools-${SAMTOOLS_VERSION}.tar.bz2 \
- && cd samtools-${SAMTOOLS_VERSION} \
- && ./configure \
+ && tar -xf samtools-${SAMTOOLS_VERSION}.tar.bz2
+WORKDIR samtools-${SAMTOOLS_VERSION}
+RUN ./configure \
  && make \
  && make install \
  && rm -rf /opt/samtools-${SAMTOOLS_VERSION} /opt/samtools-${SAMTOOLS_VERSION}.tar.bz2
