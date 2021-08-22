@@ -74,7 +74,7 @@ steps:
                     {"class":"File", "location": self.location + "/barcode_added_R2.fastq"}]
           }
 
-      # Index is provided by 'alignement_index input above
+      # Index is provided by 'alignment_index input above
     out: [reads_stdout] 
 
 

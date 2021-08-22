@@ -1,4 +1,4 @@
-cwlVersion: v1.1
+cwlVersion: v1.2
 class: Workflow
 
 # label: A workflow that processes and analyzes single cell ATAC seq data
@@ -85,14 +85,18 @@ steps:
   align_paired_end:
     scatter: [input_fastq1, input_fastq2]
     scatterMethod: dotproduct
-    run: steps/create_snap_steps/snaptools_align_paired_end_tool.cwl
+#    run: steps/create_snap_steps/snaptools_align_paired_end_tool.cwl
+    run: steps/BWA-Mem.cwl 
     in:
       alignment_index: index_ref_genome/genome_alignment_index
-      input_fastq1: gather_sequence_bundles/fastq1_files
-      input_fastq2: gather_sequence_bundles/fastq2_files
-      tmp_folder: tmp_folder
-      num_threads: threads
-      if_sort: if_sort
+      InputFile:
+        [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
+
+#      input_fastq1: gather_sequence_bundles/fastq1_files
+#      input_fastq2: gather_sequence_bundles/fastq2_files
+#      tmp_folder: tmp_folder
+#      num_threads: threads
+#      if_sort: if_sort
 
     out: [paired_end_bam]
 
