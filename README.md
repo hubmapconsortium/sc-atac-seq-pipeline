@@ -84,30 +84,3 @@ i.e. the percentage of reads mapped to promoters per cell
 * promoters\
 A BED file of promoter regions used to calculate a promoter ratio. If no
 preferred barcode or gene annotation file is provided this option is required.
-
-
-# Outputs
-
-* Bins.csv\
-A CSV file providing sequence name and bin information
-
-* cellBarcodes.CSV\
-A CSV file with barcode ID and barcode
-
-* cellByBin_summary.csv\
-A CSV file with barcode ID and bin number
-
-* cellClusterAssignment.csv\
-A CSV file with barcode ID and cluster number
-
-* GenesRanges.csv\
-A CSV file providing sequence, gene name and gene location information
-
-* cellByGene.mtx\
-A file with the cell by gene matrix in Matrix Market format
-
-* cellGenes.csv\
-A CSV file with gene ID and gene name
-
-* peaksAllCells.csv\
-A CSV file with sequence name and peak start and end
