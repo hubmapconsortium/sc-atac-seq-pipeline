@@ -66,13 +66,30 @@ steps:
     run: BWA-Mem.cwl
     in:
       alignment_index: snaptools_index_ref_genome/genome_alignment_index
-      InputFile:
-       source: adjust_barcodes/adj_fastq_dir
-       valueFrom: |
+#      InputFile:
+#       source: adjust_barcodes/adj_fastq_dir
+#       valueFrom: |
+#          ${
+#            return [{"class":"File", "location": self.location + "/barcode_added_R1.fastq"},
+#                    {"class":"File", "location": self.location + "/barcode_added_R2.fastq"}]
+#          }
+
+
+      Fastq_1: 
+        source: adjust_barcodes/adj_fastq_dir
+        valueFrom: |
           ${
-            return [{"class":"File", "location": self.location + "/barcode_added_R1.fastq"},
-                    {"class":"File", "location": self.location + "/barcode_added_R2.fastq"}]
+            return {"class":"File", "location": self.location + "/barcode_added_R1.fastq"}
           }
+
+      Fastq_2:
+        source: adjust_barcodes/adj_fastq_dir
+        valueFrom: |
+          ${
+            return {"class":"File", "location": self.location + "/barcode_added_R2.fastq"}
+          }
+
+
 
       # Index is provided by 'alignment_index input above
     out: [reads_stdout] 

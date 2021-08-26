@@ -21,13 +21,25 @@ inputs:
     doc: The alignment index to use.
 
 
-  InputFile:
-    type: File[]
+#  InputFile:
+#    type: File[]
 #    format:
 #      - edam:format_1930 # FASTA
 #      - edam:format_1931 # FASTQ
+#    inputBinding:
+#      position: 201
+
+  Fastq_1:
+    type: File
     inputBinding:
-      position: 201
+      position: 202
+
+  Fastq_2:
+    type: File
+    inputBinding:
+      position: 203
+
+
     
 #  Index:
 #    type: File

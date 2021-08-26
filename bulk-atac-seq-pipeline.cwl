@@ -7,6 +7,7 @@ class: Workflow
 requirements:
   SubworkflowFeatureRequirement: {}
   ScatterFeatureRequirement: {}
+  MultipleInputFeatureRequirement: {}
 
 inputs:
   reference_genome_fasta: File?
@@ -83,27 +84,41 @@ steps:
       [genome_alignment_index, genome_size_index]
 
   align_paired_end:
-    scatter: [input_fastq1, input_fastq2]
+#    scatter: [input_fastq1, input_fastq2]
+    scatter: [Fastq_1, Fastq_2]
     scatterMethod: dotproduct
 #    run: steps/create_snap_steps/snaptools_align_paired_end_tool.cwl
     run: steps/BWA-Mem.cwl 
     in:
       alignment_index: index_ref_genome/genome_alignment_index
-      InputFile:
-        [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
+#      InputFile: [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
+#        source: [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
+#        linkMerge: merge_nested
 
-#      input_fastq1: gather_sequence_bundles/fastq1_files
-#      input_fastq2: gather_sequence_bundles/fastq2_files
+      Fastq_1: gather_sequence_bundles/fastq1_files
+      Fastq_2: gather_sequence_bundles/fastq2_files
 #      tmp_folder: tmp_folder
 #      num_threads: threads
 #      if_sort: if_sort
 
-    out: [paired_end_bam]
+#    out: [paired_end_bam]
+    out: [reads_stdout]
+
+
+  add_cell_identifiers_and_sort:
+    scatter: [sam_file]
+    run: steps/add_cell_identifiers_and_sort.cwl
+    in:
+       sam_file: align_paired_end/reads_stdout
+    out: [sorted_BAM_with_cell_ids]
+
+
 
   merge_bam:
     run: steps/merge_bam.cwl
     in:
-      bam_files: align_paired_end/paired_end_bam
+#      bam_files: align_paired_end/paired_end_bam
+      bam_files: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
     out: [merged_bam]
 
   bulk_process:
