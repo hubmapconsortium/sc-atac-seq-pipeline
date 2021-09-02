@@ -20,7 +20,7 @@ inputs:
 outputs:
   sam_file:
     type: File
-    outputSource: create_and_analyze_snap_file/unsorted_reads
+    outputSource: sc_atac_seq_process_and_analyze/unsorted_reads
 
   fastqc_dir:
     type: Directory[]
@@ -32,11 +32,11 @@ outputs:
 
   analysis_CSV_files:
     type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_CSV_files
+    outputSource: sc_atac_seq_process_and_analyze/analysis_CSV_files
 
   analysis_PDF_files:
     type: File[]
-    outputSource: create_and_analyze_snap_file/analysis_PDF_files
+    outputSource: sc_atac_seq_process_and_analyze/analysis_PDF_files
 
 steps:
   fastqc:
@@ -57,8 +57,8 @@ steps:
     out:
       [output_directory, merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
 
-  create_and_analyze_snap_file:
-    run: steps/snaptools_create_snap_file.cwl
+  sc_atac_seq_process_and_analyze:
+    run: steps/sc_atac_seq_process_and_analyze.cwl
     in:
      assay: assay
      concat_fastq_dir: concat_fastq/output_directory
@@ -81,7 +81,7 @@ steps:
   # thanks to @pvanheus in the CWL gitter instance
   maybe_save_bam_file:
     in:
-      bam_input: create_and_analyze_snap_file/bam_file
+      bam_input: sc_atac_seq_process_and_analyze/bam_file
       exclude_bam: exclude_bam
     out:
       - bam_output

@@ -16,19 +16,19 @@ inputs:
 outputs:
   bam_file:
     type: File
-    outputSource: snaptools_remove_blacklist/rmsk_bam
+    outputSource: remove_blacklist/rmsk_bam
 
 steps:
 
   sort_bam_file:
-    run: create_snap_steps/sort_bam_file_tool.cwl
+    run: sc_atac_seq_process_steps/sort_bam_file_tool.cwl
     in:
       unsorted_paired_end_bam: merged_bam
       threads: threads
     out: [sorted_paired_end_bam]
 
-  snaptools_remove_blacklist:
-    run: create_snap_steps/snaptools_remove_blacklist.cwl
+  remove_blacklist:
+    run: sc_atac_seq_process_steps/remove_blacklist.cwl
     in:
       bam_file: sort_bam_file/sorted_paired_end_bam
       bed_file: encode_blacklist

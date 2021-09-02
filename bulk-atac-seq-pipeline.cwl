@@ -75,7 +75,7 @@ steps:
       [fastq1_files, fastq2_files]
 
   index_ref_genome:
-    run: steps/create_snap_steps/snaptools_index_ref_genome_tool.cwl
+    run: steps/sc_atac_seq_process_steps/index_ref_genome_tool.cwl
     in:
       input_fasta: reference_genome_fasta
       alignment_index: alignment_index
