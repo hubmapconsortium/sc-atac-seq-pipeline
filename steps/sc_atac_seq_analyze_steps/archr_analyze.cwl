@@ -47,4 +47,4 @@ outputs:
 #    outputBinding:
 #      glob: "archr_umap_coords_clusters.csv"
 
-baseCommand: [Rscript, /opt/snapAnalysis.R]
+baseCommand: [Rscript, /opt/run_ArchR_analysis.R]
