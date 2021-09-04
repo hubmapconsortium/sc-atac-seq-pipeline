@@ -46,22 +46,36 @@ RUN ./configure \
  && make install \
  && rm -rf /opt/samtools-${SAMTOOLS_VERSION} /opt/samtools-${SAMTOOLS_VERSION}.tar.bz2
 
+WORKDIR /opt
+
 ENV BWA_VERSION=0.7.17
 RUN wget -O bwa-${BWA_VERSION}.tar.bz2 https://sourceforge.net/projects/bio-bwa/files/bwa-${BWA_VERSION}.tar.bz2/download \
- && tar -xf bwa-${BWA_VERSION}.tar.bz2 \
- && cd bwa-${BWA_VERSION} \
- && make \
+ && tar -xf bwa-${BWA_VERSION}.tar.bz2
+WORKDIR bwa-${BWA_VERSION}
+RUN make \
  && cp bwa /usr/local/bin \
  && rm -rf /opt/bwa-${BWA_VERSION} /opt/bwa-${BWA_VERSION}.tar.bz2
+
+WORKDIR /opt
 
 ENV BEDTOOLS_VERSION=2.29.1
 # Install bedtools
 RUN wget -O bedtools-${BEDTOOLS_VERSION}.tar.gz https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools-${BEDTOOLS_VERSION}.tar.gz \
- && tar -xf bedtools-${BEDTOOLS_VERSION}.tar.gz \
- && cd bedtools2 \
- && make \
+ && tar -xf bedtools-${BEDTOOLS_VERSION}.tar.gz
+WORKDIR bedtools2
+RUN make \
  && make install \
  && rm -rf /opt/bedtools-${BEDTOOLS_VERSION}.tar.gz /opt/bedtools2
+
+WORKDIR /opt
+
+# Get GTF for NCBI GRCh38 so we can make custom gene annotation for ArchR
+# https://www.archrproject.com/bookdown/getting-set-up.html
+# from https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/
+#RUN wget -O GCA_000001405.15_GRCh38_full_analysis_set.refseq_annotation.gtf.gz https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_full_analysis_set.refseq_annotation.gtf.gz \
+# && gunzip GCA_000001405.15_GRCh38_full_analysis_set.refseq_annotation.gtf.gz
+
+RUN wget -O GRCh37_latest_genomic.gff.gz https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh37_latest/refseq_identifiers/GRCh37_latest_genomic.gff.gz
 
 COPY bin /opt
 

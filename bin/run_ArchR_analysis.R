@@ -48,8 +48,22 @@ inputFiles
 
 # Before we begin, we need add a reference genome annotation for ArchR to have access to chromosome and gene information. ArchR natively supports hg19, hg38, mm9, and mm10.
 
-addArchRGenome("hg38")
+#addArchRGenome("hg38")
 ## Setting default genome to Hg19.
+# Create custom ArchR genome NCBI GRCh38
+# https://www.archrproject.com/bookdown/getting-set-up.html
+library(BSgenome.Hsapiens.NCBI.GRCh38)
+genomeAnnotationForGRCh38 <- createGenomeAnnotation(genome = BSgenome.Hsapiens.NCBI.GRCh38)
+
+library(GenomicFeatures)
+# Downloaded in Dockerfile from https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/
+#txdbForGRCh38 = makeTxDbFromGFF('/opt/GCA_000001405.15_GRCh38_full_analysis_set.refseq_annotation.gtf')
+txdbForGRCh38 = makeTxDbFromGFF('/opt/GRCh37_latest_genomic.gff.gz')
+
+library(org.Hs.eg.db)
+geneAnnotationForGRCh38 <- createGeneAnnotation(TxDb = txdbForGRCh38, OrgDb = org.Hs.eg.db)
+
+
 
 # Creating Arrow Files
 # Now we will create our Arrow files which will take 10-15 minutes. For each sample, this step will:
@@ -60,6 +74,9 @@ addArchRGenome("hg38")
 # Create a genome-wide TileMatrix using 500-bp bins.
 # Create a GeneScoreMatrix using the custom geneAnnotation that was defined when we called addArchRGenome().
 ArrowFiles <- createArrowFiles(
+  geneAnnotation = genomeAnnotationForGRCh38,
+  genomeAnnotation = geneAnnotationForGRCh38,
+
   inputFiles = inputFiles,
   sampleNames = names(inputFiles),
   minTSS = 4, #Dont set this too high because you can always increase later
@@ -84,10 +101,14 @@ ArrowFiles
 ## “scATAC_PBMC_R1.arrow”
 
 projSci <- ArchRProject(
-    ArrowFiles = ArrowFiles, 
-      outputDirectory = "SciTest",
-      copyArrows = TRUE #This is recommened so that if you modify the Arrow files you have an original copy for later usage.
-      )
+  geneAnnotation = genomeAnnotationForGRCh38,
+  genomeAnnotation = geneAnnotationForGRCh38,
+
+  ArrowFiles = ArrowFiles, 
+  outputDirectory = "SciTest",
+  copyArrows = TRUE #This is recommened so that if you modify the Arrow files you have an original copy for later usage.
+)
+
 #We can examine the contents of our ArchRProject:
 projSci
 

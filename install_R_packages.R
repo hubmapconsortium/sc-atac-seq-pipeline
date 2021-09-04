@@ -88,3 +88,34 @@ tryCatch({
   }
 )
 
+# See section 1.5.1 Creating a Custom ArchGenome in
+# https://www.archrproject.com/bookdown/getting-set-up.html
+tryCatch({
+    BiocManager::install("BSgenome.Hsapiens.NCBI.GRCh38")
+},
+    error = function(e) {
+    message("Error installing NCBI GRCh38")
+    message(e$message)
+    quit("no", -1)
+  }
+)
+
+tryCatch({
+    BiocManager::install("org.Hs.eg.db")
+},
+    error = function(e) {
+    message("Error installing org.Hs.eg.db")
+    message(e$message)
+    quit("no", -1)
+  }
+)
+
+tryCatch({
+    BiocManager::install("GenomicFeatures")
+ },
+    error = function(e) {
+    message("Error installing GenomicFeatures")
+    message(e$message)
+    quit("no", -1)
+  }
+)   

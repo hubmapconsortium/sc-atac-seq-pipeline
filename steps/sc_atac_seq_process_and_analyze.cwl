@@ -28,9 +28,9 @@ outputs:
     type: File
     outputSource: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
 
-  fragment_file:
-    type: File
-    outputSource: create_fragment_file/fragment_file
+#  fragment_file:
+#    type: File
+#    outputSource: create_fragment_file/fragment_file
 
   analysis_CSV_files:
     type: File[]
@@ -120,11 +120,11 @@ steps:
       - CSV_files
       - PDF_files
 
-  create_fragment_file:
-    run: sc_atac_seq_process_steps/create_fragment_file.cwl
-    in:
-      input_bam: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
-    out: [fragment_file]
+#  create_fragment_file:
+#    run: sc_atac_seq_process_steps/create_fragment_file.cwl
+#    in:
+#      input_bam: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
+#    out: [fragment_file]
 
 
 
