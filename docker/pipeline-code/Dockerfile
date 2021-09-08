@@ -69,14 +69,6 @@ RUN make \
 
 WORKDIR /opt
 
-# Get GTF for NCBI GRCh38 so we can make custom gene annotation for ArchR
-# https://www.archrproject.com/bookdown/getting-set-up.html
-# from https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/
-#RUN wget -O GCA_000001405.15_GRCh38_full_analysis_set.refseq_annotation.gtf.gz https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_full_analysis_set.refseq_annotation.gtf.gz \
-# && gunzip GCA_000001405.15_GRCh38_full_analysis_set.refseq_annotation.gtf.gz
-
-RUN wget -O GRCh37_latest_genomic.gff.gz https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh37_latest/refseq_identifiers/GRCh37_latest_genomic.gff.gz
-
 COPY bin /opt
 
 CMD ["/bin/bash"]

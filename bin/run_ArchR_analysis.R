@@ -9,6 +9,12 @@ option_list = list(
     help="Selected barcodes"
   ),
   make_option(
+    c("-q", "--QCDir"),
+    type="character",
+    default="/tmp",
+    help="The relative path to the output directory for QC-level information and plots for each sample/ArrowFile."
+  ),
+  make_option(
     c("-n", "--threads"),
     type="integer",
     default=2,
@@ -26,44 +32,28 @@ if (is.null(opt$bam_file)){
 
 
 
-# First, we load the ArchR library. If this fails, you have not properly installed ArchR and should revisit the installation instructions. We also recommend setting and remembering a known seed to facilitate replication of operations requiring randomization.
-
+# First, we load the ArchR library. If this fails, you have not properly installed
+# ArchR and should revisit the installation instructions. We also recommend setting
+# and remembering a known seed to facilitate replication of operations requiring randomization.
 library(ArchR)
 set.seed(1)
-# Next, we set the default number of threads for parallelized operations in ArchR functions. You should change the value passed to threads to match the specifications of your local machine.
 
+# Next, we set the default number of threads for parallelized operations in ArchR
+# functions. You should change the value passed to threads to match the
+# specifications of your local machine.
 addArchRThreads(threads = opt$threads) 
-## Setting default number of Parallel threads to 16.
 
-#The Hematopoeisis tutorial data can be downloaded using the getTutorialData() function. The tutorial data is approximately 0.5 GB in size. If you have already downloaded the tutorial in the current working directory, ArchR will bypass downloading.
 script.dir <- getwd()
 message(paste("directory used is:",script.dir))
 
 inputFiles <- c(opt$bam_file)
-#inputFiles <- c(gsub(" ", "", paste(script.dir,"CB_sorted.bam", sep="/")))
-#inputFiles <- c("/mnt/ArchR/sci-test/CB_sorted.bam")
 names(inputFiles) <- c("BAM_data")
 inputFiles
 
 
-# Before we begin, we need add a reference genome annotation for ArchR to have access to chromosome and gene information. ArchR natively supports hg19, hg38, mm9, and mm10.
-
-#addArchRGenome("hg38")
-## Setting default genome to Hg19.
-# Create custom ArchR genome NCBI GRCh38
-# https://www.archrproject.com/bookdown/getting-set-up.html
-library(BSgenome.Hsapiens.NCBI.GRCh38)
-genomeAnnotationForGRCh38 <- createGenomeAnnotation(genome = BSgenome.Hsapiens.NCBI.GRCh38)
-
-library(GenomicFeatures)
-# Downloaded in Dockerfile from https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/
-#txdbForGRCh38 = makeTxDbFromGFF('/opt/GCA_000001405.15_GRCh38_full_analysis_set.refseq_annotation.gtf')
-txdbForGRCh38 = makeTxDbFromGFF('/opt/GRCh37_latest_genomic.gff.gz')
-
-library(org.Hs.eg.db)
-geneAnnotationForGRCh38 <- createGeneAnnotation(TxDb = txdbForGRCh38, OrgDb = org.Hs.eg.db)
-
-
+# Before we begin, we need add a reference genome annotation for ArchR to have
+# access to chromosome and gene information. ArchR natively supports hg19, hg38, mm9, and mm10.
+addArchRGenome("hg38")
 
 # Creating Arrow Files
 # Now we will create our Arrow files which will take 10-15 minutes. For each sample, this step will:
@@ -74,36 +64,23 @@ geneAnnotationForGRCh38 <- createGeneAnnotation(TxDb = txdbForGRCh38, OrgDb = or
 # Create a genome-wide TileMatrix using 500-bp bins.
 # Create a GeneScoreMatrix using the custom geneAnnotation that was defined when we called addArchRGenome().
 ArrowFiles <- createArrowFiles(
-  geneAnnotation = genomeAnnotationForGRCh38,
-  genomeAnnotation = geneAnnotationForGRCh38,
-
   inputFiles = inputFiles,
   sampleNames = names(inputFiles),
   minTSS = 4, #Dont set this too high because you can always increase later
   minFrags = 2000,
+  QCDir = opt$QCDir,
   addTileMat = TRUE,
   addGeneScoreMat = TRUE,
   bamFlag = list(isMinusStrand = FALSE, isProperPair = TRUE, isDuplicate = FALSE),
   bcTag = "CB" # We added this tag to the SAM file and then converted it to a BAM
 )
-## Using GeneAnnotation set by addArchRGenome(Hg19)!
-## Using GeneAnnotation set by addArchRGenome(Hg19)!
-## ArchR logging to : ArchRLogs/ArchR-createArrows-69ef6ba2e1c7-Date-2020-04-21_Time-16-18-35.log
-## If there is an issue, please report to github with logFile!
-## Cleaning Temporary Files
-## 2020-04-21 16:18:35 : Batch Execution w/ safelapply!, 0 mins elapsed.
-## ArchR logging successful to : ArchRLogs/ArchR-createArrows-69ef6ba2e1c7-Date-2020-04-21_Time-16-18-35.log
 
 # We can inspect the ArrowFiles object to see that it is actually just a character vector of Arrow file paths.
-
 ArrowFiles
 ## “scATAC_BMMC_R1.arrow” “scATAC_CD34_BMMC_R1.arrow”
 ## “scATAC_PBMC_R1.arrow”
 
 projSci <- ArchRProject(
-  geneAnnotation = genomeAnnotationForGRCh38,
-  genomeAnnotation = geneAnnotationForGRCh38,
-
   ArrowFiles = ArrowFiles, 
   outputDirectory = "SciTest",
   copyArrows = TRUE #This is recommened so that if you modify the Arrow files you have an original copy for later usage.
@@ -139,12 +116,15 @@ quantile(projSci$TSSEnrichment)
 
 #Example 5. Plotting QC metrics - log10(Unique Fragments) vs TSS enrichment score
 
-#Repeating the example shown above, we can easily obtain standard scATAC-seq metrics for quality control of individual cells. We have found that the most robust metrics for quality control are the TSS enrichment score (a measure of signal-to-background in ATAC-seq data) and the number of unique nuclear fragments (because cells with very few fragments do not have enough data to confidently analyze).
+#Repeating the example shown above, we can easily obtain standard scATAC-seq
+# metrics for quality control of individual cells. We have found that the most
+# robust metrics for quality control are the TSS enrichment score (a measure of
+# signal-to-background in ATAC-seq data) and the number of unique nuclear fragments
+# (because cells with very few fragments do not have enough data to confidently analyze).
 df <- getCellColData(projSci, select = c("log10(nFrags)", "TSSEnrichment"))
 df
 
 #Now lets plot the number of unique nuclear fragments (log10) by the TSS enrichment score. This type of plot is key for identifying high quality cells. You’ll notice that the cutoffs that we previously specified when creating the Arrow files (via filterTSS and filterFrags) have already removed low quality cells. However, if we noticed that the previously applied QC filters were not adequate for this sample, we could further adjust our cutoffs based on this plot or re-generate the Arrow files if needed.
-
 p <- ggPoint(
      x = df[,1],
      y = df[,2],
@@ -171,15 +151,10 @@ p1 <- plotGroups(
      name = "TSSEnrichment",
      plotAs = "ridges"
         )
-## 1
-
 p1
-## Picking joint bandwidth of 0.882
 
-#Example 2. Make a violin plot for each sample for the TSS enrichment scores.
-
-#To make a violin plot, we set plotAs = "violin". Violin plots in ArchR come with a box-and-whiskers plot in the style of Tukey as implemented by ggplot2. This means that the lower and upper hinges correspond to the 25th and 75th percentiles, respectively, and the middle corresponds to the median. The lower and upper whiskers extend from the hinge to the lowest or highest value or 1.5 times the interquartile range (the distance between the 25th and 75th percentiles).
-
+# Make a violin plot for each sample for the TSS enrichment scores.
+# To make a violin plot, we set plotAs = "violin". Violin plots in ArchR come with a box-and-whiskers plot in the style of Tukey as implemented by ggplot2. This means that the lower and upper hinges correspond to the 25th and 75th percentiles, respectively, and the middle corresponds to the median. The lower and upper whiskers extend from the hinge to the lowest or highest value or 1.5 times the interquartile range (the distance between the 25th and 75th percentiles).
 p2 <- plotGroups(
      ArchRProj = projSci, 
      groupBy = "Sample", 
@@ -189,12 +164,9 @@ p2 <- plotGroups(
          alpha = 0.4,
          addBoxPlot = TRUE
     )
-## 1
-
 p2
 
-#Example 3. Make a ridge plot for each sample for the log10(unique nuclear fragments).
-
+# Make a ridge plot for each sample for the log10(unique nuclear fragments).
 p3 <- plotGroups(
      ArchRProj = projSci, 
      groupBy = "Sample", 
@@ -202,13 +174,10 @@ p3 <- plotGroups(
      name = "log10(nFrags)",
      plotAs = "ridges"
         )
-## 1
-
 p3
 ## Picking joint bandwidth of 0.05
 
-#Example 4. Make a violin plot for each sample for the log10(unique nuclear fragments).
-
+# Make a violin plot for each sample for the log10(unique nuclear fragments).
 p4 <- plotGroups(
      ArchRProj = projSci, 
      groupBy = "Sample", 
@@ -218,8 +187,6 @@ p4 <- plotGroups(
      alpha = 0.4,
      addBoxPlot = TRUE
     )
-## 1
-
 p4
 
 #To save editable vectorized versions of these plots, we use plotPDF().
@@ -229,7 +196,6 @@ plotPDF(p1,p2,p3,p4, name = "QC-Sample-Statistics.pdf", ArchRProj = projSci, add
 #Because of how the data is stored and accessed, ArchR can compute fragment size distributions and TSS enrichment profiles from Arrow files very quickly.
 
 #Fragment size distributions To plot the fragment size distributions of all samples, we use the plotFragmentSizes() function. Fragment size distributions in ATAC-seq can be quite variable across samples, cell types, and batches. Slight differences like those shown below are common and do not necessarily correlate with differences in data quality.
-
 pfrag <- plotFragmentSizes(ArchRProj = projSci)
 pfrag
 
@@ -246,9 +212,9 @@ saveArchRProject(ArchRProj = projSci, outputDirectory = "SciTest", load = FALSE)
 
 
 # Inferring Doublets
-# After Arrow file creation, we can infer potential doublets (a single droplet containing multiple cells) that can confound downstream results. This is done using the addDoubletScores() function.
-
-
+# After Arrow file creation, we can infer potential doublets (a single droplet
+# containing multiple cells) that can confound downstream results. This is
+# done using the addDoubletScores() function.
 
 #commenting out doublet score becuase we saw this error message last time:
 #ArchR logging to : ArchRLogs/ArchR-addDoubletScores-1f9f35c3dde9-Date-2021-07-22_Time-21-31-26.log
@@ -269,23 +235,9 @@ saveArchRProject(ArchRProj = projSci, outputDirectory = "SciTest", load = FALSE)
 #  knnMethod = "UMAP", #Refers to the embedding to use for nearest neighbor search.
 #  dimsToUse = 1:15 # Have to make upper dimension less than default of 30 since we only have 18 columns... 
 #)
-## ArchR logging to : ArchRLogs/ArchR-addDoubletScores-69ef56ebfd4d-Date-2020-04-21_Time-16-24-31.log
-## If there is an issue, please report to github with logFile!
-## 2020-04-21 16:24:31 : Batch Execution w/ safelapply!, 0 mins elapsed.
-## 2020-04-21 16:24:31 : scATAC_BMMC_R1 (1 of 3) : Computing Doublet Statistics, 0 mins elapsed.
-## scATAC_BMMC_R1 (1 of 3) : UMAP Projection R^2 = 0.97229
-## scATAC_BMMC_R1 (1 of 3) : UMAP Projection R^2 = 0.97229
-## 2020-04-21 16:26:31 : scATAC_CD34_BMMC_R1 (2 of 3) : Computing Doublet Statistics, 2.007 mins elapsed.
-## scATAC_CD34_BMMC_R1 (2 of 3) : UMAP Projection R^2 = 0.99077
-## scATAC_CD34_BMMC_R1 (2 of 3) : UMAP Projection R^2 = 0.99077
-## 2020-04-21 16:28:03 : scATAC_PBMC_R1 (3 of 3) : Computing Doublet Statistics, 3.531 mins elapsed.
-## scATAC_PBMC_R1 (3 of 3) : UMAP Projection R^2 = 0.97496
-## scATAC_PBMC_R1 (3 of 3) : UMAP Projection R^2 = 0.97496
-## ArchR logging successful to : ArchRLogs/ArchR-addDoubletScores-69ef56ebfd4d-Date-2020-04-21_Time-16-24-31.log
 
 # Creating an ArchRProject 
 # With our Arrow files in hand, we are now ready to create an ArchRProject. An ArchRProject is associated with a set of Arrow files and is the backbone of nearly all ArchR analyses.
-
 #proj <- ArchRProject(
 #  ArrowFiles = ArrowFiles, 
 #  outputDirectory = "SciTest",
@@ -318,9 +270,7 @@ tile_matrix = getMatrixFromProject(
      threads = getArchRThreads(),
      logFile = createLogFile("getTileMatrixFromProject")
    )
-
 tile_matrix
-##
 
 message(paste("Gene Score Matrix:"))
 gene_score_matrix = getMatrixFromProject(
@@ -332,7 +282,6 @@ gene_score_matrix = getMatrixFromProject(
      threads = getArchRThreads(),
      logFile = createLogFile("getGeneScoreMatrixFromProject")
    )
-
 gene_score_matrix
 
 
@@ -348,49 +297,9 @@ gene_score_matrix
 ## ArchR implements an iterative LSI dimensionality reduction via the addIterativeLSI() function.
 #
 projSci <- addIterativeLSI(ArchRProj = projSci, useMatrix = "TileMatrix", name = "IterativeLSI")
-### Checking Inputs…
-### ArchR logging to : ArchRLogs/ArchR-addIterativeLSI-69ef14e7f129-Date-2020-04-21_Time-16-29-45.log
-### If there is an issue, please report to github with logFile!
-### 2020-04-21 16:29:46 : Computing Total Accessibility Across All Features, 0.005 mins elapsed.
-### 2020-04-21 16:29:49 : Computing Top Features, 0.068 mins elapsed.
-### ###########
-### 2020-04-21 16:29:50 : Running LSI (1 of 2) on Top Features, 0.077 mins elapsed.
-### ###########
-### 2020-04-21 16:29:50 : Sampling Cells (N = 10002) for Estimated LSI, 0.078 mins elapsed.
-### 2020-04-21 16:29:50 : Creating Sampled Partial Matrix, 0.078 mins elapsed.
-### 2020-04-21 16:29:58 : Computing Estimated LSI (projectAll = FALSE), 0.208 mins elapsed.
-### 2020-04-21 16:30:38 : Identifying Clusters, 0.876 mins elapsed.
-### 2020-04-21 16:31:00 : Identified 5 Clusters, 1.241 mins elapsed.
-### 2020-04-21 16:31:00 : Saving LSI Iteration, 1.242 mins elapsed.
-### 2020-04-21 16:31:21 : Creating Cluster Matrix on the total Group Features, 1.593 mins elapsed.
-### 2020-04-21 16:31:31 : Computing Variable Features, 1.759 mins elapsed.
-### ###########
-### 2020-04-21 16:31:31 : Running LSI (2 of 2) on Variable Features, 1.764 mins elapsed.
-### ###########
-### 2020-04-21 16:31:31 : Creating Partial Matrix, 1.764 mins elapsed.
-### 2020-04-21 16:31:40 : Computing LSI, 1.911 mins elapsed.
-### 2020-04-21 16:32:18 : Finished Running IterativeLSI, 2.541 mins elapsed.
 #
 ## To call clusters in this reduced dimension sub-space, we use the addClusters() function which uses Seurat’s graph clustering as the default clustering method.
-#
 projSci <- addClusters(input = projSci, reducedDims = "IterativeLSI")
-### ArchR logging to : ArchRLogs/ArchR-addClusters-69ef73b1d963-Date-2020-04-21_Time-16-32-18.log
-### If there is an issue, please report to github with logFile!
-### 2020-04-21 16:32:19 : Running Seurats FindClusters (Stuart et al. Cell 2019), 0.004 mins elapsed.
-### Computing nearest neighbor graph
-### Computing SNN
-### Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
-###
-### Number of nodes: 10251
-### Number of edges: 498555
-###
-### Running Louvain algorithm…
-### Maximum modularity in 10 random starts: 0.8575
-### Number of communities: 11
-### Elapsed time: 0 seconds
-### 2020-04-21 16:32:38 : Testing Outlier Clusters, 0.32 mins elapsed.
-### 2020-04-21 16:32:38 : Assigning Cluster Names to 11 Clusters, 0.32 mins elapsed.
-### 2020-04-21 16:32:38 : Finished addClusters, 0.322 mins elapsed.
 #
 ## Visualizing in a 2D UMAP Embedding
 ## We can visualize our scATAC-seq data using a 2-dimensional representation such as Uniform Manifold Approximation and Projection (UMAP). To do this, we add a UMAP embedding to our ArchRProject object with the addUMAP() function. This function uses the uwot package to perform UMAP.
@@ -554,54 +463,8 @@ pBrowserTrack <- plotBrowserTrack(
     upstream = 50000,
     downstream = 50000
 )
-## ArchR logging to : ArchRLogs/ArchR-plotBrowserTrack-69ef1ca18f89-Date-2020-04-21_Time-16-34-17.log
-## If there is an issue, please report to github with logFile!
-## 2020-04-21 16:34:17 : Validating Region, 0.006 mins elapsed.
-## GRanges object with 9 ranges and 2 metadata columns:
-## seqnames ranges strand | gene_id symbol
-## |
-## [1] chr1 208059883-208084683 - | 947 CD34
-## [2] chrX 48644982-48652717 + | 2623 GATA1
-## [3] chr9 36838531-37034476 - | 5079 PAX5
-## [4] chr11 60223282-60238225 + | 931 MS4A1
-## [5] chr3 154741913-154901518 + | 4311 MME
-## [6] chr5 140011313-140013286 - | 929 CD14
-## [7] chr17 56347217-56358296 - | 4353 MPO
-## [8] chr11 118209789-118213459 - | 915 CD3D
-## [9] chr2 87011728-87035519 - | 925 CD8A
-## ——-
-## seqinfo: 24 sequences from hg19 genome
-## 2020-04-21 16:34:17 : Adding Bulk Tracks (1 of 9), 0.007 mins elapsed.
-## 2020-04-21 16:34:19 : Adding Gene Tracks (1 of 9), 0.033 mins elapsed.
-## 2020-04-21 16:34:19 : Plotting, 0.043 mins elapsed.
-## 2020-04-21 16:34:22 : Adding Bulk Tracks (2 of 9), 0.084 mins elapsed.
-## 2020-04-21 16:34:22 : Adding Gene Tracks (2 of 9), 0.099 mins elapsed.
-## 2020-04-21 16:34:23 : Plotting, 0.105 mins elapsed.
-## 2020-04-21 16:34:26 : Adding Bulk Tracks (3 of 9), 0.156 mins elapsed.
-## 2020-04-21 16:34:27 : Adding Gene Tracks (3 of 9), 0.174 mins elapsed.
-## 2020-04-21 16:34:27 : Plotting, 0.182 mins elapsed.
-## 2020-04-21 16:34:30 : Adding Bulk Tracks (4 of 9), 0.219 mins elapsed.
-## 2020-04-21 16:34:31 : Adding Gene Tracks (4 of 9), 0.235 mins elapsed.
-## 2020-04-21 16:34:31 : Plotting, 0.242 mins elapsed.
-## 2020-04-21 16:34:32 : Adding Bulk Tracks (5 of 9), 0.265 mins elapsed.
-## 2020-04-21 16:34:34 : Adding Gene Tracks (5 of 9), 0.284 mins elapsed.
-## 2020-04-21 16:34:34 : Plotting, 0.291 mins elapsed.
-## 2020-04-21 16:34:36 : Adding Bulk Tracks (6 of 9), 0.318 mins elapsed.
-## 2020-04-21 16:34:37 : Adding Gene Tracks (6 of 9), 0.334 mins elapsed.
-## 2020-04-21 16:34:37 : Plotting, 0.339 mins elapsed.
-## 2020-04-21 16:34:39 : Adding Bulk Tracks (7 of 9), 0.374 mins elapsed.
-## 2020-04-21 16:34:40 : Adding Gene Tracks (7 of 9), 0.391 mins elapsed.
-## 2020-04-21 16:34:41 : Plotting, 0.401 mins elapsed.
-## 2020-04-21 16:34:44 : Adding Bulk Tracks (8 of 9), 0.454 mins elapsed.
-## 2020-04-21 16:34:45 : Adding Gene Tracks (8 of 9), 0.473 mins elapsed.
-## 2020-04-21 16:34:45 : Plotting, 0.482 mins elapsed.
-## 2020-04-21 16:34:47 : Adding Bulk Tracks (9 of 9), 0.515 mins elapsed.
-## 2020-04-21 16:34:49 : Adding Gene Tracks (9 of 9), 0.537 mins elapsed.
-## 2020-04-21 16:34:49 : Plotting, 0.546 mins elapsed.
-## ArchR logging successful to : ArchRLogs/ArchR-plotBrowserTrack-69ef1ca18f89-Date-2020-04-21_Time-16-34-17.log
 
 # To plot a track of a specific gene, we can simply select one from the list.
-
  grid::grid.newpage()
  grid::grid.draw(pBrowserTrack$CD14)
 
@@ -865,45 +728,5 @@ Sys.Date()
 ## [1] “2020-04-21”
 
 # The sessionInfo() at run time was:
-
 sessionInfo()
-## R version 3.6.1 (2019-07-05)
-## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: CentOS Linux 7 (Core)
-##
-## Matrix products: default
-## BLAS/LAPACK: /share/software/user/open/openblas/0.2.19/lib/libopenblasp-r0.2.19.so
-##
-## locale:
-## [1] LC_CTYPE=en_US.UTF-8 LC_NUMERIC=C
-## [3] LC_TIME=en_US.UTF-8 LC_COLLATE=en_US.UTF-8
-## [5] LC_MONETARY=en_US.UTF-8 LC_MESSAGES=en_US.UTF-8
-## [7] LC_PAPER=en_US.UTF-8 LC_NAME=C
-## [9] LC_ADDRESS=C LC_TELEPHONE=C
-## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C
-##
-## attached base packages:
-## [1] parallel stats4 stats graphics grDevices utils datasets
-## [8] methods base
-##
-## other attached packages:
-## [1] ArchR_0.9.1 magrittr_1.5
-## [3] rhdf5_2.30.1 Matrix_1.2-17
-## [5] data.table_1.12.8 SummarizedExperiment_1.16.1
-## [7] DelayedArray_0.12.2 BiocParallel_1.20.1
-## [9] matrixStats_0.56.0 Biobase_2.46.0
-## [11] GenomicRanges_1.38.0 GenomeInfoDb_1.22.1
-## [13] IRanges_2.20.2 S4Vectors_0.24.3
-## [15] BiocGenerics_0.32.0 ggplot2_3.2.1
-##
-## loaded via a namespace (and not attached):
-## [1] Rcpp_1.0.4 pillar_1.4.3 compiler_3.6.1
-## [4] XVector_0.26.0 tools_3.6.1 bitops_1.0-6
-## [7] zlibbioc_1.32.0 lifecycle_0.1.0 tibble_2.1.3
-## [10] gtable_0.3.0 lattice_0.20-38 pkgconfig_2.0.3
-## [13] rlang_0.4.5 GenomeInfoDbData_1.2.2 withr_2.1.2
-## [16] dplyr_0.8.4 grid_3.6.1 tidyselect_1.0.0
-## [19] glue_1.4.0 R6_2.4.1 Rhdf5lib_1.8.0
-## [22] purrr_0.3.3 scales_1.1.0 assertthat_0.2.1
-## [25] colorspace_1.4-1 RCurl_1.98-1.1 lazyeval_0.2.2
-## [28] munsell_0.5.0 crayon_1.3.4
+

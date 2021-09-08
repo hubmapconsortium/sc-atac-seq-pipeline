@@ -11,6 +11,8 @@ requirements:
   NetworkAccess:
     networkAccess: true
 
+arguments: ["--QCDir", $(runtime.outdir)]
+
 inputs:
   bam_file:
     type: File
@@ -18,11 +20,11 @@ inputs:
       position: 1
       prefix: --bam_file
     doc: The sorted BAM file with cell ids in the CB tag.
-
+ 
   threads:
     type: int?
     inputBinding:
-      position: 2
+      position: 3
       prefix: --threads
     default: 2
     doc: Number of threads to use
