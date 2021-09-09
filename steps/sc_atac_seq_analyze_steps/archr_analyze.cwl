@@ -10,8 +10,11 @@ requirements:
     dockerPull: hubmap/sc-atac-seq-grch38
   NetworkAccess:
     networkAccess: true
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.bam_file)
 
-arguments: ["--QCDir", $(runtime.outdir)]
+#arguments: ["--QCDir", $(runtime.outdir)]
 
 inputs:
   bam_file:
@@ -19,6 +22,7 @@ inputs:
     inputBinding:
       position: 1
       prefix: --bam_file
+      valueFrom: $(self.basename)
     doc: The sorted BAM file with cell ids in the CB tag.
  
   threads:
@@ -30,23 +34,73 @@ inputs:
     doc: Number of threads to use
 
 outputs:
-  CSV_files:
-    type:
-      type: array
-      items: File
-    outputBinding:
-      glob: "*.csv"
-
-  PDF_files:
-    type:
-      type: array
-      items: File
-    outputBinding:
-      glob: "*.pdf"
-
-#  umap_coords_csv:
-#    type: File
+#  CSV_files:
+#    type:
+#      type: array
+#      items: File
 #    outputBinding:
-#      glob: "archr_umap_coords_clusters.csv"
+#      glob: "*.csv"
+#
+#  PDF_files:
+#    type:
+#      type: array
+#      items: File
+#    outputBinding:
+#      glob: "*.pdf"
+
+  Fragment_Size_Distribution_pdf:
+    type: File
+    outputBinding:
+      glob: "QualityControl/*/*-Fragment_Size_Distribution.pdf"
+
+  TSS_by_Unique_Frags_pdf:
+    type: File
+    outputBinding:
+      glob: "QualityControl/*/*-TSS_by_Unique_Frags.pdf"
+
+  QC-Sample-FragSizes-TSSProfile_pdf:
+    type: File
+    outputBinding:
+      glob: "*/QC-Sample-FragSizes-TSSProfile.pdf"
+
+  QC-Sample-Statistics_pdf:
+    type: File
+    outputBinding:
+      glob: "*/QC-Sample-Statistics.pdf"
+
+  TSS-vs-Frags_pdf:
+    type: File
+    outputBinding:
+      glob: "*/TSS-vs-Frags.pdf"
+
+  Rplots_pdf:
+    type: File
+    outputBinding:
+      glob: "Rplots.pdf"
+
+  Plot-UMAP-Sample-Clusters_pdf:
+    type: File
+    outputBinding:
+      glob: "*/Plots/Plot-UMAP-Sample-Clusters.pdf"
+
+  peaks_csv:
+    type: File
+    outputBinding:
+      glob: "peaks.csv"
+
+  markers_csv:
+    type: File
+    outputBinding:
+      glob: "markers.csv"
+
+  cell_column_data_csv:
+    type: File
+    outputBinding:
+      glob: "cell_column_data.csv"
+
+  umap_coords_clusters_csv:
+    type: File
+    outputBinding:
+      glob: "archr_umap_coords_clusters.csv"
 
 baseCommand: [Rscript, /opt/run_ArchR_analysis.R]

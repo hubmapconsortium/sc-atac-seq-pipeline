@@ -32,13 +32,57 @@ outputs:
 #    type: File
 #    outputSource: create_fragment_file/fragment_file
 
-  analysis_CSV_files:
-    type: File[]
-    outputSource: analyze_with_ArchR/CSV_files
+#  analysis_CSV_files:
+#    type: File[]
+#    outputSource: analyze_with_ArchR/CSV_files
+#
+#  analysis_PDF_files:
+#    type: File[]
+#    outputSource: analyze_with_ArchR/PDF_files
 
-  analysis_PDF_files:
-    type: File[]
-    outputSource: analyze_with_ArchR/PDF_files
+  Fragment_Size_Distribution_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/Fragment_Size_Distribution_pdf
+
+  TSS_by_Unique_Frags_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/TSS_by_Unique_Frags_pdf
+
+  QC-Sample-FragSizes-TSSProfile_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/QC-Sample-FragSizes-TSSProfile_pdf
+
+  QC-Sample-Statistics_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/QC-Sample-Statistics_pdf
+
+  TSS-vs-Frags_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/TSS-vs-Frags_pdf
+
+  Rplots_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/Rplots_pdf
+
+  Plot-UMAP-Sample-Clusters_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/Plot-UMAP-Sample-Clusters_pdf
+
+  peaks_csv:
+    type: File
+    outputSource: analyze_with_ArchR/peaks_csv
+
+  markers_csv:
+    type: File
+    outputSource: analyze_with_ArchR/markers_csv
+
+  cell_column_data_csv:
+    type: File
+    outputSource: analyze_with_ArchR/cell_column_data_csv
+
+  umap_coords_clusters_csv:
+    type: File
+    outputSource: analyze_with_ArchR/umap_coords_clusters_csv
 
 
 #  cell_by_bin_h5ad:
@@ -117,8 +161,17 @@ steps:
       bam_file: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
       threads: threads
     out:
-      - CSV_files
-      - PDF_files
+      - Fragment_Size_Distribution_pdf
+      - TSS_by_Unique_Frags_pdf
+      - QC-Sample-FragSizes-TSSProfile_pdf
+      - QC-Sample-Statistics_pdf
+      - TSS-vs-Frags_pdf
+      - Rplots_pdf
+      - Plot-UMAP-Sample-Clusters_pdf
+      - peaks_csv
+      - markers_csv
+      - cell_column_data_csv
+      - umap_coords_clusters_csv
 
 #  create_fragment_file:
 #    run: sc_atac_seq_process_steps/create_fragment_file.cwl

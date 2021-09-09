@@ -8,12 +8,12 @@ option_list = list(
     default=NULL,
     help="Selected barcodes"
   ),
-  make_option(
-    c("-q", "--QCDir"),
-    type="character",
-    default="/tmp",
-    help="The relative path to the output directory for QC-level information and plots for each sample/ArrowFile."
-  ),
+#  make_option(
+#    c("-q", "--QCDir"),
+#    type="character",
+#    default="QualityControl",
+#    help="The relative path to the output directory for QC-level information and plots for each sample/ArrowFile."
+#  ),
   make_option(
     c("-n", "--threads"),
     type="integer",
@@ -68,7 +68,7 @@ ArrowFiles <- createArrowFiles(
   sampleNames = names(inputFiles),
   minTSS = 4, #Dont set this too high because you can always increase later
   minFrags = 2000,
-  QCDir = opt$QCDir,
+#  QCDir = opt$QCDir,
   addTileMat = TRUE,
   addGeneScoreMat = TRUE,
   bamFlag = list(isMinusStrand = FALSE, isProperPair = TRUE, isDuplicate = FALSE),
@@ -325,8 +325,8 @@ projSci <- addUMAP(ArchRProj = projSci, reducedDims = "IterativeLSI")
 ### 16:32:46 Commencing optimization for 200 epochs, with 623598 positive edges
 ### 16:32:58 Optimization finished
 #
-projSciEmbeddingDF = getEmbedding(ArchRProj = projSci, embedding = "UMAP", returnDF = TRUE)
-write.csv(projSciEmbeddingDF, file='archr_umap_coords.csv')
+#projSciEmbeddingDF = getEmbedding(ArchRProj = projSci, embedding = "UMAP", returnDF = TRUE)
+#write.csv(projSciEmbeddingDF, file='archr_umap_coords.csv')
 
 projSciEmbeddingWClustersDF = getEmbedding(ArchRProj = projSci, embedding = "UMAP", returnDF = TRUE)
 #message("row names")

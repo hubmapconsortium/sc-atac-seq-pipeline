@@ -30,13 +30,59 @@ outputs:
     type: File?
     outputSource: maybe_save_bam_file/bam_output
 
-  analysis_CSV_files:
-    type: File[]
-    outputSource: sc_atac_seq_process_and_analyze/analysis_CSV_files
+#  analysis_CSV_files:
+#    type: File[]
+#    outputSource: sc_atac_seq_process_and_analyze/analysis_CSV_files
+#
+#  analysis_PDF_files:
+#    type: File[]
+#    outputSource: sc_atac_seq_process_and_analyze/analysis_PDF_files
 
-  analysis_PDF_files:
-    type: File[]
-    outputSource: sc_atac_seq_process_and_analyze/analysis_PDF_files
+  Fragment_Size_Distribution_pdf:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/Fragment_Size_Distribution_pdf
+
+  TSS_by_Unique_Frags_pdf:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/TSS_by_Unique_Frags_pdf
+
+  QC-Sample-FragSizes-TSSProfile_pdf:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/QC-Sample-FragSizes-TSSProfile_pdf
+
+  QC-Sample-Statistics_pdf:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/QC-Sample-Statistics_pdf
+
+  TSS-vs-Frags_pdf:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/TSS-vs-Frags_pdf
+
+  Rplots_pdf:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/Rplots_pdf
+
+  Plot-UMAP-Sample-Clusters_pdf:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/Plot-UMAP-Sample-Clusters_pdf
+
+  peaks_csv:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/peaks_csv
+
+  markers_csv:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/markers_csv
+
+  cell_column_data_csv:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/cell_column_data_csv
+
+  umap_coords_clusters_csv:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/umap_coords_clusters_csv
+
+
 
 steps:
   fastqc:
@@ -75,8 +121,18 @@ steps:
     out:
       - unsorted_reads
       - bam_file
-      - analysis_CSV_files
-      - analysis_PDF_files
+      - Fragment_Size_Distribution_pdf
+      - TSS_by_Unique_Frags_pdf
+      - QC-Sample-FragSizes-TSSProfile_pdf
+      - QC-Sample-Statistics_pdf
+      - TSS-vs-Frags_pdf
+      - Rplots_pdf
+      - Plot-UMAP-Sample-Clusters_pdf
+      - peaks_csv
+      - markers_csv
+      - cell_column_data_csv
+      - umap_coords_clusters_csv
+
 
   # thanks to @pvanheus in the CWL gitter instance
   maybe_save_bam_file:
