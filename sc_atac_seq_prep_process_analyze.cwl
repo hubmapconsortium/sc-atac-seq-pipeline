@@ -60,7 +60,7 @@ outputs:
 
   Peak-Call-Summary_pdf:
     type: File
-    outputSource: sc_atac_seq_process_and_analyze/Peak-Call-Summary_pdf"
+    outputSource: sc_atac_seq_process_and_analyze/Peak-Call-Summary_pdf
 
   Rplots_pdf:
     type: File

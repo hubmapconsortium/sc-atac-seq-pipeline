@@ -62,7 +62,7 @@ outputs:
 
   Peak-Call-Summary_pdf:
     type: File
-    outputSource: analyze_with_ArchR/Peak-Call-Summary_pdf"
+    outputSource: analyze_with_ArchR/Peak-Call-Summary_pdf
 
   Rplots_pdf:
     type: File
