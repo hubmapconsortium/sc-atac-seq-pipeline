@@ -60,6 +60,10 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/TSS-vs-Frags_pdf
 
+  Peak-Call-Summary_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/Peak-Call-Summary_pdf"
+
   Rplots_pdf:
     type: File
     outputSource: analyze_with_ArchR/Rplots_pdf
@@ -166,6 +170,7 @@ steps:
       - QC-Sample-FragSizes-TSSProfile_pdf
       - QC-Sample-Statistics_pdf
       - TSS-vs-Frags_pdf
+      - Peak-Call-Summary_pdf
       - Rplots_pdf
       - Plot-UMAP-Sample-Clusters_pdf
       - peaks_csv

@@ -58,6 +58,10 @@ outputs:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/TSS-vs-Frags_pdf
 
+  Peak-Call-Summary_pdf:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/Peak-Call-Summary_pdf"
+
   Rplots_pdf:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/Rplots_pdf
@@ -126,6 +130,7 @@ steps:
       - QC-Sample-FragSizes-TSSProfile_pdf
       - QC-Sample-Statistics_pdf
       - TSS-vs-Frags_pdf
+      - Peak-Call-Summary_pdf
       - Rplots_pdf
       - Plot-UMAP-Sample-Clusters_pdf
       - peaks_csv
