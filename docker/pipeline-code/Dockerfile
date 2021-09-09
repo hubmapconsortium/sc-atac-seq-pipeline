@@ -8,6 +8,7 @@ RUN apt-get update \
     libcairo2-dev \
     libcurl4-gnutls-dev \
     libncurses-dev \
+    libglpk-dev \
     libgsl-dev \
     libmagick++-dev \
     libxml2-dev \
