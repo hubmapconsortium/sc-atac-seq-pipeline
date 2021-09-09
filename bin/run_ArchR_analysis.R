@@ -82,7 +82,7 @@ ArrowFiles
 
 projSci <- ArchRProject(
   ArrowFiles = ArrowFiles, 
-  outputDirectory = "SciTest",
+  outputDirectory = "ArchRProjFiles",
   copyArrows = TRUE #This is recommened so that if you modify the Arrow files you have an original copy for later usage.
 )
 
@@ -206,7 +206,7 @@ pTSSEn
 #To save editable vectorized versions of these plots, we use plotPDF().
 plotPDF(pfrag,pTSSEn, name = "QC-Sample-FragSizes-TSSProfile.pdf", ArchRProj = projSci, addDOC = FALSE, width = 5, height = 5)
 
-saveArchRProject(ArchRProj = projSci, outputDirectory = "SciTest", load = FALSE)
+saveArchRProject(ArchRProj = projSci, outputDirectory = "ArchRProjFiles", load = FALSE)
 
 
 
@@ -240,7 +240,7 @@ saveArchRProject(ArchRProj = projSci, outputDirectory = "SciTest", load = FALSE)
 # With our Arrow files in hand, we are now ready to create an ArchRProject. An ArchRProject is associated with a set of Arrow files and is the backbone of nearly all ArchR analyses.
 #proj <- ArchRProject(
 #  ArrowFiles = ArrowFiles, 
-#  outputDirectory = "SciTest",
+#  outputDirectory = "ArchRProjFiles",
 #  copyArrows = TRUE #This is recommened so that you maintain an unaltered copy for later usage.
 #)
 ### Using GeneAnnotation set by addArchRGenome(Hg19)!
@@ -718,7 +718,7 @@ projSci <- saveArchRProject(ArchRProj = projSci)
 
 # When we are ready to load this saved ArchRProject we use the loadArchRProject() object and provide the path to the folder containing the saved ArchRProject object.
 
-projSci <- loadArchRProject(path = "SciTest")
+projSci <- loadArchRProject(path = "ArchRProjFiles")
 ## Successfully loaded ArchRProject!
 
 # Session Information

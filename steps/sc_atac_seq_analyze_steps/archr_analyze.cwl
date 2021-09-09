@@ -61,17 +61,17 @@ outputs:
   QC-Sample-FragSizes-TSSProfile_pdf:
     type: File
     outputBinding:
-      glob: "*/QC-Sample-FragSizes-TSSProfile.pdf"
+      glob: "*/Plots/QC-Sample-FragSizes-TSSProfile.pdf"
 
   QC-Sample-Statistics_pdf:
     type: File
     outputBinding:
-      glob: "*/QC-Sample-Statistics.pdf"
+      glob: "*/Plots/QC-Sample-Statistics.pdf"
 
   TSS-vs-Frags_pdf:
     type: File
     outputBinding:
-      glob: "*/TSS-vs-Frags.pdf"
+      glob: "*/Plots/TSS-vs-Frags.pdf"
 
   Rplots_pdf:
     type: File
@@ -82,6 +82,11 @@ outputs:
     type: File
     outputBinding:
       glob: "*/Plots/Plot-UMAP-Sample-Clusters.pdf"
+
+  Peak-Call-Summary_pdf:
+    type: File
+    outputBinding:
+      glob: "*/Plots/Peak-Call-Summary.pdf"
 
   peaks_csv:
     type: File
