@@ -332,117 +332,6 @@ projSci <- addImputeWeights(projSci)
 ### ArchR logging to : ArchRLogs/ArchR-addImputeWeights-69ef433c71d0-Date-2020-04-21_Time-16-33-19.log
 ### If there is an issue, please report to github with logFile!
 ### 2020-04-21 16:33:19 : Computing Impute Weights Using Magic (Cell 2018), 0 mins elapsed.
-#
-### Now we can overlay our marker gene scores on our 2D UMAP embedding.
-##
-#markerGenes  <- c(
-#    "CD34",  #Early Progenitor
-#    "GATA1", #Erythroid
-#    "PAX5", "MS4A1", "MME", #B-Cell Trajectory
-#    "CD14", "MPO", #Monocytes
-#    "CD3D", "CD8A"#TCells
-#  )
-#
-#pMarkerGenes <- plotEmbedding(
-#    ArchRProj = projSci, 
-#    colorBy = "GeneScoreMatrix", 
-#    name = markerGenes, 
-#    embedding = "UMAP",
-#    imputeWeights = getImputeWeights(projSci)
-#)
-### Getting ImputeWeights
-### ArchR logging to : ArchRLogs/ArchR-plotEmbedding-69ef2f10a62d-Date-2020-04-21_Time-16-33-31.log
-### If there is an issue, please report to github with logFile!
-### Getting UMAP Embedding
-### ColorBy = GeneScoreMatrix
-### Getting Matrix Values…
-### 2020-04-21 16:33:32 :
-###
-### Imputing Matrix
-### Using weights on disk
-### Using weights on disk
-### Plotting Embedding
-### 1 2 3 4 5 6 7 8 9
-### ArchR logging successful to : ArchRLogs/ArchR-plotEmbedding-69ef2f10a62d-Date-2020-04-21_Time-16-33-31.log
-#
-## To plot a specific gene we can subset this plot list using the gene name.
-#
-#p$CD14
-#
-#
-## To plot all genes we can use cowplot to arrange the 9 different plots together. Each of these marker genes lights up the corresponding cell clusters. For example, we infer that the cells that have the highest gene score for CD3D, a known T cell marker, are in fact T cells.
-#
-##Rearrange for grid plotting
-#pMarkerGenesCow <- lapply(pMarkerGenes, function(x){
-#    x + guides(color = FALSE, fill = FALSE) +
-#    theme_ArchR(baseSize = 6.5) +
-#    theme(plot.margin = unit(c(0, 0, 0, 0), "cm")) +
-#    theme(
-#        axis.text.x=element_blank(),
-#        axis.ticks.x=element_blank(),
-#        axis.text.y=element_blank(),
-#        axis.ticks.y=element_blank()
-#    )
-#})
-#do.call(cowplot::plot_grid, c(list(ncol = 3),pMarkerGenesCow))
-#
-## To save an editable vectorized version of this plot, we use the plotPDF() function.
-#
-#plotPDF(plotList = pMarkerGenes,
-#    name = "Plot-UMAP-Marker-Genes-W-Imputation.pdf",
-#    ArchRProj = projSci,
-#    addDOC = FALSE, width = 5, height = 5)
-### [1] “plotting ggplot!”
-### [1] “plotting ggplot!”
-### [1] “plotting ggplot!”
-### [1] “plotting ggplot!”
-### [1] “plotting ggplot!”
-### [1] “plotting ggplot!”
-### [1] “plotting ggplot!”
-### [1] “plotting ggplot!”
-### [1] “plotting ggplot!”
-### [1] 0
-#
-#
-#
-## In addition to plotting gene scores per cell as a UMAP overlay, we can browse the local chromatin accessibility at these marker genes on a per cluster basis with genome browser tracks. To do this, we use the plotBrowserTrack() function which will create a list of plots, one for each of the genes specified by markerGenes.
-#pBrowserTrack <- plotBrowserTrack(
-#    ArchRProj = projSci,
-#    groupBy = "Clusters",
-#    geneSymbol = markerGenes,
-#    upstream = 50000,
-#    downstream = 50000
-#)
-#
-## To plot a track of a specific gene, we can simply select one from the list.
-# grid::grid.newpage()
-# grid::grid.draw(pBrowserTrack$CD14)
-#
-#
-#
-#
-## We can save a multi-page PDF with a single page for each gene locus in our plot list using the plotPDF() function.
-#
-#plotPDF(plotList = pBrowserTrack, 
-#    name = "Plot-Tracks-Marker-Genes.pdf", 
-#    ArchRProj = projSci, 
-#    addDOC = FALSE, width = 5, height = 5)
-### NULL
-### NULL
-### NULL
-### NULL
-### NULL
-### NULL
-### NULL
-### NULL
-### NULL
-### [1] 0
-
-# Last but certainly not least, ArchR natively supports an interactive and dynamic genome browser that can be launched locally via a shiny app. To do this, we use the ArchRBrowser() function.
-
-# ArchRBrowser(ArchRProj = projSci)
-# This launches a dynamic genome browser session with a whole host of features including export of vectorized tracks for publication.
-
 
 projSci <- addGroupCoverages(ArchRProj = projSci, groupBy = "Clusters")
 pathToMacs2 <- findMacs2()
@@ -480,16 +369,6 @@ markersGS <- getMarkerFeatures(
 markerGSList <- getMarkers(markersGS, cutOff = "FDR <= 0.01 & Log2FC >= 1.25")
 #markerGSList$C1
 
-## To visualize all of the marker features simultaneously, we can create a heatmap using the markerHeatmap() function, optionally supplying some marker genes to label on the heatmap via the labelMarkers parameter.
-#markersGSGenes  <- c(
-#      "CD34", #Early Progenitor
-#      "GATA1", #Erythroid
-#      "PAX5", "MS4A1", "EBF1", "MME", #B-Cell Trajectory
-#      "CD14", "CEBPB", "MPO", #Monocytes
-#      "IRF8", 
-#      "CD3D", "CD8A", "TBX21", "IL7R" #TCells
-#  )
-
 heatmapGS <- markerHeatmap(
      seMarker = markersGS, 
      cutOff = "FDR <= 0.01 & Log2FC >= 1.25", 
@@ -500,14 +379,6 @@ heatmapGS <- markerHeatmap(
 ComplexHeatmap::draw(heatmapGS, heatmap_legend_side = "bot", annotation_legend_side = "bot")
 
 plotPDF(heatmapGS, name = "GeneScores-Marker-Heatmap", width = 8, height = 6, ArchRProj = projSci, addDOC = FALSE)
-
-
-
-
-
-
-
-
 
 
 # Often times, we are interested to know which peaks are unique to an individual
@@ -544,10 +415,6 @@ markers_gr <- getMarkers(markersPeaks, cutOff = "FDR <= 0.01 & Log2FC >= 1", ret
 markers_gr
 write.csv(markers_gr, file = "markers.csv")
 
-# This GRangesList object can similarly be subset to a GRanges object for a particular cell group using the $ accessor.
-# markerList$C1
-
-
 # ArchR provides multiple plotting functions to interact with the SummarizedExperiment objects returned by getMarkerFeatures().
 # We can visualize these marker peaks (or any features output by getMarkerFeatures()) as a heatmap using the markerHeatmap() function.
 heatmapPeaks <- plotMarkerHeatmap(
@@ -561,114 +428,6 @@ heatmapPeaks <- plotMarkerHeatmap(
 draw(heatmapPeaks, heatmap_legend_side = "bot", annotation_legend_side = "bot")
 
 plotPDF(heatmapPeaks, name = "Peak-Marker-Heatmap", width = 8, height = 6, ArchRProj = projSci, addDOC = FALSE)
-
-
-## Instead of plotting a heatmap, we can also plot an MA or Volcano plot for any individual cell group. To do this, we use the plotMarkers() function. For an MA plot we specify plotAs = "MA". Here we specify the “Erythroid” cell group via the name parameter.
-#pma <- plotMarkers(seMarker = markersPeaks, name = "C1", cutOff = "FDR <= 0.1 & Log2FC >= 1", plotAs = "MA")
-#pma
-## Similarly, for a Volcano plot, we specify plotAs = "Volcano".
-#pC1v <- plotMarkers(seMarker = markersPeaks, name = "C1", cutOff = "FDR <= 0.1 & Log2FC >= 1", plotAs = "Volcano")
-#pC1v
-##
-#plotPDF(pma, pC1v, name = "C1-Markers-MA-Volcano", width = 5, height = 5, ArchRProj = projSci, addDOC = FALSE)
-##
-#
-# Additionally we can see these peak regions overlayed on our browser tracks
-# by passing the relevant peak regions to the features parameterin the plotBrowserTrack()
-# function. This will add an additional BED-style track of marker peak regions to the bottom
-# of our ArchR track plot. Here we specify plotting the GATA1 gene via the geneSymbol parameter
-#pPeakRegionsOverBrowserTrack <- plotBrowserTrack(
-#      ArchRProj = projSci,
-#      groupBy = "Clusters",
-##      geneSymbol = c("GATA1"),
-#      features =  getMarkers(markersPeaks, cutOff = "FDR <= 0.1 & Log2FC >= 1", returnGR = TRUE)["C1"],
-#      upstream = 50000,
-#      downstream = 50000
-#  )
-##
-###We can plot this using grid::grid.draw().
-###grid::grid.newpage()
-###grid::grid.draw(p$GATA1)
-##i
-#plotPDF(pPeakRegionsOverBrowserTrack, name = "Plot-Tracks-With-Features", width = 5, height = 5, ArchRProj = projSci, addDOC = FALSE)
-#
-
-## Here we perform a pairwise test between the “Erythroid” cell group and the “Progenitor” cell group.
-#markerTest <- getMarkerFeatures(
-#  ArchRProj = projSci, 
-#  useMatrix = "PeakMatrix",
-#  groupBy = "Clusters",
-#  testMethod = "wilcoxon",
-#  bias = c("TSSEnrichment", "log10(nFrags)"),
-#  useGroups = "C1",
-#  bgdGroups = "C2"
-#)
-#
-##
-## Motif Enrichment in Differential Peaks
-#projSci <- addMotifAnnotations(ArchRProj = projSci, motifSet = "cisbp", name = "Motif")
-#
-#motifsUp <- peakAnnoEnrichment(
-#       seMarker = markerTest,
-#       ArchRProj = projSci,
-#       peakAnnotation = "Motif",
-#       cutOff = "FDR <= 0.1 & Log2FC >= 0.5"
-#    )
-#
-#motifsUp
-#
-## To prepare this data for plotting with ggplot we can create a simplified data.frame object containing the motif names, the corrected p-values, and the significance rank.
-#df <- data.frame(TF = rownames(motifsUp), mlog10Padj = assay(motifsUp)[,1])
-#df <- df[order(df$mlog10Padj, decreasing = TRUE),]
-#df$rank <- seq_len(nrow(df))
-#head(df)
-#
-## Using ggplot we can plot the rank-sorted TF motifs and color them by the significance of their enrichment. Here we use ggrepel to label each TF motif.
-#ggUp <- ggplot(df, aes(rank, mlog10Padj, color = mlog10Padj)) + 
-#  geom_point(size = 1) +
-#    ggrepel::geom_label_repel(
-#      data = df[rev(seq_len(30)), ], aes(x = rank, y = mlog10Padj, label = TF), 
-#      size = 1.5,
-#      nudge_x = 2,
-#      color = "black"
-#    ) + theme_ArchR() + 
-#   ylab("-log10(P-adj) Motif Enrichment") + 
-#   xlab("Rank Sorted TFs Enriched") +
-#   scale_color_gradientn(colors = paletteContinuous(set = "comet"))
-#
-#ggUp
-#
-## We can perform the same analyses for the peaks that are more accessible in the “Progenitor” cells by using peaks with Log2FC <= -0.5.
-#motifsDo <- peakAnnoEnrichment(
-#      seMarker = markerTest,
-#      ArchRProj = projSci,
-#      peakAnnotation = "Motif",
-#      cutOff = "FDR <= 0.1 & Log2FC <= -0.5"
-#    )
-#
-#motifsDo
-#
-#df <- data.frame(TF = rownames(motifsDo), mlog10Padj = assay(motifsDo)[,1])
-#df <- df[order(df$mlog10Padj, decreasing = TRUE),]
-#df$rank <- seq_len(nrow(df))
-#
-#ggDo <- ggplot(df, aes(rank, mlog10Padj, color = mlog10Padj)) + 
-#  geom_point(size = 1) +
-#  ggrepel::geom_label_repel(
-#              data = df[rev(seq_len(30)), ], aes(x = rank, y = mlog10Padj, label = TF), 
-#              size = 1.5,
-#              nudge_x = 2,
-#              color = "black"
-#        ) + theme_ArchR() + 
-#   ylab("-log10(FDR) Motif Enrichment") +
-#    xlab("Rank Sorted TFs Enriched") +
-#   scale_color_gradientn(colors = paletteContinuous(set = "comet"))
-#
-#ggDo
-#
-#plotPDF(ggUp, ggDo, name = "Erythroid-vs-Progenitor-Markers-Motifs-Enriched", width = 5, height = 5, ArchRProj = projSci, addDOC = FALSE)
-#
-
 
 # Saving and Loading an ArchRProject
 # To easily save an ArchRProject for later use or for sharing with collaborators,
