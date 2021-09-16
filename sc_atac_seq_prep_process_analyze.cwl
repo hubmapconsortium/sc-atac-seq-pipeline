@@ -30,14 +30,6 @@ outputs:
     type: File?
     outputSource: maybe_save_bam_file/bam_output
 
-#  analysis_CSV_files:
-#    type: File[]
-#    outputSource: sc_atac_seq_process_and_analyze/analysis_CSV_files
-#
-#  analysis_PDF_files:
-#    type: File[]
-#    outputSource: sc_atac_seq_process_and_analyze/analysis_PDF_files
-
   Fragment_Size_Distribution_pdf:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/Fragment_Size_Distribution_pdf
