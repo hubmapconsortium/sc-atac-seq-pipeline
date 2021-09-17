@@ -32,14 +32,6 @@ outputs:
 #    type: File
 #    outputSource: create_fragment_file/fragment_file
 
-#  analysis_CSV_files:
-#    type: File[]
-#    outputSource: analyze_with_ArchR/CSV_files
-#
-#  analysis_PDF_files:
-#    type: File[]
-#    outputSource: analyze_with_ArchR/PDF_files
-
   Fragment_Size_Distribution_pdf:
     type: File
     outputSource: analyze_with_ArchR/Fragment_Size_Distribution_pdf
@@ -71,6 +63,14 @@ outputs:
   Plot-UMAP-Sample-Clusters_pdf:
     type: File
     outputSource: analyze_with_ArchR/Plot-UMAP-Sample-Clusters_pdf
+
+  GeneScores-Marker-Heatmap_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/GeneScores-Marker-Heatmap_pdf
+
+  Peak-Marker-Heatmap_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/Peak-Marker-Heatmap_pdf
 
   peaks_csv:
     type: File
@@ -173,6 +173,8 @@ steps:
       - Peak-Call-Summary_pdf
       - Rplots_pdf
       - Plot-UMAP-Sample-Clusters_pdf
+      - GeneScores-Marker-Heatmap_pdf
+      - Peak-Marker-Heatmap_pdf
       - peaks_csv
       - markers_csv
       - cell_column_data_csv

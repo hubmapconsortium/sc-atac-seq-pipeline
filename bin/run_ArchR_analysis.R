@@ -8,12 +8,6 @@ option_list = list(
     default=NULL,
     help="Selected barcodes"
   ),
-#  make_option(
-#    c("-q", "--QCDir"),
-#    type="character",
-#    default="QualityControl",
-#    help="The relative path to the output directory for QC-level information and plots for each sample/ArrowFile."
-#  ),
   make_option(
     c("-n", "--threads"),
     type="integer",
@@ -29,8 +23,6 @@ if (is.null(opt$bam_file)){
   print_help(opt_parser)
   stop("--bam_file argument must be supplied (input BAM file).", call.=FALSE)
 }
-
-
 
 # First, we load the ArchR library. If this fails, you have not properly installed
 # ArchR and should revisit the installation instructions. We also recommend setting
@@ -49,7 +41,6 @@ inputFiles <- c(opt$bam_file)
 names(inputFiles) <- c("BAM_data")
 inputFiles
 
-
 # Before we begin, we need add a reference genome annotation for ArchR to have
 # access to chromosome and gene information. ArchR natively supports hg19, hg38, mm9, and mm10.
 addArchRGenome("hg38")
@@ -65,9 +56,8 @@ addArchRGenome("hg38")
 ArrowFiles <- createArrowFiles(
   inputFiles = inputFiles,
   sampleNames = names(inputFiles),
-  minTSS = 2, #Dont set this too high because you can always increase later
+  minTSS = 1.5, #Dont set this too high because you can always increase later
   minFrags = 2000,
-#  QCDir = opt$QCDir,
   addTileMat = TRUE,
   addGeneScoreMat = TRUE,
   bamFlag = list(isMinusStrand = FALSE, isProperPair = TRUE, isDuplicate = FALSE),
@@ -136,7 +126,7 @@ p <- ggPoint(
 #To save an editable vectorized version of this plot, we use plotPDF().
 plotPDF(p, name = "TSS-vs-Frags.pdf", ArchRProj = projSci, addDOC = FALSE)
 
-#Example 1. Make a ridge plot for each sample for the TSS enrichment scores.
+#Make a ridge plot for each sample for the TSS enrichment scores.
 #To make a ridge plot, we set plotAs = "ridges".
 
 p1 <- plotGroups(
@@ -146,7 +136,6 @@ p1 <- plotGroups(
      name = "TSSEnrichment",
      plotAs = "ridges"
         )
-p1
 
 # Make a violin plot for each sample for the TSS enrichment scores.
 # To make a violin plot, we set plotAs = "violin". Violin plots in ArchR come
@@ -173,7 +162,6 @@ p3 <- plotGroups(
      name = "log10(nFrags)",
      plotAs = "ridges"
         )
-## Picking joint bandwidth of 0.05
 
 # Make a violin plot for each sample for the log10(unique nuclear fragments).
 p4 <- plotGroups(
@@ -186,7 +174,7 @@ p4 <- plotGroups(
      addBoxPlot = TRUE
     )
 
-#To save editable vectorized versions of these plots, we use plotPDF().
+# To save editable vectorized versions of these plots, we use plotPDF().
 plotPDF(p1,p2,p3,p4, name = "QC-Sample-Statistics.pdf", ArchRProj = projSci, addDOC = FALSE, width = 4, height = 4)
 
 # Plot Sample Fragment Size Distribution and TSS Enrichment Profiles.
@@ -199,7 +187,7 @@ plotPDF(p1,p2,p3,p4, name = "QC-Sample-Statistics.pdf", ArchRProj = projSci, add
 # are common and do not necessarily correlate with differences in data quality.
 pfrag <- plotFragmentSizes(ArchRProj = projSci)
 
-# TSS enrichment profiles, we use the plotTSSEnrichment() function. TSS enrichment
+# Plot TSS enrichment profiles, We use the plotTSSEnrichment() function. TSS enrichment
 # profiles should show a clear peak in the center and a smaller shoulder peak
 # right-of-center which is caused by the well-positioned +1 nucleosome.
 pTSSEn <- plotTSSEnrichment(ArchRProj = projSci)
@@ -209,37 +197,19 @@ plotPDF(pfrag,pTSSEn, name = "QC-Sample-FragSizes-TSSProfile.pdf", ArchRProj = p
 
 saveArchRProject(ArchRProj = projSci, outputDirectory = "ArchRProjFiles", load = FALSE)
 
-
-
-
 # Inferring Doublets
 # After Arrow file creation, we can infer potential doublets (a single droplet
 # containing multiple cells) that can confound downstream results. This is
 # done using the addDoubletScores() function.
+doubScores <- addDoubletScores(
+  input = ArrowFiles,
+  k = 10, #Refers to how many cells near a "pseudo-doublet" to count.
+  knnMethod = "UMAP", #Refers to the embedding to use for nearest neighbor search.
+  dimsToUse = 1:15 # Have to make upper dimension less than default of 30 since we only have 18 columns... 
+)
 
-#commenting out doublet score becuase we saw this error message last time:
-#ArchR logging to : ArchRLogs/ArchR-addDoubletScores-1f9f35c3dde9-Date-2021-07-22_Time-21-31-26.log
-#If there is an issue, please report to github with logFile!
-#2021-07-22 21:31:26 : Batch Execution w/ safelapply!, 0 mins elapsed.
-#2021-07-22 21:31:26 : BAM_data (1 of 1) :  Computing Doublet Statistics, 0 mins elapsed.
-#Warning: The following arguments are not used: row.names
-#BAM_data (1 of 1) : UMAP Projection R^2 = 0.38719
-#BAM_data (1 of 1) : Correlation of UMAP Projection is below 0.9 (normally this is ~0.99)
-#This means there is little heterogeneity in your sample and thus doubletCalling is inaccurate.   
-#force = FALSE, thus returning -1 doubletScores and doubletEnrichments!
-#Set force = TRUE if you want to continue (not recommended).
-#ArchR logging successful to : ArchRLogs/ArchR-addDoubletScores-1f9f35c3dde9-Date-2021-07-22_Time-21-31-26.log
-#
-#doubScores <- addDoubletScores(
-#  input = ArrowFiles,
-#  k = 10, #Refers to how many cells near a "pseudo-doublet" to count.
-#  knnMethod = "UMAP", #Refers to the embedding to use for nearest neighbor search.
-#  dimsToUse = 1:15 # Have to make upper dimension less than default of 30 since we only have 18 columns... 
-#)
-
-
-## We can also ask which data matrices are available within the ArchRProject which will be useful downstream once we start adding to this project:
-#
+# We can also ask which data matrices are available within the ArchRProject
+# which will be useful downstream once we start adding to this project:
 getAvailableMatrices(projSci)
 ### [1] “GeneScoreMatrix” “TileMatrix”
 
@@ -273,15 +243,10 @@ gene_score_matrix
 ## remove data from the Arrow files but rather tells the ArchRProject to ignore
 # these cells for downstream analysis.
 #
-#projSci <- filterDoublets(ArchRProj = projSci)
-### Filtering 410 cells from ArchRProject!
-### scATAC_BMMC_R1 : 243 of 4932 (4.9%)
-### scATAC_CD34_BMMC_R1 : 107 of 3275 (3.3%)
-### scATAC_PBMC_R1 : 60 of 2454 (2.4%)
-#
+projSci <- filterDoublets(ArchRProj = projSci)
+
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the addIterativeLSI() function.
-#
 projSci <- addIterativeLSI(ArchRProj = projSci, useMatrix = "TileMatrix", name = "IterativeLSI")
 #
 # To call clusters in this reduced dimension sub-space, we use the addClusters()
@@ -298,10 +263,6 @@ cellColDataDF <- getCellColData(projSci)
 write.csv(cellColDataDF, file='cell_column_data.csv')
 
 projSci <- addUMAP(ArchRProj = projSci, reducedDims = "IterativeLSI")
-
-#projSciEmbeddingDF = getEmbedding(ArchRProj = projSci, embedding = "UMAP", returnDF = TRUE)
-#write.csv(projSciEmbeddingDF, file='archr_umap_coords.csv')
-
 projSciEmbeddingWClustersDF = getEmbedding(ArchRProj = projSci, embedding = "UMAP", returnDF = TRUE)
 projSciEmbeddingWClustersDF$Clusters <- cellColDataDF$Clusters[match(row.names(cellColDataDF), row.names(projSciEmbeddingWClustersDF))]
 write.csv(projSciEmbeddingWClustersDF, file='archr_umap_coords_clusters.csv')
@@ -324,9 +285,6 @@ plotPDF(pcellCollDataSampleUMAP, pCellCollDataClustersUMAP, name = "Plot-UMAP-Sa
         ArchRProj = projSci, addDOC = FALSE, width = 5, height = 5)
 
 ## Assigning Clusters with Gene Scores
-## We can try to assign biological labels to these clusters using marker genes of
-# known hematopoietic regulators. 
-
 # First, we add imputation weights using MAGIC to help smooth the dropout noise in our gene scores.
 projSci <- addImputeWeights(projSci)
 ### ArchR logging to : ArchRLogs/ArchR-addImputeWeights-69ef433c71d0-Date-2020-04-21_Time-16-33-19.log
@@ -372,7 +330,6 @@ markerGSList <- getMarkers(markersGS, cutOff = "FDR <= 0.01 & Log2FC >= 1.25")
 heatmapGS <- markerHeatmap(
      seMarker = markersGS, 
      cutOff = "FDR <= 0.01 & Log2FC >= 1.25", 
-#     labelMarkers = markersGSGenes,
      transpose = TRUE
   )
 
@@ -398,16 +355,6 @@ markersPeaks <- getMarkerFeatures(
 
 # The object returned by the getMarkerFeatures() function is a SummarizedExperiment that contains a few different assays.
 markersPeaks
-
-# We can use the getMarkers() function to retrieve particular slices of this
-# SummarizedExperiment that we are interested in. The default behavior of
-# this function is to return a list of DataFrame objects, one for each cell group.
-markerList <- getMarkers(markersPeaks, cutOff = "FDR <= 0.01 & Log2FC >= 1")
-markerList
-
-# If we are interested in the marker peaks for a specific cell group, we can access
-# this from the list via the $ accessor.
-#markerList$Erythroid
 
 # Instead of a list of DataFrame objects, we can use getMarkers() to return a
 # GRangesList object by setting returnGR = TRUE.

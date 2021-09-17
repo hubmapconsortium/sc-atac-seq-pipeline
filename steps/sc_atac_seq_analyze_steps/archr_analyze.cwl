@@ -14,8 +14,6 @@ requirements:
     listing:
       - $(inputs.bam_file)
 
-#arguments: ["--QCDir", $(runtime.outdir)]
-
 inputs:
   bam_file:
     type: File
@@ -34,20 +32,6 @@ inputs:
     doc: Number of threads to use
 
 outputs:
-#  CSV_files:
-#    type:
-#      type: array
-#      items: File
-#    outputBinding:
-#      glob: "*.csv"
-#
-#  PDF_files:
-#    type:
-#      type: array
-#      items: File
-#    outputBinding:
-#      glob: "*.pdf"
-
   Fragment_Size_Distribution_pdf:
     type: File
     outputBinding:
@@ -87,6 +71,16 @@ outputs:
     type: File
     outputBinding:
       glob: "*/Plots/Peak-Call-Summary.pdf"
+
+  GeneScores-Marker-Heatmap_pdf:
+    type: File
+    outputBinding:
+      glob: "*/Plots/GeneScores-Marker-Heatmap.pdf"
+
+  Peak-Marker-Heatmap_pdf:
+    type: File
+    outputBinding:
+      glob: "*/Plots/Peak-Marker-Heatmap.pdf"
 
   peaks_csv:
     type: File
