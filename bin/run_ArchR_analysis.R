@@ -64,11 +64,24 @@ ArrowFiles <- createArrowFiles(
   bcTag = "CB" # We added this tag to the SAM file and then converted it to a BAM
 )
 
+# Inferring Doublets
+# After Arrow file creation, we can infer potential doublets (a single droplet
+# containing multiple cells) that can confound downstream results. This is
+# done using the addDoubletScores() function.
+doubScores <- addDoubletScores(
+  input = ArrowFiles,
+  k = 10, #Refers to how many cells near a "pseudo-doublet" to count.
+  knnMethod = "UMAP", #Refers to the embedding to use for nearest neighbor search.
+  dimsToUse = 1:15 # Have to make upper dimension less than default of 30 since we only have 18 columns... 
+)
+
+
 projSci <- ArchRProject(
   ArrowFiles = ArrowFiles, 
   outputDirectory = "ArchRProjFiles",
   copyArrows = TRUE # This is recommened so that if you modify the Arrow files you have an original copy for later usage.
 )
+projSci
 
 # We can check how much memory is used to store the ArchRProject in memory within R:
 paste0("Memory Size = ", round(object.size(projSci) / 10^6, 3), " MB")
@@ -196,17 +209,6 @@ pTSSEn <- plotTSSEnrichment(ArchRProj = projSci)
 plotPDF(pfrag,pTSSEn, name = "QC-Sample-FragSizes-TSSProfile.pdf", ArchRProj = projSci, addDOC = FALSE, width = 5, height = 5)
 
 saveArchRProject(ArchRProj = projSci, outputDirectory = "ArchRProjFiles", load = FALSE)
-
-# Inferring Doublets
-# After Arrow file creation, we can infer potential doublets (a single droplet
-# containing multiple cells) that can confound downstream results. This is
-# done using the addDoubletScores() function.
-doubScores <- addDoubletScores(
-  input = ArrowFiles,
-  k = 10, #Refers to how many cells near a "pseudo-doublet" to count.
-  knnMethod = "UMAP", #Refers to the embedding to use for nearest neighbor search.
-  dimsToUse = 1:15 # Have to make upper dimension less than default of 30 since we only have 18 columns... 
-)
 
 # We can also ask which data matrices are available within the ArchRProject
 # which will be useful downstream once we start adding to this project:
