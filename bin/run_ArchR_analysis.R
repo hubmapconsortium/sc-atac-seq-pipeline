@@ -264,9 +264,20 @@ projSci <- addClusters(input = projSci, reducedDims = "IterativeLSI")
 cellColDataDF <- getCellColData(projSci)
 write.csv(cellColDataDF, file='cell_column_data.csv')
 
+message(paste("Adding UMAP"))
 projSci <- addUMAP(ArchRProj = projSci, reducedDims = "IterativeLSI")
+
+message(paste("Getting embedding"))
 projSciEmbeddingWClustersDF = getEmbedding(ArchRProj = projSci, embedding = "UMAP", returnDF = TRUE)
-projSciEmbeddingWClustersDF$Clusters <- cellColDataDF$Clusters[match(row.names(cellColDataDF), row.names(projSciEmbeddingWClustersDF))]
+write.csv(projSciEmbeddingWClustersDF, file='umap_embedding.csv')
+
+message(paste("Adding Clusters column"))
+# https://stackoverflow.com/questions/48896190/add-column-to-r-dataframe-based-on-rowname
+# https://intellipaat.com/community/31833/r-add-a-new-column-to-a-dataframe-using-matching-values-of-another-dataframe
+# row.names(projSciEmbeddingWClustersDF) must be the first argument because cellColDataDF may
+# have rows that do not exist in projSciEmbeddingWClustersDF and match in that case will return
+# a vector with NAs, which will fail when used as an index to cellColDataDF$Clusters. 
+projSciEmbeddingWClustersDF$Clusters <- cellColDataDF$Clusters[match(row.names(projSciEmbeddingWClustersDF), row.names(cellColDataDF))]
 write.csv(projSciEmbeddingWClustersDF, file='archr_umap_coords_clusters.csv')
 
 
