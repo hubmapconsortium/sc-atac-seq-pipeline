@@ -30,6 +30,10 @@ outputs:
     type: File?
     outputSource: maybe_save_bam_file/bam_output
 
+  fragment_file:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/fragment_file
+
   Fragment_Size_Distribution_pdf:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/Fragment_Size_Distribution_pdf
@@ -125,6 +129,7 @@ steps:
     out:
       - unsorted_reads
       - bam_file
+      - fragment_file
       - Fragment_Size_Distribution_pdf
       - TSS_by_Unique_Frags_pdf
       - QC-Sample-FragSizes-TSSProfile_pdf
