@@ -6,13 +6,25 @@ option_list = list(
     c("-b", "--bam_file"),
     type="character",
     default=NULL,
-    help="Selected barcodes"
+    help="BAM file to use."
   ),
   make_option(
-    c("-n", "--threads"),
+    c("-t", "--threads"),
     type="integer",
     default=2,
-    help="Number of subprocesses/threads to use"
+    help="Number of subprocesses/threads to use."
+  ),
+  make_option(
+    c("-e", "--minTSS"),
+    type="double",
+    default=1.5,
+    help="The minimum numeric transcription start site (TSS) enrichment score required to pass filtering. E.g. 1.5"
+  ),
+  make_option(
+    c("-g", "--minFrags"),
+    type="integer",
+    default=2000,
+    help="The minimum number of mapped ATAC-seq fragments required per cell to pass filtering. E.g. 2000"
   )
 )
 
@@ -56,8 +68,8 @@ addArchRGenome("hg38")
 ArrowFiles <- createArrowFiles(
   inputFiles = inputFiles,
   sampleNames = names(inputFiles),
-  minTSS = 1.5, #Dont set this too high because you can always increase later
-  minFrags = 2000,
+  minTSS = opt$minTSS, # Dont set this too high because you can always increase later
+  minFrags = opt$minFrags,
   addTileMat = TRUE,
   addGeneScoreMat = TRUE,
   bamFlag = list(isMinusStrand = FALSE, isProperPair = TRUE, isDuplicate = FALSE),
@@ -70,7 +82,7 @@ ArrowFiles <- createArrowFiles(
 # done using the addDoubletScores() function.
 doubScores <- addDoubletScores(
   input = ArrowFiles,
-  k = 10, #Refers to how many cells near a "pseudo-doublet" to count.
+  k = 10, # Refers to how many cells near a "pseudo-doublet" to count.
   knnMethod = "UMAP", #Refers to the embedding to use for nearest neighbor search.
   dimsToUse = 1:15 # Have to make upper dimension less than default of 30 since we only have 18 columns... 
 )
@@ -276,7 +288,7 @@ message(paste("Adding Clusters column"))
 # https://intellipaat.com/community/31833/r-add-a-new-column-to-a-dataframe-using-matching-values-of-another-dataframe
 # row.names(projSciEmbeddingWClustersDF) must be the first argument because cellColDataDF may
 # have rows that do not exist in projSciEmbeddingWClustersDF and match in that case will return
-# a vector with NAs, which will fail when used as an index to cellColDataDF$Clusters. 
+# a larger vector with NAs, which will fail when used as an index to cellColDataDF$Clusters. 
 projSciEmbeddingWClustersDF$Clusters <- cellColDataDF$Clusters[match(row.names(projSciEmbeddingWClustersDF), row.names(cellColDataDF))]
 write.csv(projSciEmbeddingWClustersDF, file='archr_umap_coords_clusters.csv')
 
@@ -284,7 +296,7 @@ write.csv(projSciEmbeddingWClustersDF, file='archr_umap_coords_clusters.csv')
 # Using this UMAP, we can visualize various attributes of our cells which are
 # stored in a matrix called cellColData in our ArchRProject. To do this, we use
 # the plotEmbedding() function and we specify the variable to use for coloration
-#via a combination of the colorBy and name parameters.
+# via a combination of the colorBy and name parameters.
 #
 ## For example, we can color by “Sample”:
 pcellCollDataSampleUMAP <- plotEmbedding(ArchRProj = projSci, colorBy = "cellColData", name = "Sample", embedding = "UMAP")

@@ -21,7 +21,7 @@ inputs:
       position: 1
       prefix: --bam_file
       valueFrom: $(self.basename)
-    doc: The sorted BAM file with cell ids in the CB tag.
+    doc: "The sorted BAM file with cell ids in the CB tag."
  
   threads:
     type: int?
@@ -29,7 +29,23 @@ inputs:
       position: 3
       prefix: --threads
     default: 2
-    doc: Number of threads to use
+    doc: "Number of threads to use."
+
+  minTSS:
+    type: double?
+    inputBinding:
+      position: 4
+      prefix: --minTSS
+    default: 1.5
+    doc: "The minimum numeric transcription start site (TSS) enrichment score required to pass filtering. E.g. 1.5"
+
+  minFrags:
+    type: int?
+    inputBinding:
+      position: 5
+      prefix: --minFrags
+    default: 2000
+    doc: "The minimum number of mapped ATAC-seq fragments required per cell to pass filtering. E.g. 2000"
 
 outputs:
   Fragment_Size_Distribution_pdf:
