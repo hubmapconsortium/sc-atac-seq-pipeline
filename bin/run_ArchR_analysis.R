@@ -330,6 +330,20 @@ write.csv(peaks_gr, file = "peaks.csv")
 projSci <- addPeakMatrix(projSci)
 getAvailableMatrices(projSci)
 
+## Create the cell by gene table
+message(paste("Creating cell by gene CSV file"))
+geneScoreMatrix <- getMatrixFromProject(ArchRProj = projSci, useMatrix = "GeneScoreMatrix")
+# Get row and column number matrix for assay with gene score > 0i
+# https://www.journaldev.com/45274/which-function-in-r
+geneScoreGt0RowAndColumnMatrix <- which(assay(geneScoreMatrix) > 0,arr.ind = T)
+geneRowDataDF <- rowData(geneScoreMatrix)
+geneColDataDF <- colData(geneScoreMatrix)
+# Get vector of gene information, e.g. seq, start, end, strand, gene name, with gene scores gt zero
+geneInformation <- geneRowDataDF[geneScoreGt0RowAndColumnMatrix[,1],]
+# Get vector of cell names with gene scores gt zero
+cellNames <- rownames(geneColDataDF[geneScoreGt0RowAndColumnMatrix[,2],])
+cellByGeneInfo <- cbind(cellNames, geneInformation)
+write.csv(cellByGeneInfo, file='cell_by_gene.csv')
 
 message(paste("Cell types:"))
 # First, lets remind ourselves of the cell types that we are working with in the
