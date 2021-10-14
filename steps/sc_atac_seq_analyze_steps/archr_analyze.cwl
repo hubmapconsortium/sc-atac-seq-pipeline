@@ -103,19 +103,34 @@ outputs:
     outputBinding:
       glob: "peaks.csv"
 
-  markers_csv:
+  peak_markers_csv:
     type: File
     outputBinding:
-      glob: "markers.csv"
+      glob: "peak_markers.csv"
+
+  gene_markers_csv:
+    type: File
+    outputBinding:
+      glob: "gene_markers.csv"
 
   cell_column_data_csv:
     type: File
     outputBinding:
       glob: "cell_column_data.csv"
 
+  gene_row_data_csv:
+    type: File
+    outputBinding:
+      glob: "gene_row_data.csv"
+
   umap_coords_clusters_csv:
     type: File
     outputBinding:
       glob: "archr_umap_coords_clusters.csv"
+
+  cell_by_gene_raw_mtx:
+    type: File
+    outputBinding:
+      glob: "cell_by_gene_raw.mtx"
 
 baseCommand: [Rscript, /opt/run_ArchR_analysis.R]

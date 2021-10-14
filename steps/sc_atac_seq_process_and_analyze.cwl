@@ -76,13 +76,21 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/peaks_csv
 
-  markers_csv:
+  peak_markers_csv:
     type: File
-    outputSource: analyze_with_ArchR/markers_csv
+    outputSource: analyze_with_ArchR/peak_markers_csv
+
+  gene_markers_csv:
+    type: File
+    outputSource: analyze_with_ArchR/gene_markers_csv
 
   cell_column_data_csv:
     type: File
     outputSource: analyze_with_ArchR/cell_column_data_csv
+
+  gene_row_data_csv:
+    type: File
+    outputSource: analyze_with_ArchR/gene_row_data_csv
 
   umap_coords_clusters_csv:
     type: File
@@ -176,9 +184,12 @@ steps:
       - GeneScores-Marker-Heatmap_pdf
       - Peak-Marker-Heatmap_pdf
       - peaks_csv
-      - markers_csv
+      - peak_markers_csv
+      - gene_markers_csv
       - cell_column_data_csv
+      - gene_row_data_csv
       - umap_coords_clusters_csv
+      - cell_by_gene_raw_mtx
 
   create_fragment_file:
     run: sc_atac_seq_process_steps/create_fragment_file.cwl
@@ -191,12 +202,12 @@ steps:
 #  convert_to_h5ad:
 #    run: convert_to_h5ad.cwl
 #    in:
-#      umap_coords_csv: snapanalysis_analyze/umap_coords_csv
-#      cell_by_gene_raw_mtx: snapanalysis_analyze/cell_by_gene_raw_mtx
-#      cell_by_gene_smoothed_hdf5: snapanalysis_analyze/cell_by_gene_smoothed_hdf5
-#      cell_by_bin_mtx: snapanalysis_analyze/cell_by_bin_mtx
-#      cell_by_bin_barcodes: snapanalysis_analyze/cell_by_bin_barcodes
-#      cell_by_bin_bins: snapanalysis_analyze/cell_by_bin_bins
+#      umap_coords_clusters_csv: analyze_with_ArchR/umap_coords_clusters_csv
+#      cell_by_gene_raw_mtx: analyze_with_ArchR/cell_by_gene_raw_mtx
+##      cell_by_gene_smoothed_hdf5: snapanalysis_analyze/cell_by_gene_smoothed_hdf5
+##      cell_by_bin_mtx: snapanalysis_analyze/cell_by_bin_mtx
+##      cell_by_bin_barcodes: snapanalysis_analyze/cell_by_bin_barcodes
+##      cell_by_bin_bins: snapanalysis_analyze/cell_by_bin_bins
 #    out:
-#      - cell_by_bin_h5ad
+##      - cell_by_bin_h5ad
 #      - cell_by_gene_h5ad

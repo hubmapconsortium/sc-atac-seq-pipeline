@@ -78,9 +78,17 @@ outputs:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/peaks_csv
 
-  markers_csv:
+  peak_markers_csv:
     type: File
-    outputSource: sc_atac_seq_process_and_analyze/markers_csv
+    outputSource: sc_atac_seq_process_and_analyze/peak_markers_csv
+
+  gene_markers_csv:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/gene_markers_csv
+
+  gene_row_data_csv:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/gene_row_data_csv
 
   cell_column_data_csv:
     type: File
@@ -141,7 +149,9 @@ steps:
       - GeneScores-Marker-Heatmap_pdf
       - Peak-Marker-Heatmap_pdf
       - peaks_csv
-      - markers_csv
+      - gene_markers_csv
+      - peak_markers_csv
+      - gene_row_data_csv
       - cell_column_data_csv
       - umap_coords_clusters_csv
 

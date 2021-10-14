@@ -19,8 +19,10 @@ def main(
     cell_by_bin_bins: Path,
 ):
     umap_coords_df = pd.read_csv(umap_coords_csv, index_col=0)
-    umap_coords_df.loc[:, "cluster"] = umap_coords_df.loc[:, "cluster"].astype("category")
-    umap_coords = umap_coords_df.loc[:, ["umap.1", "umap.2"]].to_numpy()
+    umap_coords_df.loc[:, "cluster"] = umap_coords_df.loc[:, "Clusters"].astype("category")
+    umap_coords = umap_coords_df.loc[
+        :, ["IterativeLSI#UMAP_Dimension_1", "IterativeLSI#UMAP_Dimension_2"]
+    ].to_numpy()
 
     cell_by_bin_mat = scipy.io.mmread(cell_by_bin_mtx).astype(bool).tocsr()
     with open(cell_by_bin_barcodes) as f:

@@ -331,19 +331,30 @@ projSci <- addPeakMatrix(projSci)
 getAvailableMatrices(projSci)
 
 ## Create the cell by gene table
-message(paste("Creating cell by gene CSV file"))
-geneScoreMatrix <- getMatrixFromProject(ArchRProj = projSci, useMatrix = "GeneScoreMatrix")
+message(paste("Creating cell by gene MTX file"))
+geneScoreMatrixSE <- getMatrixFromProject(ArchRProj = projSci, useMatrix = "GeneScoreMatrix")
+geneScoreDataMatrix <- assays(geneScoreMatrixSE)$GeneScoreMatrix
+writeMM(geneScoreDataMatrix, 'cell_by_gene_raw.mtx')
+
 # Get row and column number matrix for assay with gene score > 0i
 # https://www.journaldev.com/45274/which-function-in-r
-geneScoreGt0RowAndColumnMatrix <- which(assay(geneScoreMatrix) > 0,arr.ind = T)
-geneRowDataDF <- rowData(geneScoreMatrix)
-geneColDataDF <- colData(geneScoreMatrix)
-# Get vector of gene information, e.g. seq, start, end, strand, gene name, with gene scores gt zero
-geneInformation <- geneRowDataDF[geneScoreGt0RowAndColumnMatrix[,1],]
-# Get vector of cell names with gene scores gt zero
-cellNames <- rownames(geneColDataDF[geneScoreGt0RowAndColumnMatrix[,2],])
-cellByGeneInfo <- cbind(cellNames, geneInformation)
-write.csv(cellByGeneInfo, file='cell_by_gene.csv')
+#geneScoreGt0RowAndColumnMatrix <- which(assay(geneScoreMatrixSE) > 0,arr.ind = T)
+
+message(paste("Creating gene row data CSV file"))
+geneRowDataDF <- rowData(geneScoreMatrixSE)
+write.csv(geneRowDataDF, file='gene_row_data.csv')
+
+#message(paste("Creating cell column data CSV file"))
+#cellColDataDF <- colData(geneScoreMatrixSE)
+#write.csv(cellColDataDF, file='cell_col_data.csv')
+
+
+## Get vector of gene information, e.g. seq, start, end, strand, gene name, with gene scores gt zero
+#geneInformation <- geneRowDataDF[geneScoreGt0RowAndColumnMatrix[,1],]
+## Get vector of cell names with gene scores gt zero
+#cellNames <- rownames(cellColDataDF[geneScoreGt0RowAndColumnMatrix[,2],])
+#cellByGeneInfo <- cbind(cellNames, geneInformation)
+#write.csv(cellByGeneInfo, file='cell_by_gene.csv')
 
 message(paste("Cell types:"))
 # First, lets remind ourselves of the cell types that we are working with in the
@@ -363,17 +374,16 @@ markersGS <- getMarkerFeatures(
        testMethod = "wilcoxon"
  )
 
-markerGSList <- getMarkers(markersGS, cutOff = "FDR <= 0.01 & Log2FC >= 1.25")
+markersGSList <- getMarkers(markersGS, cutOff = "FDR <= 0.01 & Log2FC >= 1")
 #markerGSList$C1
+write.csv(markersGSList, file = "gene_markers.csv")
 
-heatmapGS <- markerHeatmap(
+heatmapGS <- plotMarkerHeatmap(
      seMarker = markersGS, 
-     cutOff = "FDR <= 0.01 & Log2FC >= 1.25", 
+     cutOff = "FDR <= 0.01 & Log2FC >= 1", 
      transpose = TRUE
   )
-
-ComplexHeatmap::draw(heatmapGS, heatmap_legend_side = "bot", annotation_legend_side = "bot")
-
+draw(heatmapGS, heatmap_legend_side = "bot", annotation_legend_side = "bot")
 plotPDF(heatmapGS, name = "GeneScores-Marker-Heatmap", width = 8, height = 6, ArchRProj = projSci, addDOC = FALSE)
 
 
@@ -399,20 +409,18 @@ markersPeaks
 # GRangesList object by setting returnGR = TRUE.
 markers_gr <- getMarkers(markersPeaks, cutOff = "FDR <= 0.01 & Log2FC >= 1", returnGR = TRUE)
 markers_gr
-write.csv(markers_gr, file = "markers.csv")
+write.csv(markers_gr, file = "peak_markers.csv")
 
 # ArchR provides multiple plotting functions to interact with the SummarizedExperiment objects returned by getMarkerFeatures().
 # We can visualize these marker peaks (or any features output by getMarkerFeatures()) as a heatmap using the markerHeatmap() function.
 heatmapPeaks <- plotMarkerHeatmap(
   seMarker = markersPeaks, 
-  cutOff = "FDR <= 0.1 & Log2FC >= 0.5",
+  cutOff = "FDR <= 0.01 & Log2FC >= 1",
   transpose = TRUE
   )
 
-
 # We can plot this heatmap using draw().
 draw(heatmapPeaks, heatmap_legend_side = "bot", annotation_legend_side = "bot")
-
 plotPDF(heatmapPeaks, name = "Peak-Marker-Heatmap", width = 8, height = 6, ArchRProj = projSci, addDOC = FALSE)
 
 # Saving and Loading an ArchRProject
