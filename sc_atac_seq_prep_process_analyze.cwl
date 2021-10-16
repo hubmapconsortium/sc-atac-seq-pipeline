@@ -98,6 +98,13 @@ outputs:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/umap_coords_clusters_csv
 
+  cell_by_bin_h5ad:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/cell_by_bin_h5ad
+
+  cell_by_gene_h5ad:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/cell_by_gene_h5ad
 
 
 steps:
@@ -149,11 +156,23 @@ steps:
       - GeneScores-Marker-Heatmap_pdf
       - Peak-Marker-Heatmap_pdf
       - peaks_csv
+      - peaks_bed
       - gene_markers_csv
       - peak_markers_csv
       - gene_row_data_csv
       - cell_column_data_csv
       - umap_coords_clusters_csv
+      - cell_by_bin_h5ad
+      - cell_by_gene_h5ad
+
+  qc_measures:
+    run: steps/qc_measures.cwl
+    in:
+      bam_file: sc_atac_seq_process_and_analyze/bam_file
+      peak_file: sc_atac_seq_process_and_analyze/peaks_bed
+      cell_by_bin_h5ad: sc_atac_seq_process_and_analyze/cell_by_bin_h5ad
+    out:
+      - qc_report
 
 
   # thanks to @pvanheus in the CWL gitter instance

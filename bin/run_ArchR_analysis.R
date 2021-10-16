@@ -80,11 +80,11 @@ ArrowFiles <- createArrowFiles(
 # After Arrow file creation, we can infer potential doublets (a single droplet
 # containing multiple cells) that can confound downstream results. This is
 # done using the addDoubletScores() function.
-doubScores <- addDoubletScores(
+doubletScores <- addDoubletScores(
   input = ArrowFiles,
   k = 10, # Refers to how many cells near a "pseudo-doublet" to count.
   knnMethod = "UMAP", #Refers to the embedding to use for nearest neighbor search.
-  dimsToUse = 1:15 # Have to make upper dimension less than default of 30 since we only have 18 columns... 
+#  dimsToUse = 1:15 # Have to make upper dimension less than default of 30 since we only have 18 columns... 
 )
 
 
@@ -96,7 +96,7 @@ projSci <- ArchRProject(
 projSci
 
 # We can check how much memory is used to store the ArchRProject in memory within R:
-paste0("Memory Size = ", round(object.size(projSci) / 10^6, 3), " MB")
+message(paste0("Memory Size = ", round(object.size(projSci) / 10^6, 3), " MB"))
 ## [1] “Memory Size = 37.135 MB”
 
 # We can also ask which data matrices are available within the ArchRProject which
@@ -222,36 +222,6 @@ plotPDF(pfrag,pTSSEn, name = "QC-Sample-FragSizes-TSSProfile.pdf", ArchRProj = p
 
 saveArchRProject(ArchRProj = projSci, outputDirectory = "ArchRProjFiles", load = FALSE)
 
-# We can also ask which data matrices are available within the ArchRProject
-# which will be useful downstream once we start adding to this project:
-getAvailableMatrices(projSci)
-### [1] “GeneScoreMatrix” “TileMatrix”
-
-message(paste("Tile Matrix:"))
-tile_matrix = getMatrixFromProject(
-     ArchRProj = projSci,
-     useMatrix = "TileMatrix",
-     useSeqnames = "chr1",
-     verbose = TRUE,
-     binarize = TRUE,
-     threads = getArchRThreads(),
-     logFile = createLogFile("getTileMatrixFromProject")
-   )
-tile_matrix
-
-message(paste("Gene Score Matrix:"))
-gene_score_matrix = getMatrixFromProject(
-     ArchRProj = projSci,
-     useMatrix = "GeneScoreMatrix",
-     useSeqnames = "chr1",
-     verbose = TRUE,
-     binarize = TRUE,
-     threads = getArchRThreads(),
-     logFile = createLogFile("getGeneScoreMatrixFromProject")
-   )
-gene_score_matrix
-
-
 ## Now we can filter putative doublets based on the previously determined
 ## doublet scores using the filterDoublets() function. This doesn’t physically
 ## remove data from the Arrow files but rather tells the ArchRProject to ignore
@@ -276,12 +246,53 @@ projSci <- addClusters(input = projSci, reducedDims = "IterativeLSI")
 cellColDataDF <- getCellColData(projSci)
 write.csv(cellColDataDF, file='cell_column_data.csv')
 
+## Create the cell by gene table MTX and CSVs
+message(paste("Creating cell by gene MTX file"))
+geneScoreMatrixSE <- getMatrixFromProject(
+    ArchRProj = projSci, 
+    useMatrix = "GeneScoreMatrix",
+    logFile = createLogFile("getGeneScoreMatrixFromProject")
+)
+geneScoreDataMatrix <- assays(geneScoreMatrixSE)$GeneScoreMatrix
+# AnnData expects barcodes as rows not columns in convert_to_h5ad.cwl
+transposedGeneScoreDataMatrix <- t(geneScoreDataMatrix)
+writeMM(transposedGeneScoreDataMatrix, 'cell_by_gene_raw.mtx')
+
+message(paste("Creating gene row data CSV file"))
+geneRowDataDF <- rowData(geneScoreMatrixSE)
+write.csv(geneRowDataDF, file='gene_row_data.csv')
+
+## Create the cell by bin table MTX and CSVs
+message(paste("Creating cell by bin MTX file"))
+tileMatrixSE <- getMatrixFromProject(
+     ArchRProj = projSci,
+     useMatrix = "TileMatrix",
+     binarize = TRUE,
+     logFile = createLogFile("getTileMatrixFromProject")
+     )
+tileDataMatrix <- assays(tileMatrixSE)$TileMatrix
+# AnnData expects barcodes as rows not columns in convert_to_h5ad.cwl  
+transposedTileDataMatrix <- t(tileDataMatrix)
+writeMM(transposedTileDataMatrix, 'cell_by_bin_raw.mtx')
+
+message(paste("Creating cell by bin column data CSV file"))
+tileColDataDF <- colData(tileMatrixSE)
+write.csv(tileColDataDF, file='cell_by_bin_col_data.csv')
+
+message(paste("Creating cell by bin row data CSV file"))
+tileRowDataDF <- rowData(tileMatrixSE)
+write.csv(tileRowDataDF, file='cell_by_bin_row_data.csv')
+
+write.table(projSci$cellNames, 'barcodes.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
+write.table(tileRowDataDF, 'bins.txt', col.names=FALSE, row.names=FALSE, quote=FALSE)
+
+
 message(paste("Adding UMAP"))
 projSci <- addUMAP(ArchRProj = projSci, reducedDims = "IterativeLSI")
 
 message(paste("Getting embedding"))
 projSciEmbeddingWClustersDF = getEmbedding(ArchRProj = projSci, embedding = "UMAP", returnDF = TRUE)
-write.csv(projSciEmbeddingWClustersDF, file='umap_embedding.csv')
+#write.csv(projSciEmbeddingWClustersDF, file='umap_embedding.csv')
 
 message(paste("Adding Clusters column"))
 # https://stackoverflow.com/questions/48896190/add-column-to-r-dataframe-based-on-rowname
@@ -316,6 +327,21 @@ projSci <- addImputeWeights(projSci)
 ### If there is an issue, please report to github with logFile!
 ### 2020-04-21 16:33:19 : Computing Impute Weights Using Magic (Cell 2018), 0 mins elapsed.
 
+
+# Create hdf5 file containing smoothed data
+message(paste("Writing smoothed data to hdf5 file"))
+smoothedGeneScoreMatrixSE <- getMatrixFromProject(ArchRProj = projSci, useMatrix = "GeneScoreMatrix")
+smoothedGeneScoreDataMatrix <- assays(smoothedGeneScoreMatrixSE)$GeneScoreMatrix
+smooth_cell_by_gene_filename = 'cell_by_gene_smoothed.hdf5'
+message(paste("Writing smoothed cell by gene data to", smooth_cell_by_gene_filename))
+h5createFile(smooth_cell_by_gene_filename)
+# AnnData expects barcodes as rows not columns in convert_to_h5ad.cwl
+transposedSmoothedGeneScoreDataMatrix <- t(smoothedGeneScoreDataMatrix)
+h5write(as.matrix(transposedSmoothedGeneScoreDataMatrix ), smooth_cell_by_gene_filename, 'cell_by_gene_smoothed', level=0)
+h5write(geneRowDataDF$name, smooth_cell_by_gene_filename, 'genes')
+h5write(projSci$cellNames, smooth_cell_by_gene_filename, 'barcodes')
+
+
 projSci <- addGroupCoverages(ArchRProj = projSci, groupBy = "Clusters")
 pathToMacs2 <- findMacs2()
 projSci <- addReproduciblePeakSet(
@@ -325,36 +351,12 @@ projSci <- addReproduciblePeakSet(
     )
 
 peaks_gr = getPeakSet(projSci)
+message(paste("Writing peaks CSV and BED files"))
 write.csv(peaks_gr, file = "peaks.csv")
+library(rtracklayer)
+export.bed(peaks_gr, con='peaks.bed')
 
 projSci <- addPeakMatrix(projSci)
-getAvailableMatrices(projSci)
-
-## Create the cell by gene table
-message(paste("Creating cell by gene MTX file"))
-geneScoreMatrixSE <- getMatrixFromProject(ArchRProj = projSci, useMatrix = "GeneScoreMatrix")
-geneScoreDataMatrix <- assays(geneScoreMatrixSE)$GeneScoreMatrix
-writeMM(geneScoreDataMatrix, 'cell_by_gene_raw.mtx')
-
-# Get row and column number matrix for assay with gene score > 0i
-# https://www.journaldev.com/45274/which-function-in-r
-#geneScoreGt0RowAndColumnMatrix <- which(assay(geneScoreMatrixSE) > 0,arr.ind = T)
-
-message(paste("Creating gene row data CSV file"))
-geneRowDataDF <- rowData(geneScoreMatrixSE)
-write.csv(geneRowDataDF, file='gene_row_data.csv')
-
-#message(paste("Creating cell column data CSV file"))
-#cellColDataDF <- colData(geneScoreMatrixSE)
-#write.csv(cellColDataDF, file='cell_col_data.csv')
-
-
-## Get vector of gene information, e.g. seq, start, end, strand, gene name, with gene scores gt zero
-#geneInformation <- geneRowDataDF[geneScoreGt0RowAndColumnMatrix[,1],]
-## Get vector of cell names with gene scores gt zero
-#cellNames <- rownames(cellColDataDF[geneScoreGt0RowAndColumnMatrix[,2],])
-#cellByGeneInfo <- cbind(cellNames, geneInformation)
-#write.csv(cellByGeneInfo, file='cell_by_gene.csv')
 
 message(paste("Cell types:"))
 # First, lets remind ourselves of the cell types that we are working with in the
@@ -374,13 +376,13 @@ markersGS <- getMarkerFeatures(
        testMethod = "wilcoxon"
  )
 
-markersGSList <- getMarkers(markersGS, cutOff = "FDR <= 0.01 & Log2FC >= 1")
-#markerGSList$C1
+markersGSList <- getMarkers(markersGS, cutOff = "FDR <= 0.01 & Log2FC >= .5")
+message(paste("Writing gene markers CSV"))
 write.csv(markersGSList, file = "gene_markers.csv")
 
 heatmapGS <- plotMarkerHeatmap(
      seMarker = markersGS, 
-     cutOff = "FDR <= 0.01 & Log2FC >= 1", 
+     cutOff = "FDR <= 0.01 & Log2FC >= .5", 
      transpose = TRUE
   )
 draw(heatmapGS, heatmap_legend_side = "bot", annotation_legend_side = "bot")
@@ -407,7 +409,7 @@ markersPeaks
 
 # Instead of a list of DataFrame objects, we can use getMarkers() to return a
 # GRangesList object by setting returnGR = TRUE.
-markers_gr <- getMarkers(markersPeaks, cutOff = "FDR <= 0.01 & Log2FC >= 1", returnGR = TRUE)
+markers_gr <- getMarkers(markersPeaks, cutOff = "FDR <= 0.01 & Log2FC >= .5", returnGR = TRUE)
 markers_gr
 write.csv(markers_gr, file = "peak_markers.csv")
 
@@ -415,7 +417,7 @@ write.csv(markers_gr, file = "peak_markers.csv")
 # We can visualize these marker peaks (or any features output by getMarkerFeatures()) as a heatmap using the markerHeatmap() function.
 heatmapPeaks <- plotMarkerHeatmap(
   seMarker = markersPeaks, 
-  cutOff = "FDR <= 0.01 & Log2FC >= 1",
+  cutOff = "FDR <= 0.01 & Log2FC >= .5",
   transpose = TRUE
   )
 

@@ -15,28 +15,34 @@ inputs:
     type: File
     inputBinding:
       position: 1
-#  cell_by_gene_smoothed_hdf5:
-#    type: File
-#    inputBinding:
-#      position: 2
-#  cell_by_bin_mtx:
-#    type: File
-#    inputBinding:
-#      position: 3
-#  cell_by_bin_barcodes:
-#    type: File
-#    inputBinding:
-#      position: 4
-#  cell_by_bin_bins:
-#    type: File
-#    inputBinding:
-#      position: 5
-#
+  cell_by_gene_smoothed_hdf5:
+    type: File
+    inputBinding:
+      position: 2
+  cell_by_bin_mtx:
+    type: File
+    inputBinding:
+      position: 3
+  cell_by_bin_barcodes:
+    type: File
+    inputBinding:
+      position: 4
+  cell_by_bin_bins:
+    type: File
+    inputBinding:
+      position: 5
+
+  bin_size:
+    type: int?
+    inputBinding:
+      position: 6
+    default: 500
+
 outputs:
-#  cell_by_bin_h5ad:
-#    type: File
-#    outputBinding:
-#      glob: 'cell_by_bin.h5ad'
+  cell_by_bin_h5ad:
+    type: File
+    outputBinding:
+      glob: 'cell_by_bin.h5ad'
   cell_by_gene_h5ad:
     type: File
     outputBinding:

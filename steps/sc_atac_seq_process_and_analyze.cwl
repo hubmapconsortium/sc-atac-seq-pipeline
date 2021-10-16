@@ -76,6 +76,10 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/peaks_csv
 
+  peaks_bed:
+    type: File
+    outputSource: analyze_with_ArchR/peaks_bed
+
   peak_markers_csv:
     type: File
     outputSource: analyze_with_ArchR/peak_markers_csv
@@ -96,14 +100,13 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/umap_coords_clusters_csv
 
+  cell_by_bin_h5ad:
+    type: File
+    outputSource: convert_to_h5ad/cell_by_bin_h5ad
 
-#  cell_by_bin_h5ad:
-#    type: File
-#    outputSource: convert_to_h5ad/cell_by_bin_h5ad
-#
-#  cell_by_gene_h5ad:
-#    type: File
-#    outputSource: convert_to_h5ad/cell_by_gene_h5ad
+  cell_by_gene_h5ad:
+    type: File
+    outputSource: convert_to_h5ad/cell_by_gene_h5ad
 
 
 steps:
@@ -184,12 +187,17 @@ steps:
       - GeneScores-Marker-Heatmap_pdf
       - Peak-Marker-Heatmap_pdf
       - peaks_csv
+      - peaks_bed
       - peak_markers_csv
       - gene_markers_csv
       - cell_column_data_csv
       - gene_row_data_csv
       - umap_coords_clusters_csv
       - cell_by_gene_raw_mtx
+      - cell_by_gene_smoothed_hdf5
+      - cell_by_bin_mtx
+      - cell_by_bin_barcodes
+      - cell_by_bin_bins
 
   create_fragment_file:
     run: sc_atac_seq_process_steps/create_fragment_file.cwl
@@ -197,17 +205,15 @@ steps:
       input_bam: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
     out: [fragment_file]
 
-
-
-#  convert_to_h5ad:
-#    run: convert_to_h5ad.cwl
-#    in:
-#      umap_coords_clusters_csv: analyze_with_ArchR/umap_coords_clusters_csv
-#      cell_by_gene_raw_mtx: analyze_with_ArchR/cell_by_gene_raw_mtx
-##      cell_by_gene_smoothed_hdf5: snapanalysis_analyze/cell_by_gene_smoothed_hdf5
-##      cell_by_bin_mtx: snapanalysis_analyze/cell_by_bin_mtx
-##      cell_by_bin_barcodes: snapanalysis_analyze/cell_by_bin_barcodes
-##      cell_by_bin_bins: snapanalysis_analyze/cell_by_bin_bins
-#    out:
-##      - cell_by_bin_h5ad
-#      - cell_by_gene_h5ad
+  convert_to_h5ad:
+    run: convert_to_h5ad.cwl
+    in:
+      umap_coords_csv: analyze_with_ArchR/umap_coords_clusters_csv
+      cell_by_gene_raw_mtx: analyze_with_ArchR/cell_by_gene_raw_mtx
+      cell_by_gene_smoothed_hdf5: analyze_with_ArchR/cell_by_gene_smoothed_hdf5
+      cell_by_bin_mtx: analyze_with_ArchR/cell_by_bin_mtx
+      cell_by_bin_barcodes: analyze_with_ArchR/cell_by_bin_barcodes
+      cell_by_bin_bins: analyze_with_ArchR/cell_by_bin_bins
+    out:
+      - cell_by_bin_h5ad
+      - cell_by_gene_h5ad

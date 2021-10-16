@@ -108,6 +108,11 @@ outputs:
     outputBinding:
       glob: "peak_markers.csv"
 
+  peaks_bed:
+    type: File
+    outputBinding:
+      glob: "peaks.bed"
+
   gene_markers_csv:
     type: File
     outputBinding:
@@ -132,5 +137,25 @@ outputs:
     type: File
     outputBinding:
       glob: "cell_by_gene_raw.mtx"
+
+  cell_by_gene_smoothed_hdf5:
+    type: File
+    outputBinding:
+      glob: "cell_by_gene_smoothed.hdf5"
+
+  cell_by_bin_mtx:
+    type: File
+    outputBinding:
+      glob: "cell_by_bin.mtx"
+
+  cell_by_bin_barcodes:
+    type: File
+    outputBinding:
+      glob: "barcodes.txt"
+
+  cell_by_bin_bins:
+    type: File
+    outputBinding:
+      glob: "bins.txt"
 
 baseCommand: [Rscript, /opt/run_ArchR_analysis.R]
