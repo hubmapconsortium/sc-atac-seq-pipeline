@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
  && apt-get -y install \
     build-essential \
+    git \
     libcairo2-dev \
     libcurl4-gnutls-dev \
     libncurses-dev \

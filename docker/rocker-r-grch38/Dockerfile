@@ -1,4 +1,4 @@
-FROM rocker/tidyverse:4.1.0
+FROM rocker/r-ver:4.1.1
 # use tidyverse because it includes devtools so we don't need to specifically install it
 # https://hub.docker.com/r/rocker/tidyverse
 

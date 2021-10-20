@@ -14,7 +14,7 @@ c(
 
 # Docker image rocker/tidyverse includes devtools so no need to install it
 # First, install devtools (for installing GitHub packages) if it isn’t already installed:
-#if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
 
 # Then, install BiocManager (for installing bioconductor packages) if it isn’t already installed:
 if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
