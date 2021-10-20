@@ -18,6 +18,7 @@ c(
 
 # Then, install BiocManager (for installing bioconductor packages) if it isn’t already installed:
 if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+BiocManager::install(version = "3.13")
 
 tryCatch({
     BiocManager::install("DirichletMultinomial")
@@ -30,12 +31,11 @@ tryCatch({
 )
 
 # Then, install ArchR:
-#devtools::install_github("GreenleafLab/ArchR", ref="release_1.0.2", repos = BiocManager::repositories())
 tryCatch({
     devtools::install_github("GreenleafLab/ArchR", ref="release_1.0.2", repos = BiocManager::repositories())
 },
     error = function(e) {
-    message("Error installing DirichletMultinomial")
+    message("Error installing GreenleafLab/ArchR")
     message(e$message)
     quit("no", -1)
   }
@@ -44,7 +44,6 @@ tryCatch({
 ## Lastly, install all of the ArchR dependencies that arent installed by default:
 library(ArchR)
 
-#ArchR::installExtraPackages()
 tryCatch({
     ArchR::installExtraPackages()
 },
@@ -61,12 +60,11 @@ tryCatch({
 ## is Cairo (see below) which is installed by the ArchR::installExtraPackages()
 ## function. Cairo is not required but is highly recommended.
 
-# We installed MACS2 using python and archr_requirements.txt
+# We installed MACS2 using python and requirements.txt
 ## It is also highly recommended that you install MACS2, which requires python,
 ## and have the macs2 executable in your PATH variable. This will allow ArchR to call peaks using MACS2.
 ##pip install MACS2
 #
-#devtools::install_github("GreenleafLab/chromVARmotifs")
 tryCatch({
     devtools::install_github("GreenleafLab/chromVARmotifs")
 },
@@ -77,9 +75,8 @@ tryCatch({
   }
 )
 
-#install.packages("magick")
 tryCatch({
-    install.packages("magick")
+    install.packages("magick", version = "2.7.3")
 },
     error = function(e) {
     message("Error installing magick")

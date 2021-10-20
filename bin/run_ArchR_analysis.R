@@ -84,7 +84,6 @@ doubletScores <- addDoubletScores(
   input = ArrowFiles,
   k = 10, # Refers to how many cells near a "pseudo-doublet" to count.
   knnMethod = "UMAP", #Refers to the embedding to use for nearest neighbor search.
-#  dimsToUse = 1:15 # Have to make upper dimension less than default of 30 since we only have 18 columns... 
 )
 
 
@@ -231,7 +230,18 @@ projSci <- filterDoublets(ArchRProj = projSci)
 
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the addIterativeLSI() function.
-projSci <- addIterativeLSI(ArchRProj = projSci, useMatrix = "TileMatrix", name = "IterativeLSI")
+projSci <- addIterativeLSI(
+    ArchRProj = projSci,
+    useMatrix = "TileMatrix",
+    name = "IterativeLSI",
+    iterations = 5,
+    clusterParams = list(
+        resolution = c(2),
+        sampleCells = 10000,
+        maxClusters = 6, 
+        n.start = 10),
+    varFeatures = 25000
+    )
 #
 # To call clusters in this reduced dimension sub-space, we use the addClusters()
 # function which uses Seurat’s graph clustering as the default clustering method.
