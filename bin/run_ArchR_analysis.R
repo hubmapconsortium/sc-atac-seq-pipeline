@@ -283,7 +283,7 @@ tileMatrixSE <- getMatrixFromProject(
 tileDataMatrix <- assays(tileMatrixSE)$TileMatrix
 # AnnData expects barcodes as rows not columns in convert_to_h5ad.cwl  
 transposedTileDataMatrix <- t(tileDataMatrix)
-writeMM(transposedTileDataMatrix, 'cell_by_bin_raw.mtx')
+writeMM(transposedTileDataMatrix, 'cell_by_bin.mtx')
 
 message(paste("Creating cell by bin column data CSV file"))
 tileColDataDF <- colData(tileMatrixSE)
