@@ -374,30 +374,39 @@ message(paste("Cell types:"))
 table(projSci$Clusters)
 
 
-# To identify marker genes based on gene scores, we call the getMarkerFeatures()
-# function with useMatrix = "GeneScoreMatrix". We specify that we want to know
-# the cluster-specific features with groupBy = "Clusters" which tells ArchR to use
-# the “Clusters” column in cellColData to stratify cell groups.
-markersGS <- getMarkerFeatures(
-       ArchRProj = projSci, 
-       useMatrix = "GeneScoreMatrix", 
-       groupBy = "Clusters",
-       bias = c("TSSEnrichment", "log10(nFrags)"),
-       testMethod = "wilcoxon"
- )
+# Sometimes when trying to get marker genes an error occurs like:
+# 'Found less than 100 cells for background matching, Lowering k to 0'
+# so put the following in a try catch block
+tryCatch({
+    # To identify marker genes based on gene scores, we call the getMarkerFeatures()
+    # function with useMatrix = "GeneScoreMatrix". We specify that we want to know
+    # the cluster-specific features with groupBy = "Clusters" which tells ArchR to use
+    # the “Clusters” column in cellColData to stratify cell groups.
+    markersGS <- getMarkerFeatures(
+           ArchRProj = projSci, 
+           useMatrix = "GeneScoreMatrix",
+           groupBy = "Clusters",
+           bias = c("TSSEnrichment", "log10(nFrags)"),
+           testMethod = "wilcoxon"
+     )
 
-markersGSList <- getMarkers(markersGS, cutOff = "FDR <= 0.01 & Log2FC >= .5")
-message(paste("Writing gene markers CSV"))
-write.csv(markersGSList, file = "gene_markers.csv")
+    markersGSList <- getMarkers(markersGS, cutOff = "FDR <= 0.01 & Log2FC >= .5")
+    message(paste("Writing gene markers CSV"))
+    write.csv(markersGSList, file = "gene_markers.csv")
 
-heatmapGS <- plotMarkerHeatmap(
-     seMarker = markersGS, 
-     cutOff = "FDR <= 0.01 & Log2FC >= .5", 
-     transpose = TRUE
-  )
-draw(heatmapGS, heatmap_legend_side = "bot", annotation_legend_side = "bot")
-plotPDF(heatmapGS, name = "GeneScores-Marker-Heatmap", width = 8, height = 6, ArchRProj = projSci, addDOC = FALSE)
-
+    heatmapGS <- plotMarkerHeatmap(
+         seMarker = markersGS,
+         cutOff = "FDR <= 0.01 & Log2FC >= .5",
+         transpose = TRUE
+      )
+    draw(heatmapGS, heatmap_legend_side = "bot", annotation_legend_side = "bot")
+    plotPDF(heatmapGS, name = "GeneScores-Marker-Heatmap", width = 8, height = 6, ArchRProj = projSci, addDOC = FALSE)
+},
+    error = function(e) {
+    message("Error creating gene markers CSV and/or heatmap")
+    message(e$message)
+  }
+)
 
 # Often times, we are interested to know which peaks are unique to an individual
 # cluster or a small group of clusters. 

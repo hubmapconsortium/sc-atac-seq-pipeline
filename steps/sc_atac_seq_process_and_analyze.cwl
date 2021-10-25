@@ -65,7 +65,7 @@ outputs:
     outputSource: analyze_with_ArchR/Plot-UMAP-Sample-Clusters_pdf
 
   GeneScores-Marker-Heatmap_pdf:
-    type: File
+    type: File?
     outputSource: analyze_with_ArchR/GeneScores-Marker-Heatmap_pdf
 
   Peak-Marker-Heatmap_pdf:
@@ -85,7 +85,7 @@ outputs:
     outputSource: analyze_with_ArchR/peak_markers_csv
 
   gene_markers_csv:
-    type: File
+    type: File?
     outputSource: analyze_with_ArchR/gene_markers_csv
 
   cell_column_data_csv:

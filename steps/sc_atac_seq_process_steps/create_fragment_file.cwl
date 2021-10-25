@@ -1,7 +1,7 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-label: snaptools create fragment file
+label: create fragment file
 cwlVersion: v1.2
 
 requirements:

@@ -87,7 +87,6 @@ steps:
 #    scatter: [input_fastq1, input_fastq2]
     scatter: [Fastq_1, Fastq_2]
     scatterMethod: dotproduct
-#    run: steps/create_snap_steps/snaptools_align_paired_end_tool.cwl
     run: steps/BWA-Mem.cwl 
     in:
       alignment_index: index_ref_genome/genome_alignment_index

@@ -5,11 +5,11 @@ from pathlib import Path
 from subprocess import run
 from typing import Callable, Dict, List, Tuple, Union
 
-import snaptools_defaults
+import pipeline_defaults
 from utils import find_base_index_path, identity
 
 # 3-tuples:
-#  [0] command-line argument to snaptools
+#  [0] command-line argument to pipeline
 #  [1] default path
 #  [2] function used to adjust the path (both default path and user-provided)
 #      (if no adjustment required, use 'identity')
@@ -23,21 +23,21 @@ CommandData = Tuple[
     ],
 ]
 
-SNAPTOOLS_COMMAND_DEFAULTS: Dict[str, List[CommandData]] = {
+PIPELINE_COMMAND_DEFAULTS: Dict[str, List[CommandData]] = {
     "mem": [
-        ("--alignment-index", snaptools_defaults.DEFAULT_ALIGNMENT_INDEX, find_base_index_path),
+        ("--alignment-index", pipeline_defaults.DEFAULT_ALIGNMENT_INDEX, find_base_index_path),
     ]
 }
 
 
-def run_with_defaults(snaptools_command: str, other_args: List[Union[Path, str]]):
+def run_with_defaults(pipeline_command: str, other_args: List[Union[Path, str]]):
     args = other_args.copy()
 
     # For each command, check known options/arguments with default values.
     # If the option is present, transform with the provided function (e.g.
     # finding the "base" path of a genome index). If the option is not present,
     # append with the default value
-    for option, default, func in SNAPTOOLS_COMMAND_DEFAULTS[snaptools_command]:
+    for option, default, func in PIPELINE_COMMAND_DEFAULTS[pipeline_command]:
         if option in args:
             existing_option_index = args.index(option)
             value_index = existing_option_index + 1
@@ -52,7 +52,7 @@ def run_with_defaults(snaptools_command: str, other_args: List[Union[Path, str]]
             # insert the reference genome index path just after 'bwa mem'
             args.insert(0, (func(default)))
 
-    command = ["bwa", snaptools_command]
+    command = ["bwa", pipeline_command]
     command.extend(fspath(arg) for arg in args)
 
     run(command, check=True)
@@ -60,12 +60,12 @@ def run_with_defaults(snaptools_command: str, other_args: List[Union[Path, str]]
 
 if __name__ == "__main__":
     p = ArgumentParser()
-    p.add_argument("snaptools_command")
+    p.add_argument("pipeline_command")
     p.add_argument(
         "other_arg",
         nargs="*",
-        help="Arguments to the chosen snaptools command",
+        help="Arguments to the chosen pipeline command",
     )
     args = p.parse_args()
 
-    run_with_defaults(args.snaptools_command, args.other_arg)
+    run_with_defaults(args.pipeline_command, args.other_arg)

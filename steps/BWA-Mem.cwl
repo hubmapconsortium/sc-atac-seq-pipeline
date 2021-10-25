@@ -4,7 +4,6 @@ class: CommandLineTool
 
 requirements:
   DockerRequirement:
-    #dockerPull: "quay.io/biocontainers/bwa:0.7.17--ha92aebf_3"
     dockerPull: hubmap/sc-atac-seq-grch38
 
 
@@ -147,7 +146,7 @@ inputs:
       
 
 #baseCommand: [bwa, mem]
-baseCommand: [/opt/snaptools_wrapper.py, mem]
+baseCommand: [/opt/pipeline_wrapper.py, mem]
 
 stdout: unsorted_reads.sam
 

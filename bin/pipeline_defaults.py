@@ -2,7 +2,6 @@ from pathlib import Path
 
 SUPPLEMENTARY_DATA_PATH = Path("/opt/supplementary-data")
 
-# Some of these are only used by SnapATAC.
 # TODO: refactor so the same data is usable both in Python and R
 
 DEFAULT_ALIGNMENT_INDEX = SUPPLEMENTARY_DATA_PATH / "bwa-index"

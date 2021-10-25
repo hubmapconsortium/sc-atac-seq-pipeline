@@ -1,8 +1,8 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-id: snaptools_index_ref_genome
-label: snaptools index reference genome
+id: index_ref_genome
+label: index reference genome
 cwlVersion: v1.2
 
 requirements:

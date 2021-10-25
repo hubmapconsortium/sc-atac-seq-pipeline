@@ -89,7 +89,7 @@ outputs:
       glob: "*/Plots/Peak-Call-Summary.pdf"
 
   GeneScores-Marker-Heatmap_pdf:
-    type: File
+    type: File?
     outputBinding:
       glob: "*/Plots/GeneScores-Marker-Heatmap.pdf"
 
@@ -114,7 +114,7 @@ outputs:
       glob: "peaks.bed"
 
   gene_markers_csv:
-    type: File
+    type: File?
     outputBinding:
       glob: "gene_markers.csv"
 

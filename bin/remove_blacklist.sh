@@ -15,7 +15,7 @@ if [[ "$*" == *--bed-file* ]]
 then
   echo "Removing blacklisted regions"
   # Get the PG tags from the header
-  # SnapTools snapPre needs this
+  # TODO is it necessary to do this anymore? SnapTools snapPre needed this
   # and bedtools intersect strips it from the header
   samtools view -H ${2} | grep @PG > pg.txt
   
