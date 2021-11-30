@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38:1.4.3
+    dockerPull: hubmap/sc-atac-seq-grch38
 
 inputs:
   bam_file:
@@ -21,7 +21,7 @@ inputs:
       position: 1
 
   cell_by_bin_h5ad:
-    type: File
+    type: File?
     inputBinding:
       position: 2
 
