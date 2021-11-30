@@ -50,7 +50,7 @@ RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSI
  && rm -rf /opt/samtools-${SAMTOOLS_VERSION} /opt/samtools-${SAMTOOLS_VERSION}.tar.bz2
 
 ENV BWA_VERSION=0.7.17
-RUN wget -O bwa-${BWA_VERSION}.tar.bz2 https://sourceforge.net/projects/bio-bwa/files/bwa-${BWA_VERSION}.tar.bz2/download \
+RUN wget https://github.com/lh3/bwa/releases/download/v${BWA_VERSION}/bwa-${BWA_VERSION}.tar.bz2 \
  && tar -xf bwa-${BWA_VERSION}.tar.bz2 \
  && cd bwa-${BWA_VERSION} \
  && make \
