@@ -1,6 +1,11 @@
 #!/usr/bin/env Rscript
 library(optparse)
 
+# https://github.com/GreenleafLab/ArchR/discussions/1044#discussioncomment-1405648
+# Following two library calls needed when using R 4.1.1
+library(parallel)
+library(magick)
+
 option_list = list(
   make_option(
     c("-b", "--bam_file"),
