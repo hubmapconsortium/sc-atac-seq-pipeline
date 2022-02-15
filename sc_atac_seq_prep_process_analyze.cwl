@@ -8,20 +8,12 @@ requirements:
 
 inputs:
   assay: string
-  reference_genome_fasta: File?
-  alignment_index: File?
-  size_index: File?
-  genome_name: string?
   sequence_directory: Directory[]
 
   threads: int?
   exclude_bam: boolean?
 
 outputs:
-  sam_file:
-    type: File
-    outputSource: sc_atac_seq_process_and_analyze/unsorted_reads
-
   fastqc_dir:
     type: Directory[]
     outputSource: fastqc/fastqc_dir
@@ -132,17 +124,11 @@ steps:
      assay: assay
      concat_fastq_dir: concat_fastq/output_directory
 
-     reference_genome_fasta: reference_genome_fasta
-     alignment_index: alignment_index
-     size_index: size_index
-     genome_name: genome_name
-
      input_fastq1: concat_fastq/merged_fastq_r1
      input_fastq2: concat_fastq/merged_fastq_r2
 
      threads: threads
     out:
-      - unsorted_reads
       - bam_file
       - fragment_file
       - Fragment_Size_Distribution_pdf
@@ -173,7 +159,6 @@ steps:
       cell_by_bin_h5ad: sc_atac_seq_process_and_analyze/cell_by_bin_h5ad
     out:
       - qc_report
-
 
   # thanks to @pvanheus in the CWL gitter instance
   maybe_save_bam_file:

@@ -1,4 +1,4 @@
-FROM hubmap/rocker-r-grch38:latest
+FROM rocker/tidyverse:4.1.1
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -26,7 +26,6 @@ COPY install_R_packages.R /opt
 RUN Rscript /opt/install_R_packages.R \
  && rm /opt/install_R_packages.R
 
-
 COPY requirements.txt /opt
 RUN python3 -m pip install -r /opt/requirements.txt \
  && rm -rf /root/.cache/pip /opt/requirements.txt
@@ -44,15 +43,6 @@ RUN ./configure \
  && make \
  && make install \
  && rm -rf /opt/samtools-${SAMTOOLS_VERSION} /opt/samtools-${SAMTOOLS_VERSION}.tar.bz2
-
-WORKDIR /opt
-ENV BWA_VERSION=0.7.17
-RUN wget -O bwa-${BWA_VERSION}.tar.bz2 https://sourceforge.net/projects/bio-bwa/files/bwa-${BWA_VERSION}.tar.bz2/download \
- && tar -xf bwa-${BWA_VERSION}.tar.bz2
-WORKDIR bwa-${BWA_VERSION}
-RUN make \
- && cp bwa /usr/local/bin \
- && rm -rf /opt/bwa-${BWA_VERSION} /opt/bwa-${BWA_VERSION}.tar.bz2
 
 WORKDIR /opt
 ENV BEDTOOLS_VERSION=2.29.1

@@ -1,160 +1,39 @@
 #!/usr/bin/env cwl-runner
-cwlVersion: v1.0
+
 class: CommandLineTool
+id: align_reads
+label: align paired end reads with HISAT2
+cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38
-
-
-arguments:
-  - position: 1
-    valueFrom: "--"
+    dockerPull: hubmap/hubmap/hisat2-hg38:latest
 
 inputs:
-  alignment_index:
-    type: Directory?
-    inputBinding:
-      position: 2
-      prefix: --alignment_index
-    doc: The alignment index to use.
-
-
-#  InputFile:
-#    type: File[]
-#    format:
-#      - edam:format_1930 # FASTA
-#      - edam:format_1931 # FASTQ
-#    inputBinding:
-#      position: 201
-
-  Fastq_1:
+  input_fastq1:
     type: File
     inputBinding:
-      position: 202
+      position: 3
+    doc: The first paired end fastq file to be aligned.
 
-  Fastq_2:
+  input_fastq2:
     type: File
     inputBinding:
-      position: 203
+      position: 4
+    doc: The second paired end fastq file to be aligned.
 
-
-    
-#  Index:
-#    type: File
-#    inputBinding:
-#      position: 200
-#    secondaryFiles:
-#      - .fai
-#      - .amb
-#      - .ann
-#      - .bwt
-#      - .pac
-#      - .sa
-
-#Optional arguments
-
-  Threads:
+  num_threads:
     type: int?
     inputBinding:
-      prefix: "-t"
-
-  MinSeedLen:
-    type: int?
-    inputBinding:
-      prefix: "-k"
-  
-  BandWidth:
-    type: int?
-    inputBinding:
-      prefix: "-w"
-
-  ZDropoff:
-    type: int?
-    inputBinding:
-      prefix: "-d"
-
-  SeedSplitRatio:
-    type: float?
-    inputBinding:
-      prefix: "-r"
-    
-  MaxOcc:
-    type: int?
-    inputBinding:
-      prefix: "-c"
-
-  MatchScore:
-    type: int?
-    inputBinding:
-      prefix: "-A"
-
-  MmPenalty:
-    type: int?
-    inputBinding:
-      prefix: "-B"
-
-  GapOpenPen:
-    type: int?
-    inputBinding:
-      prefix: "-O"
-
-  GapExtPen:
-    type: int?
-    inputBinding:
-      prefix: "-E"
-
-  ClipPen:
-    type: int?
-    inputBinding:
-      prefix: "-L"
-
-  UnpairPen:
-    type: int?
-    inputBinding:
-      prefix: "-U"
-
-  RgLine:
-    type: string?
-    inputBinding:
-      prefix: "-R"
-
-  VerboseLevel:
-    type: int?
-    inputBinding:
-      prefix: "-v"
-
-  isOutSecAlign:
-    type: boolean?
-    inputBinding:
-      prefix: "-a"
-
-  isMarkShortSplit:
-    type: boolean?
-    inputBinding:
-      prefix: "-M"
-
-  isUseHardClip:
-    type: boolean?
-    inputBinding:
-      prefix: "-H"
-
-  isMultiplexedPair:
-    type: boolean?
-    inputBinding:
-      prefix: "-p"
-      
-
-#baseCommand: [bwa, mem]
-baseCommand: [/opt/pipeline_wrapper.py, mem]
-
-stdout: unsorted_reads.sam
+      position: 1
+      prefix: --processes
+    default: 16
+    doc: The number of threads to use.
 
 outputs:
-  reads_stdout:
-    type: stdout
-    
-$namespaces:
-  edam: http://edamontology.org/
-$schemas:
-  - http://edamontology.org/EDAM_1.18.owl
+  paired_end_bam:
+    type: File
+    outputBinding:
+      glob: alignment.bam
+
+baseCommand: [/opt/align_reads.py]

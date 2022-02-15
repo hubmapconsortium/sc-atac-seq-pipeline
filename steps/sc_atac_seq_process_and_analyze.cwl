@@ -11,22 +11,14 @@ inputs:
   assay: string
   concat_fastq_dir: Directory
 
-  reference_genome_fasta: File?
-  alignment_index: File?
-  size_index: File?
-  genome_name: string?
   input_fastq1: File
   input_fastq2: File
   threads: int?
 
 outputs:
-  unsorted_reads:
-    type: File
-    outputSource: align_reads/reads_stdout
-
   bam_file:
     type: File
-    outputSource: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
+    outputSource: align_reads/paired_end_bam
 
   fragment_file:
     type: File
@@ -110,15 +102,6 @@ outputs:
 
 
 steps:
-  index_ref_genome:
-    run: sc_atac_seq_process_steps/index_ref_genome_tool.cwl
-    in:
-      input_fasta: reference_genome_fasta
-      alignment_index: alignment_index
-      size_index: size_index
-    out:
-      [genome_alignment_index, genome_size_index]
-
   adjust_barcodes:
     run: adjust-barcodes.cwl
     in:
@@ -130,50 +113,31 @@ steps:
     out:
      [adj_fastq_dir]
 
-
   align_reads:
-    run: BWA-Mem.cwl
+    run: align_reads.cwl
     in:
-      alignment_index: index_ref_genome/genome_alignment_index
-#      InputFile:
-#       source: adjust_barcodes/adj_fastq_dir
-#       valueFrom: |
-#          ${
-#            return [{"class":"File", "location": self.location + "/barcode_added_R1.fastq"},
-#                    {"class":"File", "location": self.location + "/barcode_added_R2.fastq"}]
-#          }
+      num_threads: threads
 
-
-      Fastq_1: 
+      input_fastq1:
         source: adjust_barcodes/adj_fastq_dir
         valueFrom: |
           ${
-            return {"class":"File", "location": self.location + "/barcode_added_R1.fastq"}
+            return {"class": "File", "location": self.location + "/barcode_added_R1.fastq"}
           }
 
-      Fastq_2:
+      input_fastq2:
         source: adjust_barcodes/adj_fastq_dir
         valueFrom: |
           ${
-            return {"class":"File", "location": self.location + "/barcode_added_R2.fastq"}
+            return {"class": "File", "location": self.location + "/barcode_added_R2.fastq"}
           }
 
-
-
-      # Index is provided by 'alignment_index input above
-    out: [reads_stdout] 
-
-
-  add_cell_identifiers_and_sort:
-    run: add_cell_identifiers_and_sort.cwl
-    in:
-       sam_file: align_reads/reads_stdout
-    out: [sorted_BAM_with_cell_ids]
+    out: [paired_end_bam]
 
   analyze_with_ArchR:
     run: sc_atac_seq_analyze_steps/archr_analyze.cwl
     in:
-      bam_file: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
+      bam_file: align_reads/paired_end_bam
       threads: threads
     out:
       - Fragment_Size_Distribution_pdf
@@ -202,7 +166,7 @@ steps:
   create_fragment_file:
     run: sc_atac_seq_process_steps/create_fragment_file.cwl
     in:
-      input_bam: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
+      input_bam: align_reads/paired_end_bam
     out: [fragment_file]
 
   convert_to_h5ad:
