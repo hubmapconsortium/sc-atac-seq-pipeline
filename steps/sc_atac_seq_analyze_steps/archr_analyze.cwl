@@ -73,11 +73,6 @@ outputs:
     outputBinding:
       glob: "*/Plots/TSS-vs-Frags.pdf"
 
-  Rplots_pdf:
-    type: File
-    outputBinding:
-      glob: "Rplots.pdf"
-
   Plot-UMAP-Sample-Clusters_pdf:
     type: File
     outputBinding:

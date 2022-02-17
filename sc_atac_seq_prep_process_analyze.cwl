@@ -50,10 +50,6 @@ outputs:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/Peak-Call-Summary_pdf
 
-  Rplots_pdf:
-    type: File
-    outputSource: sc_atac_seq_process_and_analyze/Rplots_pdf
-
   Plot-UMAP-Sample-Clusters_pdf:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/Plot-UMAP-Sample-Clusters_pdf
@@ -65,10 +61,6 @@ outputs:
   Peak-Marker-Heatmap_pdf:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/Peak-Marker-Heatmap_pdf
-
-  peaks_csv:
-    type: File
-    outputSource: sc_atac_seq_process_and_analyze/peaks_csv
 
   peak_markers_csv:
     type: File
@@ -98,6 +90,9 @@ outputs:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/cell_by_gene_h5ad
 
+  genome_build_json:
+    type: File
+    outputSource: write_genome_build/genome_build_json
 
 steps:
   fastqc:
@@ -137,11 +132,9 @@ steps:
       - QC-Sample-Statistics_pdf
       - TSS-vs-Frags_pdf
       - Peak-Call-Summary_pdf
-      - Rplots_pdf
       - Plot-UMAP-Sample-Clusters_pdf
       - GeneScores-Marker-Heatmap_pdf
       - Peak-Marker-Heatmap_pdf
-      - peaks_csv
       - peaks_bed
       - gene_markers_csv
       - peak_markers_csv
@@ -159,6 +152,11 @@ steps:
       cell_by_bin_h5ad: sc_atac_seq_process_and_analyze/cell_by_bin_h5ad
     out:
       - qc_report
+
+  write_genome_build:
+    run: steps/write_genome_build.cwl
+    in: {}
+    out: [genome_build_json]
 
   # thanks to @pvanheus in the CWL gitter instance
   maybe_save_bam_file:

@@ -1,0 +1,50 @@
+[
+	{
+		"pattern": "qc_report\\.json",
+		"description": "Quality control report, in JSON format",
+		"edam_ontology_term": "EDAM_1.24.format_3464",
+		"is_qa_qc": true
+	},
+	{
+		"pattern": "genome_build\\.json",
+		"description": "Genome build information in JSON format",
+		"edam_ontology_term": "EDAM_1.24.format_3464"
+	},
+	{
+		"pattern": "(?P<filename>.*)_fastqc\\.html",
+		"description": "FastQC report for {filename}.fastq, HTML version",
+		"edam_ontology_term": "EDAM_1.24.format_2331",
+		"is_qa_qc": true
+	},
+	{
+		"pattern": "(?P<filename>.*)_fastqc\\.zip",
+		"description": "FastQC report for {filename}.fastq, zip version",
+		"edam_ontology_term": "EDAM_1.24.format_2333",
+		"is_qa_qc": true
+	},
+	{
+		"pattern": "cell_by_gene\\.h5ad",
+		"description": "Cell by gene matrix (sparse, and smoothed with MAGIC), in H5AD format",
+		"edam_ontology_term": "EDAM_1.24.format_3590"
+	},
+	{
+		"pattern": "cell_by_bin\\.h5ad",
+		"description": "Sparse cell by bin matrix, in H5AD format",
+		"edam_ontology_term": "EDAM_1.24.format_3590"
+	},
+	{
+		"pattern": "frags\\.sort\\.bed\\.gz",
+		"description": "Fragment file from Sinto",
+		"edam_ontology_term": "EDAM_1.24.format_3003"
+	},
+	{
+		"pattern": "peaks\\.bed",
+		"description": "Peaks called across entire data set",
+		"edam_ontology_term": "EDAM_1.24.format_3003"
+	},
+	{
+		"pattern": "archr_umap_coords_clusters\\.csv",
+		"description": "Per-cell UMAP coordinates and cluster assignments",
+		"edam_ontology_term": "EDAM_1.24.format_3752"
+	}
+]
