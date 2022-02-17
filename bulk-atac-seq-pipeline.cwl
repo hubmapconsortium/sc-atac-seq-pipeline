@@ -87,7 +87,7 @@ steps:
 #    scatter: [input_fastq1, input_fastq2]
     scatter: [Fastq_1, Fastq_2]
     scatterMethod: dotproduct
-    run: steps/BWA-Mem.cwl 
+    run: steps/BWA-Mem.cwl
     in:
       alignment_index: index_ref_genome/genome_alignment_index
 #      InputFile: [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
