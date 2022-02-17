@@ -1,13 +1,13 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-id: snaptools_remove_blacklist
-label: snaptools remove blacklist
+id: remove_blacklist
+label: remove blacklist
 cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38
+    dockerPull: hubmap/sc-atac-seq-hg38
 
 inputs:
   bam_file:

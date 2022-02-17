@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38
+    dockerPull: hubmap/sc-atac-seq-hg38
 
 inputs:
   unsorted_paired_end_bam:
@@ -19,7 +19,7 @@ inputs:
     type: string
     inputBinding:
       position: 1
-    default: "sorted-snaptools_alignment.bam"
+    default: "sorted_alignment.bam"
 
   threads:
     type: int?
