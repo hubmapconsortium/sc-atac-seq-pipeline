@@ -6,7 +6,6 @@ from collections import Counter
 from os import fspath
 from pathlib import Path
 from statistics import median
-from typing import Optional
 
 import anndata
 import HTSeq
@@ -20,7 +19,7 @@ def main(
     bam_file: Path,
     peak_file: Path,
     annotations_file: Path,
-    cell_by_bin_file: Optional[Path] = None,
+    cell_by_bin_file: Path = None,
 ):
     logging.info("Building exon/transcript index")
     # TODO: fix htseq                      ↓↓↓
@@ -122,7 +121,7 @@ def main(
         cell_by_bin = anndata.read_h5ad(cell_by_bin_file)
         qc_report["barcodes_passing_qc"] = cell_by_bin.shape[0]
 
-    with open("qc_report.json", "w") as text_file:
+    with open("alignment_qc.json", "w") as text_file:
         json.dump(qc_report, text_file, indent=4)
 
 

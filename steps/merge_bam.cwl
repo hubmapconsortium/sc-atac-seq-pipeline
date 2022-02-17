@@ -6,7 +6,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38:1.4.4
+    dockerPull: hubmap/sc-atac-seq-hg38
 
 arguments:
   - merged.bam

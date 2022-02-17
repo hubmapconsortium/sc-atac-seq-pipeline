@@ -2,5 +2,4 @@ anndata==0.7.5
 MACS2==2.2.7.1
 sinto==0.4.3
 HTSeq==0.13.5
-git+https://github.com/hubmapconsortium/SnapTools@v1.4.8-hbm1
-git+https://github.com/hubmapconsortium/fastq-utils@v0.2.4
+git+https://github.com/hubmapconsortium/fastq-utils@v0.2.3

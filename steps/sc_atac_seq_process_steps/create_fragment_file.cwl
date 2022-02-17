@@ -1,12 +1,12 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-label: snaptools create fragment file
-cwlVersion: v1.1
+label: create fragment file
+cwlVersion: v1.2
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-grch38:1.4.4
+    dockerPull: hubmap/sc-atac-seq-hg38
 
 baseCommand: /opt/bulk/sort_index_frag.py
 

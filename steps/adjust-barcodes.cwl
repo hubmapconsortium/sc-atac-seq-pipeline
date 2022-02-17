@@ -1,9 +1,9 @@
-cwlVersion: v1.0
+cwlVersion: v1.2
 class: CommandLineTool
 label: Assay-specific adjustment of cell barcodes
 hints:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-barcode-adj:1.4.4
+    dockerPull: hubmap/sc-atac-barcode-adj:latest
 baseCommand: /opt/adjust_barcodes.py
 
 inputs:

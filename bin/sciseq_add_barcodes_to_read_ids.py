@@ -8,7 +8,6 @@ from fastq_utils import Read, fastq_reader, find_grouped_fastq_files
 
 from utils import Assay
 
-# Specific format for SnapTools
 READ_ID_FORMAT = "@{barcode}:{umi}:{previous_read_id}"
 
 

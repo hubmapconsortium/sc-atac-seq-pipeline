@@ -17,28 +17,52 @@ def main(
     cell_by_bin_mtx: Path,
     cell_by_bin_barcodes: Path,
     cell_by_bin_bins: Path,
+    bin_size: int,
 ):
+    # UMAP file looks like this:
+    # "","IterativeLSI#UMAP_Dimension_1","IterativeLSI#UMAP_Dimension_2","Clusters"
+    # "BAM_data#GTCTGTCAAATCCGTCATGCCTAA",0.434770387764986,1.39683189432798,"C8"
+    # With assay name as prefix to barcode
     umap_coords_df = pd.read_csv(umap_coords_csv, index_col=0)
-    umap_coords_df.loc[:, "cluster"] = umap_coords_df.loc[:, "cluster"].astype("category")
-    umap_coords = umap_coords_df.loc[:, ["umap.1", "umap.2"]].to_numpy()
+    umap_coords_df.loc[:, "Clusters"] = umap_coords_df.loc[:, "Clusters"].astype("category")
+    umap_coords = umap_coords_df.loc[
+        :, ["IterativeLSI#UMAP_Dimension_1", "IterativeLSI#UMAP_Dimension_2"]
+    ].to_numpy()
 
     cell_by_bin_mat = scipy.io.mmread(cell_by_bin_mtx).astype(bool).tocsr()
+    # Barcode file looks like this:
+    # BAM_data#GTCTGTCAAATCCGTCATGCCTAA
+    # no header and assay name prefixed on barcode
     with open(cell_by_bin_barcodes) as f:
         barcodes = [line.strip() for line in f]
+    # bins file looks like:
+    # chr1 1 0
+    # chr1 2 500
     with open(cell_by_bin_bins) as f:
         bins = [line.strip() for line in f]
 
     assert barcodes == list(umap_coords_df.index)
 
-    obs = umap_coords_df.loc[:, ["cluster"]].copy()
+    obs = umap_coords_df.loc[:, ["Clusters"]].copy()
     obsm = {"X_umap": umap_coords}
 
     chroms = []
     bin_start = []
     bin_stop = []
     for b in bins:
-        chrom, pos = b.rsplit(":", 1)
-        start, stop = (int(p) for p in pos.split("-"))
+        # chrom, pos = b.rsplit(":", 1)
+        chrom, index, start = b.split()
+        # Remove 'chr' from chromosome string
+        prefix = "chr"
+        if chrom.startswith(prefix):
+            chrom = chrom[len(prefix) :]
+        # print("chrom:{}, start:{}, class start:{}".format(chrom, start, type(start)))
+        # start, stop = (int(p) for p in pos.split("-"))
+        # 'start' is read to a string in expoential notation, so use float to convert it as int will fail
+        # https://stackoverflow.com/questions/32861429/converting-number-in-scientific-notation-to-int
+        stop = int(float(start)) + (
+            bin_size - 1
+        )  # E.g Archr is using bins of size 500 starting at 0
         chroms.append(chrom)
         bin_start.append(start)
         bin_stop.append(stop)
@@ -50,6 +74,11 @@ def main(
         },
         index=bins,
     )
+
+    print("umap coords:{}".format(umap_coords))
+    print("obsm:{}".format(obsm))
+    print("obs:{}".format(obs))
+    print("var:{}".format(var))
 
     cell_by_bin = anndata.AnnData(
         cell_by_bin_mat,
@@ -91,6 +120,7 @@ if __name__ == "__main__":
     p.add_argument("cell_by_bin_mtx", type=Path)
     p.add_argument("cell_by_bin_barcodes", type=Path)
     p.add_argument("cell_by_bin_bins", type=Path)
+    p.add_argument("bin_size", type=int)
     args = p.parse_args()
 
     main(
@@ -100,4 +130,5 @@ if __name__ == "__main__":
         cell_by_bin_mtx=args.cell_by_bin_mtx,
         cell_by_bin_barcodes=args.cell_by_bin_barcodes,
         cell_by_bin_bins=args.cell_by_bin_bins,
+        bin_size=args.bin_size,
     )
