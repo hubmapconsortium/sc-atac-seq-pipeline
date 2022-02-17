@@ -18,10 +18,10 @@ c(
 
 # Then, install BiocManager (for installing bioconductor packages) if it isn’t already installed:
 if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-BiocManager::install(version = "3.13")
+BiocManager::install(version = "3.13", ask=FALSE)
 
 tryCatch({
-    BiocManager::install("DirichletMultinomial")
+    BiocManager::install("DirichletMultinomial", ask=FALSE)
 },
     error = function(e) {
     message("Error installing DirichletMultinomial")
@@ -86,7 +86,7 @@ tryCatch({
 )
 
 tryCatch({
-    BiocManager::install("BSgenome.Hsapiens.UCSC.hg38")
+    BiocManager::install("BSgenome.Hsapiens.UCSC.hg38", ask=FALSE)
 },
     error = function(e) {
     message("Error installing UCSC hg38")
