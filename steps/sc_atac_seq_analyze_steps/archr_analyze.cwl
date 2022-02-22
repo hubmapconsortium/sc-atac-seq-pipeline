@@ -7,7 +7,7 @@ cwlVersion: v1.2
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38:2.0b2
+    dockerPull: hubmap/sc-atac-seq-hg38
   NetworkAccess:
     networkAccess: true
   InitialWorkDirRequirement:
@@ -22,7 +22,7 @@ inputs:
       prefix: --bam_file
       valueFrom: $(self.basename)
     doc: "The sorted BAM file with cell ids in the CB tag."
-
+ 
   threads:
     type: int?
     inputBinding:
