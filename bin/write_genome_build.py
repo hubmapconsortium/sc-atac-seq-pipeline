@@ -5,4 +5,4 @@ genome_build_data = {"genome": "hg38", "annotations": {"source": "ucsc", "versio
 
 if __name__ == "__main__":
     with open("genome_build.json", "w") as f:
-        json.dump(genome_build_data, file=f, indent=4)
+        json.dump(genome_build_data, f, indent=4)
