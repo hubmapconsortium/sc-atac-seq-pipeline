@@ -3,7 +3,7 @@ class: CommandLineTool
 label: Assay-specific adjustment of cell barcodes
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38:latest
+    dockerPull: hubmap/sc-atac-seq-hg38:2.0b4
 baseCommand: /opt/convert_to_h5ad.py
 
 inputs:
