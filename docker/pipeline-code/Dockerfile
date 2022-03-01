@@ -66,6 +66,8 @@ RUN ./configure \
 
 WORKDIR /opt
 
+RUN wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/gencode.v39.annotation.gff3.gz
+
 COPY bin /opt
 
 CMD ["/bin/bash"]

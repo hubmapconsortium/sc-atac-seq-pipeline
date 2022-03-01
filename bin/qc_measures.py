@@ -12,7 +12,7 @@ import HTSeq
 import numpy as np
 
 # In container
-default_annotation_file = Path("/opt/supplementary-data/gencode.v32.annotation.gff3.gz")
+default_annotation_file = Path("/opt/gencode.v39.annotation.gff3.gz")
 
 
 def main(
