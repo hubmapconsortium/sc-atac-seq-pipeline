@@ -22,7 +22,7 @@ inputs:
       prefix: --bam_file
       valueFrom: $(self.basename)
     doc: "The sorted BAM file with cell ids in the CB tag."
- 
+
   threads:
     type: int?
     inputBinding:

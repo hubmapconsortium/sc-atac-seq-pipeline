@@ -29,7 +29,7 @@ outputs:
     type: Directory
     outputBinding:
       glob: "concat_output_dir"
- 
+
   merged_fastq_r1:
     type: File
     outputBinding:
