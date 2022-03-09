@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-hisat2-hg38:2.0b4
+    dockerPull: hubmap/sc-atac-hisat2-hg38:latest
 
 inputs:
   input_fastq1:
@@ -35,5 +35,9 @@ outputs:
     type: File
     outputBinding:
       glob: alignment.bam
+  paired_end_bam_index:
+    type: File
+    outputBinding:
+      glob: alignment.bam.bai
 
 baseCommand: [/opt/align_reads.py]

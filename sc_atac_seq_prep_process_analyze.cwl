@@ -125,6 +125,7 @@ steps:
      threads: threads
     out:
       - bam_file
+      - bam_index
       - fragment_file
       - Fragment_Size_Distribution_pdf
       - TSS_by_Unique_Frags_pdf
@@ -148,6 +149,7 @@ steps:
     run: steps/qc_measures.cwl
     in:
       bam_file: sc_atac_seq_process_and_analyze/bam_file
+      bam_index: sc_atac_seq_process_and_analyze/bam_index
       peak_file: sc_atac_seq_process_and_analyze/peaks_bed
       cell_by_bin_h5ad: sc_atac_seq_process_and_analyze/cell_by_bin_h5ad
     out:

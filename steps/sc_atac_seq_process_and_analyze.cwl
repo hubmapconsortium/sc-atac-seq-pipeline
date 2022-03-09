@@ -20,6 +20,10 @@ outputs:
     type: File
     outputSource: align_reads/paired_end_bam
 
+  bam_index:
+    type: File
+    outputSource: align_reads/paired_end_bam_index
+
   fragment_file:
     type: File
     outputSource: create_fragment_file/fragment_file
@@ -124,7 +128,7 @@ steps:
             return {"class": "File", "location": self.location + "/barcode_added_R2.fastq"}
           }
 
-    out: [paired_end_bam]
+    out: [paired_end_bam, paired_end_bam_index]
 
   analyze_with_ArchR:
     run: sc_atac_seq_analyze_steps/archr_analyze.cwl
