@@ -6,6 +6,8 @@ from pathlib import Path
 from subprocess import PIPE, Popen, check_call
 from typing import List
 
+ALIGNED_BAM_FILENAME = "alignment.bam"
+
 align_command_template = [
     "hisat2",
     "-x",
@@ -32,8 +34,15 @@ samtools_sort_command_template = [
     "--threads",
     "{processes}",
     "-o",
-    "alignment.bam",
+    ALIGNED_BAM_FILENAME,
     "unsorted.bam",
+]
+samtools_index_command_template = [
+    "samtools",
+    "index",
+    "-@",
+    "{processes}",
+    ALIGNED_BAM_FILENAME,
 ]
 
 
@@ -71,11 +80,13 @@ def main(processes: int, fastq_1: Path, fastq_2: Path):
     samtools_view_proc.wait()
     align_proc.wait()
 
-    samtools_sort_command = [
-        piece.format(processes=processes) for piece in samtools_sort_command_template
+    remaining_commands = [
+        [piece.format(processes=processes) for piece in samtools_sort_command_template],
+        [piece.format(processes=processes) for piece in samtools_index_command_template],
     ]
-    print_command(samtools_sort_command)
-    check_call(samtools_sort_command)
+    for command in remaining_commands:
+        print_command(command)
+        check_call(command)
 
 
 if __name__ == "__main__":

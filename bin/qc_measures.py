@@ -128,6 +128,7 @@ def main(
 if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("bam_file", type=Path)
+    p.add_argument("bam_index", type=Path)
     p.add_argument("peak_file", type=Path)
     p.add_argument("cell_by_bin_file", type=Path, nargs="?")
     p.add_argument("--annotations-file", type=Path, default=default_annotation_file)

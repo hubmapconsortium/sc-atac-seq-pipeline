@@ -35,5 +35,9 @@ outputs:
     type: File
     outputBinding:
       glob: alignment.bam
+  paired_end_bam_index:
+    type: File
+    outputBinding:
+      glob: alignment.bam.bai
 
 baseCommand: [/opt/align_reads.py]

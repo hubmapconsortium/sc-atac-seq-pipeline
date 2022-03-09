@@ -8,12 +8,24 @@ cwlVersion: v1.1
 requirements:
   DockerRequirement:
     dockerPull: hubmap/sc-atac-seq-hg38
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.bam_file)
+      - $(inputs.bam_index)
+
 
 inputs:
   bam_file:
     type: File
     inputBinding:
       position: 0
+      valueFrom: $(self.basename)
+
+  bam_index:
+    type: File
+    inputBinding:
+      position: 1
+      valueFrom: $(self.basename)
 
   peak_file:
     type: File
