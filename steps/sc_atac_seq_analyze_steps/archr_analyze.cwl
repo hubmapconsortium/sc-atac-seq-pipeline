@@ -13,6 +13,7 @@ requirements:
   InitialWorkDirRequirement:
     listing:
       - $(inputs.bam_file)
+      - $(inputs.bam_index)
 
 inputs:
   bam_file:
@@ -22,6 +23,12 @@ inputs:
       prefix: --bam_file
       valueFrom: $(self.basename)
     doc: "The sorted BAM file with cell ids in the CB tag."
+
+  bam_index:
+    type: File
+    inputBinding:
+      valueFrom: $(self.basename)
+    doc: "The BAM file index."
 
   threads:
     type: int?
