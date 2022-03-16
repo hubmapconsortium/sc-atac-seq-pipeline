@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38:2.0b5
+    dockerPull: hubmap/sc-atac-seq-hg38
 
 inputs:
   unsorted_paired_end_bam:
