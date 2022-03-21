@@ -27,6 +27,8 @@ inputs:
   bam_index:
     type: File
     inputBinding:
+      position: 2
+      prefix: --bam_index
       valueFrom: $(self.basename)
     doc: "The BAM file index."
 
