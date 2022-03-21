@@ -7,7 +7,7 @@ cwlVersion: v1.2
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38
+    dockerPull: hubmap/sc-atac-seq-hg38:2.0b7
   NetworkAccess:
     networkAccess: true
   InitialWorkDirRequirement:
