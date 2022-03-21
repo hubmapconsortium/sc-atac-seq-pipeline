@@ -7,7 +7,7 @@ cwlVersion: v1.2
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38:2.0b6
+    dockerPull: hubmap/sc-atac-seq-hg38
   NetworkAccess:
     networkAccess: true
   InitialWorkDirRequirement:
@@ -27,6 +27,8 @@ inputs:
   bam_index:
     type: File
     inputBinding:
+      position: 2
+      prefix: --bam_index
       valueFrom: $(self.basename)
     doc: "The BAM file index."
 

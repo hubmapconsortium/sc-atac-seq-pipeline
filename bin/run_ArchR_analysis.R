@@ -14,6 +14,12 @@ option_list = list(
     help="BAM file to use."
   ),
   make_option(
+    c("-i", "--bam_index"),
+    type="character",
+    default=NULL,
+    help="BAM file index."
+  ),
+  make_option(
     c("-t", "--threads"),
     type="integer",
     default=2,
