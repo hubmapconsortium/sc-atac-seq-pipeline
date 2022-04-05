@@ -5,6 +5,7 @@ from argparse import ArgumentParser
 from collections import Counter
 from os import fspath
 from pathlib import Path
+from pprint import pformat
 from statistics import median
 
 import anndata
@@ -56,6 +57,7 @@ def main(
     intergenic_reads = 0
     alignment_qualities = []
 
+    i = 0
     for i, seg in enumerate(bam):
         if not (i % 10000):
             logging.debug(f"Processed {i} reads")
@@ -91,6 +93,7 @@ def main(
         for iv, val in peaks[seg.iv].steps():
             read_peaks |= val
         barcode_reads_in_peaks[barcode] += bool(read_peaks)
+    logging.info(f"Processed peak overlap for {i} reads")
 
     median_reads_in_peaks_mean = median(barcode_reads_in_peaks.values())
 
@@ -121,7 +124,9 @@ def main(
         cell_by_bin = anndata.read_h5ad(cell_by_bin_file)
         qc_report["barcodes_passing_qc"] = cell_by_bin.shape[0]
 
-    with open("alignment_qc.json", "w") as text_file:
+    output_file = Path("qc_report.json")
+    logging.info(f"Writing QC measures to {output_file}")
+    with open(output_file, "w") as text_file:
         json.dump(qc_report, text_file, indent=4)
 
 
