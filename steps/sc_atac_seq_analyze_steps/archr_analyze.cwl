@@ -47,6 +47,15 @@ inputs:
     default: 2000
     doc: "The minimum number of mapped ATAC-seq fragments required per cell to pass filtering. E.g. 2000"
 
+  minCells:
+    type: int?
+    inputBinding:
+      position: 6
+      prefix: --minCells
+    default: 1000
+    doc: "The minimum number of cells in the ArchR project that must pass filtering before a warning message is printed. E.g. 1000"
+
+
 outputs:
   Fragment_Size_Distribution_pdf:
     type: File

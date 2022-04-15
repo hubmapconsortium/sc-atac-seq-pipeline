@@ -32,7 +32,7 @@ tryCatch({
 
 # Then, install ArchR:
 tryCatch({
-    devtools::install_github("GreenleafLab/ArchR", ref="release_1.0.2", repos = BiocManager::repositories())
+    devtools::install_github("GreenleafLab/ArchR@63e7883586a013b9a9c264ddb19dea18d9287087", ref="release_1.0.2", repos = BiocManager::repositories())
 },
     error = function(e) {
     message("Error installing GreenleafLab/ArchR")
