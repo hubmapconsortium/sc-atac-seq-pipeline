@@ -106,9 +106,10 @@ archr_proj <- ArchRProject(
 )
 archr_proj
 
+num_cells_pass_filter <- nCells(archr_proj)
 message(paste0("\n\nNumber of cells in the project that passed filtering = ",
-              ncells(archr_proj), "\n\n"))
-if (ncells(archr_proj) < opt$minCells) {
+              num_cells_pass_filter, "\n\n"))
+if (num_cells_pass_filter < opt$minCells) {
   message(paste0("\n\nWARNING: THE NUMBER OF CELLS IN THE PROJECT IS",
                  " LESS THAN ", opt$minCells,
                  "; THE PIPELINE MAY FAIL UNEXPECTEDLY!\n\n"))
