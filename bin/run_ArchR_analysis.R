@@ -101,7 +101,7 @@ arrow_files <- createArrowFiles(
 archr_proj <- ArchRProject(
   ArrowFiles = arrow_files,
   outputDirectory = "ArchRProjFiles",
-  copyArrows = TRUE # This is recommened so that if you modify the Arrow files
+  copyArrows = TRUE # This is recommended so that if you modify the Arrow files
                     # you have an original copy for later usage.
 )
 archr_proj
@@ -268,11 +268,13 @@ saveArchRProject(ArchRProj = archr_proj, outputDirectory = "ArchRProjFiles",
 # doublet scores using the filterDoublets() function. This doesn’t physically
 # remove data from the Arrow files but rather tells the ArchRProject to ignore
 # these cells for downstream analysis.
+message(paste("Filtering Doublets"))
 archr_proj <- filterDoublets(ArchRProj = archr_proj)
 
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the
 # addIterativeLSI() function.
+message(paste("Doing Dimensionality Reduction"))
 archr_proj <- addIterativeLSI(
     ArchRProj = archr_proj,
     useMatrix = "TileMatrix",
@@ -285,10 +287,11 @@ archr_proj <- addIterativeLSI(
         n.start = 10),
     varFeatures = 25000
     )
-#
+
 # To call clusters in this reduced dimension sub-space, we use the addClusters()
 # function which uses Seurat’s graph clustering as the default clustering
 # method.
+message(paste("Adding Clusters"))
 archr_proj <- addClusters(input = archr_proj, reducedDims = "IterativeLSI")
 
 # Visualizing in a 2D UMAP Embedding
