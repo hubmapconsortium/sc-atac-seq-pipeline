@@ -66,8 +66,9 @@ script_dir <- getwd()
 message(paste("\n\nDirectory used is:", script_dir, "\n\n"))
 
 input_files <- c(opt$bam_file)
+message(paste0("\n\nNames of input files: ", input_files, "\n\n"))
+
 names(input_files) <- c("BAM_data")
-input_files
 
 # Before we begin, we need add a reference genome annotation for ArchR to have
 # access to chromosome and gene information. ArchR natively supports hg19,
@@ -97,6 +98,7 @@ arrow_files <- createArrowFiles(
   bcTag = "CB" # We added this tag to the SAM file and then converted
                # it to a BAM
 )
+arrow_files
 
 archr_proj <- ArchRProject(
   ArrowFiles = arrow_files,
@@ -107,10 +109,10 @@ archr_proj <- ArchRProject(
 archr_proj
 
 num_cells_pass_filter <- nCells(archr_proj)
-message(paste0("\n\nNumber of cells in the project that passed filtering = ",
+message(paste0("\nNumber of cells in the project that passed filtering = ",
               num_cells_pass_filter, "\n\n"))
 if (num_cells_pass_filter < opt$minCells) {
-  message(paste0("\n\nWARNING: THE NUMBER OF CELLS IN THE PROJECT IS",
+  message(paste0("\nWARNING: THE NUMBER OF CELLS IN THE PROJECT IS",
                  " LESS THAN ", opt$minCells,
                  "; THE PIPELINE MAY FAIL UNEXPECTEDLY!\n\n"))
 }
@@ -119,13 +121,13 @@ if (num_cells_pass_filter < opt$minCells) {
 # After Arrow file creation, we can infer potential doublets (a single droplet
 # containing multiple cells) that can confound downstream results. This is
 # done using the addDoubletScores() function.
-doublet_scores <- addDoubletScores(
+message(paste0("Adding Doublet Scores"))
+archr_proj <- addDoubletScores(
   input = archr_proj,
   k = 10, # Refers to how many cells near a "pseudo-doublet" to count.
   knnMethod = "UMAP", # Refers to the embedding to use for nearest neighbor
                       # search.
 )
-
 
 # We can check how much memory is used to store the ArchRProject in memory
 # within R:
@@ -260,9 +262,6 @@ ptssen <- plotTSSEnrichment(ArchRProj = archr_proj)
 #To save editable vectorized versions of these plots, we use plotPDF().
 plotPDF(pfrag, ptssen, name = "QC-Sample-FragSizes-TSSProfile.pdf",
        ArchRProj = archr_proj, addDOC = FALSE, width = 5, height = 5)
-
-saveArchRProject(ArchRProj = archr_proj, outputDirectory = "ArchRProjFiles",
-                 load = FALSE)
 
 # Now we can filter putative doublets based on the previously determined
 # doublet scores using the filterDoublets() function. This doesn’t physically
@@ -434,29 +433,29 @@ message(paste("Cell types:"))
 # project and their relative proportions.
 table(archr_proj$Clusters)
 
+archr_proj <- saveArchRProject(ArchRProj = archr_proj)
 
-# Sometimes when trying to get marker genes an error occurs like:
-# "Found less than 100 cells for background matching, Lowering k to 0"
-# so put the following in a try catch block
-tryCatch({
-    # To identify marker genes based on gene scores, we call the
-    # getMarkerFeatures() function with useMatrix = "GeneScoreMatrix".
-    # We specify that we want to know the cluster-specific features
-    # with groupBy = "Clusters" which tells ArchR to use
-    # the “Clusters” column in cellColData to stratify cell groups.
-    marker_gs <- getMarkerFeatures(
-           ArchRProj = archr_proj,
-           useMatrix = "GeneScoreMatrix",
-           groupBy = "Clusters",
-           bias = c("TSSEnrichment", "log10(nFrags)"),
-           testMethod = "wilcoxon"
-     )
+# To identify marker genes based on gene scores, we call the
+# getMarkerFeatures() function with useMatrix = "GeneScoreMatrix".
+# We specify that we want to know the cluster-specific features
+# with groupBy = "Clusters" which tells ArchR to use
+# the “Clusters” column in cellColData to stratify cell groups.
+marker_gs <- getMarkerFeatures(
+       ArchRProj = archr_proj,
+       useMatrix = "GeneScoreMatrix",
+       groupBy = "Clusters",
+       bias = c("TSSEnrichment", "log10(nFrags)"),
+       testMethod = "wilcoxon"
+ )
 
-    markers_gs_list <- getMarkers(marker_gs,
-                 cutOff = "FDR <= 0.01 & Log2FC >= .5")
-    message(paste("Writing gene markers CSV"))
-    write.csv(markers_gs_list, file = "gene_markers.csv")
+markers_gs_list <- getMarkers(marker_gs,
+             cutOff = "FDR <= 0.01 & Log2FC >= .5")
+markers_gs_list
 
+message(paste("Writing gene markers CSV"))
+write.csv(markers_gs_list, file = "gene_markers.csv")
+  
+if (!isEmpty(markers_gs_list)) {
     heatmap_gs <- plotMarkerHeatmap(
          seMarker = marker_gs,
          cutOff = "FDR <= 0.01 & Log2FC >= .5",
@@ -466,12 +465,9 @@ tryCatch({
             annotation_legend_side = "bot")
     plotPDF(heatmap_gs, name = "GeneScores-Marker-Heatmap", width = 8,
               height = 6, ArchRProj = archr_proj, addDOC = FALSE)
-},
-    error = function(e) {
-    message("Error creating gene markers CSV and/or heatmap")
-    message(e$message)
-  }
-)
+} else {
+    message("No markers found so no marker gene scores heatmap can be created.")
+}
 
 # Often times, we are interested to know which peaks are unique to an individual
 # cluster or a small group of clusters. We can do this in an unsupervised
@@ -501,19 +497,23 @@ markers_gr
 write.csv(markers_gr, file = "peak_markers.csv")
 
 # ArchR provides multiple plotting functions to interact with the
-#SummarizedExperiment objects returned by getMarkerFeatures().
+# SummarizedExperiment objects returned by getMarkerFeatures().
 # We can visualize these marker peaks (or any features output by
 # getMarkerFeatures()) as a heatmap using the markerHeatmap() function.
-heatmap_peaks <- plotMarkerHeatmap(
-  seMarker = markers_peaks,
-  cutOff = "FDR <= 0.01 & Log2FC >= .5",
-  transpose = TRUE
-  )
-
-# We can plot this heatmap using draw().
-draw(heatmap_peaks, heatmap_legend_side = "bot", annotation_legend_side = "bot")
-plotPDF(heatmap_peaks, name = "Peak-Marker-Heatmap", width = 8, height = 6,
-        ArchRProj = archr_proj, addDOC = FALSE)
+if (!isEmpty(markers_gr)) {
+    heatmap_peaks <- plotMarkerHeatmap(
+      seMarker = markers_peaks,
+      cutOff = "FDR <= 0.01 & Log2FC >= .5",
+      transpose = TRUE
+      )
+    # We can plot this heatmap using draw().
+    draw(heatmap_peaks, heatmap_legend_side = "bot",
+                              annotation_legend_side = "bot")
+    plotPDF(heatmap_peaks, name = "Peak-Marker-Heatmap", width = 8, height = 6,
+            ArchRProj = archr_proj, addDOC = FALSE)
+} else {
+    message("No markers found so no marker peaks heatmap can be created.")
+}
 
 # Saving and Loading an ArchRProject
 # To easily save an ArchRProject for later use or for sharing with

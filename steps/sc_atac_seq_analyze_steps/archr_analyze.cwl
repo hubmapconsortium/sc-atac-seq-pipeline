@@ -98,7 +98,7 @@ outputs:
       glob: "*/Plots/GeneScores-Marker-Heatmap.pdf"
 
   Peak-Marker-Heatmap_pdf:
-    type: File
+    type: File?
     outputBinding:
       glob: "*/Plots/Peak-Marker-Heatmap.pdf"
 
