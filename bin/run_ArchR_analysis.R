@@ -366,7 +366,7 @@ archr_proj_embed_w_clusters_df$Clusters <- cell_col_data_df$Clusters[
      match(row.names(archr_proj_embed_w_clusters_df),
     row.names(cell_col_data_df))]
 write.csv(archr_proj_embed_w_clusters_df,
-          file = "archr_umap_coords_clusters.csv")
+          file = "umap_coords_clusters.csv")
 
 
 # Using this UMAP, we can visualize various attributes of our cells which are

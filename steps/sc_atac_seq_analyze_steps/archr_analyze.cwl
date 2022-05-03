@@ -135,7 +135,7 @@ outputs:
   umap_coords_clusters_csv:
     type: File
     outputBinding:
-      glob: "archr_umap_coords_clusters.csv"
+      glob: "umap_coords_clusters.csv"
 
   cell_by_gene_raw_mtx:
     type: File

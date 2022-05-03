@@ -43,7 +43,7 @@
 		"edam_ontology_term": "EDAM_1.24.format_3003"
 	},
 	{
-		"pattern": "archr_umap_coords_clusters\\.csv",
+		"pattern": "umap_coords_clusters\\.csv",
 		"description": "Per-cell UMAP coordinates and cluster assignments",
 		"edam_ontology_term": "EDAM_1.24.format_3752"
 	}
