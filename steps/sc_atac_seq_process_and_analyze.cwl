@@ -134,6 +134,7 @@ steps:
     run: sc_atac_seq_analyze_steps/archr_analyze.cwl
     in:
       bam_file: align_reads/paired_end_bam
+      bam_index: align_reads/paired_end_bam_index
       threads: threads
     out:
       - Fragment_Size_Distribution_pdf
