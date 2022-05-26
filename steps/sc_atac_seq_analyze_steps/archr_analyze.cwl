@@ -13,6 +13,7 @@ requirements:
   InitialWorkDirRequirement:
     listing:
       - $(inputs.bam_file)
+      - $(inputs.bam_index)
 
 inputs:
   bam_file:
@@ -22,6 +23,14 @@ inputs:
       prefix: --bam_file
       valueFrom: $(self.basename)
     doc: "The sorted BAM file with cell ids in the CB tag."
+
+  bam_index:
+    type: File
+    inputBinding:
+      position: 2
+      prefix: --bam_index
+      valueFrom: $(self.basename)
+    doc: "The BAM file index."
 
   threads:
     type: int?
@@ -46,6 +55,15 @@ inputs:
       prefix: --minFrags
     default: 2000
     doc: "The minimum number of mapped ATAC-seq fragments required per cell to pass filtering. E.g. 2000"
+
+  minCells:
+    type: int?
+    inputBinding:
+      position: 6
+      prefix: --minCells
+    default: 1000
+    doc: "The minimum number of cells in the ArchR project that must pass filtering before a warning message is printed. E.g. 1000"
+
 
 outputs:
   Fragment_Size_Distribution_pdf:
@@ -89,7 +107,7 @@ outputs:
       glob: "*/Plots/GeneScores-Marker-Heatmap.pdf"
 
   Peak-Marker-Heatmap_pdf:
-    type: File
+    type: File?
     outputBinding:
       glob: "*/Plots/Peak-Marker-Heatmap.pdf"
 
@@ -126,7 +144,7 @@ outputs:
   umap_coords_clusters_csv:
     type: File
     outputBinding:
-      glob: "archr_umap_coords_clusters.csv"
+      glob: "umap_coords_clusters.csv"
 
   cell_by_gene_raw_mtx:
     type: File
