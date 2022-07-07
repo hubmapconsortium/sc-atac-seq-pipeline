@@ -61,7 +61,7 @@ outputs:
     outputSource: analyze_with_ArchR/GeneScores-Marker-Heatmap_pdf
 
   Peak-Marker-Heatmap_pdf:
-    type: File
+    type: File?
     outputSource: analyze_with_ArchR/Peak-Marker-Heatmap_pdf
 
   peaks_bed:

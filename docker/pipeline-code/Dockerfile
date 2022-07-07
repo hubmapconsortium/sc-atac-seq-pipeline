@@ -8,6 +8,7 @@ RUN apt-get update \
     libcairo2-dev \
     libcurl4-gnutls-dev \
     libncurses-dev \
+    libgeos-dev \
     libglpk-dev \
     libgsl-dev \
     libmagick++-dev \
@@ -20,15 +21,6 @@ RUN apt-get update \
 # Make sure a 'python' command is available so bedtools will install, as required in
 # https://github.com/arq5x/bedtools2/blob/58e9973af1b3f5e3b26e5584aad7dc7b720f8765/Makefile#L192
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10
-
-COPY install_R_packages.R /opt
-
-RUN Rscript /opt/install_R_packages.R \
- && rm /opt/install_R_packages.R
-
-COPY requirements.txt /opt
-RUN python3 -m pip install -r /opt/requirements.txt \
- && rm -rf /root/.cache/pip /opt/requirements.txt
 
 RUN apt-get update \
  && apt-get -y install \
@@ -67,6 +59,15 @@ RUN ./configure \
 WORKDIR /opt
 
 RUN wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/gencode.v39.annotation.gff3.gz
+
+COPY requirements.txt /opt
+RUN python3 -m pip install -r /opt/requirements.txt \
+ && rm -rf /root/.cache/pip /opt/requirements.txt
+
+COPY install_R_packages.R /opt
+
+RUN Rscript /opt/install_R_packages.R \
+ && rm /opt/install_R_packages.R
 
 COPY bin /opt
 

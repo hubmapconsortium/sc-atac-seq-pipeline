@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38:2.0b8
+    dockerPull: hubmap/sc-atac-seq-hg38
   InitialWorkDirRequirement:
     listing:
       - $(inputs.bam_file)

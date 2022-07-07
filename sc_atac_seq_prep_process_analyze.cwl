@@ -59,7 +59,7 @@ outputs:
     outputSource: sc_atac_seq_process_and_analyze/GeneScores-Marker-Heatmap_pdf
 
   Peak-Marker-Heatmap_pdf:
-    type: File
+    type: File?
     outputSource: sc_atac_seq_process_and_analyze/Peak-Marker-Heatmap_pdf
 
   peak_markers_csv:
