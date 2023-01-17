@@ -15,6 +15,7 @@ SNARESEQ_BARCODE_SEGMENTS = [
 ]
 
 SNSEQ_BARCODE_SEGMENT = slice(0, 16)
+MULTIOME_10X_BARCODE_SEGMENT = slice(8, 24)
 
 UMI_START = 84
 UMI_LENGTH = 10
@@ -75,13 +76,20 @@ def main(assay: Assay, fastq_dirs: Iterable[Path], output_filename_prefix, outpu
                     umi_seq = bar.seq[UMI_SEGMENT]
                 elif assay == Assay.SNSEQ:
                     barcode_pieces = [f2r.seq[SNSEQ_BARCODE_SEGMENT]]
-                    # print("barcode pieces={}".format(barcode_pieces))
+                    umi_seq = ""
+                elif assay == Assay.MULTIOME_10X:
+                    barcode_pieces = [f2r.seq[MULTIOME_10X_BARCODE_SEGMENT]]
                     umi_seq = ""
                 else:
                     print("Could not adjust barcodes for assay {}".format(assay))
 
                 create_and_output_barcode_adjusted_reads(
-                    f1r, f2r, umi_seq, barcode_pieces, barf1addedout, barf2addedout
+                    f1r,
+                    f2r,
+                    umi_seq,
+                    barcode_pieces,
+                    barf1addedout,
+                    barf2addedout,
                 )
 
 
