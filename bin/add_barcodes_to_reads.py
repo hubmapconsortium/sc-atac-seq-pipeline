@@ -75,10 +75,10 @@ def main(assay: Assay, fastq_dirs: Iterable[Path], output_filename_prefix, outpu
                     barcode_pieces.reverse()
                     umi_seq = bar.seq[UMI_SEGMENT]
                 elif assay == Assay.SNSEQ:
-                    barcode_pieces = [f2r.seq[SNSEQ_BARCODE_SEGMENT]]
+                    barcode_pieces = [bar.seq[SNSEQ_BARCODE_SEGMENT]]
                     umi_seq = ""
                 elif assay == Assay.MULTIOME_10X:
-                    barcode_pieces = [f2r.seq[MULTIOME_10X_BARCODE_SEGMENT]]
+                    barcode_pieces = [bar.seq[MULTIOME_10X_BARCODE_SEGMENT]]
                     umi_seq = ""
                 else:
                     print("Could not adjust barcodes for assay {}".format(assay))
