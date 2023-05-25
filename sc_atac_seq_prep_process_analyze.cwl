@@ -46,30 +46,6 @@ outputs:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/TSS-vs-Frags_pdf
 
-  Peak-Call-Summary_pdf:
-    type: File
-    outputSource: sc_atac_seq_process_and_analyze/Peak-Call-Summary_pdf
-
-  Plot-UMAP-Sample-Clusters_pdf:
-    type: File
-    outputSource: sc_atac_seq_process_and_analyze/Plot-UMAP-Sample-Clusters_pdf
-
-  GeneScores-Marker-Heatmap_pdf:
-    type: File?
-    outputSource: sc_atac_seq_process_and_analyze/GeneScores-Marker-Heatmap_pdf
-
-  Peak-Marker-Heatmap_pdf:
-    type: File?
-    outputSource: sc_atac_seq_process_and_analyze/Peak-Marker-Heatmap_pdf
-
-  peak_markers_csv:
-    type: File
-    outputSource: sc_atac_seq_process_and_analyze/peak_markers_csv
-
-  gene_markers_csv:
-    type: File?
-    outputSource: sc_atac_seq_process_and_analyze/gene_markers_csv
-
   gene_row_data_csv:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/gene_row_data_csv
@@ -77,10 +53,6 @@ outputs:
   cell_column_data_csv:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/cell_column_data_csv
-
-  umap_coords_clusters_csv:
-    type: File
-    outputSource: sc_atac_seq_process_and_analyze/umap_coords_clusters_csv
 
   cell_by_bin_h5ad:
     type: File
@@ -132,16 +104,8 @@ steps:
       - QC-Sample-FragSizes-TSSProfile_pdf
       - QC-Sample-Statistics_pdf
       - TSS-vs-Frags_pdf
-      - Peak-Call-Summary_pdf
-      - Plot-UMAP-Sample-Clusters_pdf
-      - GeneScores-Marker-Heatmap_pdf
-      - Peak-Marker-Heatmap_pdf
-      - peaks_bed
-      - gene_markers_csv
-      - peak_markers_csv
       - gene_row_data_csv
       - cell_column_data_csv
-      - umap_coords_clusters_csv
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
 
@@ -150,7 +114,6 @@ steps:
     in:
       bam_file: sc_atac_seq_process_and_analyze/bam_file
       bam_index: sc_atac_seq_process_and_analyze/bam_index
-      peak_file: sc_atac_seq_process_and_analyze/peaks_bed
       cell_by_bin_h5ad: sc_atac_seq_process_and_analyze/cell_by_bin_h5ad
     out:
       - qc_report

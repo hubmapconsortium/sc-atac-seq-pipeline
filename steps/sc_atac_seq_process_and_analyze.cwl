@@ -48,34 +48,6 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/TSS-vs-Frags_pdf
 
-  Peak-Call-Summary_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/Peak-Call-Summary_pdf
-
-  Plot-UMAP-Sample-Clusters_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/Plot-UMAP-Sample-Clusters_pdf
-
-  GeneScores-Marker-Heatmap_pdf:
-    type: File?
-    outputSource: analyze_with_ArchR/GeneScores-Marker-Heatmap_pdf
-
-  Peak-Marker-Heatmap_pdf:
-    type: File?
-    outputSource: analyze_with_ArchR/Peak-Marker-Heatmap_pdf
-
-  peaks_bed:
-    type: File
-    outputSource: analyze_with_ArchR/peaks_bed
-
-  peak_markers_csv:
-    type: File
-    outputSource: analyze_with_ArchR/peak_markers_csv
-
-  gene_markers_csv:
-    type: File?
-    outputSource: analyze_with_ArchR/gene_markers_csv
-
   cell_column_data_csv:
     type: File
     outputSource: analyze_with_ArchR/cell_column_data_csv
@@ -83,10 +55,6 @@ outputs:
   gene_row_data_csv:
     type: File
     outputSource: analyze_with_ArchR/gene_row_data_csv
-
-  umap_coords_clusters_csv:
-    type: File
-    outputSource: analyze_with_ArchR/umap_coords_clusters_csv
 
   cell_by_bin_h5ad:
     type: File
@@ -142,17 +110,8 @@ steps:
       - QC-Sample-FragSizes-TSSProfile_pdf
       - QC-Sample-Statistics_pdf
       - TSS-vs-Frags_pdf
-      - Peak-Call-Summary_pdf
-      - Plot-UMAP-Sample-Clusters_pdf
-      - GeneScores-Marker-Heatmap_pdf
-      - Peak-Marker-Heatmap_pdf
-      - peaks_csv
-      - peaks_bed
-      - peak_markers_csv
-      - gene_markers_csv
       - cell_column_data_csv
       - gene_row_data_csv
-      - umap_coords_clusters_csv
       - cell_by_gene_raw_mtx
       - cell_by_gene_smoothed_hdf5
       - cell_by_bin_mtx
@@ -168,7 +127,7 @@ steps:
   convert_to_h5ad:
     run: convert_to_h5ad.cwl
     in:
-      umap_coords_csv: analyze_with_ArchR/umap_coords_clusters_csv
+      cell_column_data: analyze_with_ArchR/cell_column_data_csv
       cell_by_gene_raw_mtx: analyze_with_ArchR/cell_by_gene_raw_mtx
       cell_by_gene_smoothed_hdf5: analyze_with_ArchR/cell_by_gene_smoothed_hdf5
       cell_by_bin_mtx: analyze_with_ArchR/cell_by_bin_mtx

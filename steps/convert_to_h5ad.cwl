@@ -7,7 +7,7 @@ requirements:
 baseCommand: /opt/convert_to_h5ad.py
 
 inputs:
-  umap_coords_csv:
+  cell_column_data:
     type: File
     inputBinding:
       position: 0
