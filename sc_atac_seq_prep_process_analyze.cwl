@@ -54,22 +54,6 @@ outputs:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/Plot-UMAP-Sample-Clusters_pdf
 
-  GeneScores-Marker-Heatmap_pdf:
-    type: File?
-    outputSource: sc_atac_seq_process_and_analyze/GeneScores-Marker-Heatmap_pdf
-
-  Peak-Marker-Heatmap_pdf:
-    type: File?
-    outputSource: sc_atac_seq_process_and_analyze/Peak-Marker-Heatmap_pdf
-
-  peak_markers_csv:
-    type: File
-    outputSource: sc_atac_seq_process_and_analyze/peak_markers_csv
-
-  gene_markers_csv:
-    type: File?
-    outputSource: sc_atac_seq_process_and_analyze/gene_markers_csv
-
   gene_row_data_csv:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/gene_row_data_csv
