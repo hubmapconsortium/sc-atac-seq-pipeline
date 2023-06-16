@@ -56,25 +56,9 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/Plot-UMAP-Sample-Clusters_pdf
 
-  GeneScores-Marker-Heatmap_pdf:
-    type: File?
-    outputSource: analyze_with_ArchR/GeneScores-Marker-Heatmap_pdf
-
-  Peak-Marker-Heatmap_pdf:
-    type: File?
-    outputSource: analyze_with_ArchR/Peak-Marker-Heatmap_pdf
-
   peaks_bed:
     type: File
     outputSource: analyze_with_ArchR/peaks_bed
-
-  peak_markers_csv:
-    type: File
-    outputSource: analyze_with_ArchR/peak_markers_csv
-
-  gene_markers_csv:
-    type: File?
-    outputSource: analyze_with_ArchR/gene_markers_csv
 
   cell_column_data_csv:
     type: File
@@ -144,12 +128,8 @@ steps:
       - TSS-vs-Frags_pdf
       - Peak-Call-Summary_pdf
       - Plot-UMAP-Sample-Clusters_pdf
-      - GeneScores-Marker-Heatmap_pdf
-      - Peak-Marker-Heatmap_pdf
       - peaks_csv
       - peaks_bed
-      - peak_markers_csv
-      - gene_markers_csv
       - cell_column_data_csv
       - gene_row_data_csv
       - umap_coords_clusters_csv

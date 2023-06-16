@@ -101,35 +101,15 @@ outputs:
     outputBinding:
       glob: "*/Plots/Peak-Call-Summary.pdf"
 
-  GeneScores-Marker-Heatmap_pdf:
-    type: File?
-    outputBinding:
-      glob: "*/Plots/GeneScores-Marker-Heatmap.pdf"
-
-  Peak-Marker-Heatmap_pdf:
-    type: File?
-    outputBinding:
-      glob: "*/Plots/Peak-Marker-Heatmap.pdf"
-
   peaks_csv:
     type: File
     outputBinding:
       glob: "peaks.csv"
 
-  peak_markers_csv:
-    type: File
-    outputBinding:
-      glob: "peak_markers.csv"
-
   peaks_bed:
     type: File
     outputBinding:
       glob: "peaks.bed"
-
-  gene_markers_csv:
-    type: File?
-    outputBinding:
-      glob: "gene_markers.csv"
 
   cell_column_data_csv:
     type: File
