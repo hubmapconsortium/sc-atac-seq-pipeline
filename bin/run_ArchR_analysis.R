@@ -345,8 +345,13 @@ message(paste("Creating cell by bin row data CSV file"))
 tile_row_data_df <- rowData(tile_matrix_se)
 write.csv(tile_row_data_df, file = "cell_by_bin_row_data.csv")
 
+# Log the name and shape of archr_proj$cellNames
+cat("archr_proj$cellNames: Name = ", deparse(substitute(archr_proj$cellNames)), ", Shape = ", dim(archr_proj$cellNames), "\n")
 write.table(archr_proj$cellNames, "barcodes.txt", col.names = FALSE,
             row.names = FALSE, quote = FALSE)
+
+# Log the name and shape of tile_row_data_df
+cat("tile_row_data_df: Name = ", deparse(substitute(tile_row_data_df)), ", Shape = ", dim(tile_row_data_df), "\n")
 write.table(tile_row_data_df, "bins.txt", col.names = FALSE, row.names = FALSE,
             quote = FALSE)
 
@@ -371,6 +376,8 @@ message(paste("Adding Clusters column"))
 archr_proj_embed_w_clusters_df$Clusters <- cell_col_data_df$Clusters[
      match(row.names(archr_proj_embed_w_clusters_df),
     row.names(cell_col_data_df))]
+# Log the name and shape of archr_proj_embed_w_clusters_df
+cat("archr_proj_embed_w_clusters_df: Name = ", deparse(substitute(archr_proj_embed_w_clusters_df)), ", Shape = ", dim(archr_proj_embed_w_clusters_df), "\n")
 write.csv(archr_proj_embed_w_clusters_df,
           file = "umap_coords_clusters.csv")
 
