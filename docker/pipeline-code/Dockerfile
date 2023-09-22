@@ -60,6 +60,8 @@ WORKDIR /opt
 
 RUN wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/gencode.v39.annotation.gff3.gz
 
+RUN python3 -m pip install --upgrade pip
+
 COPY requirements.txt /opt
 RUN python3 -m pip install -r /opt/requirements.txt \
  && rm -rf /root/.cache/pip /opt/requirements.txt
