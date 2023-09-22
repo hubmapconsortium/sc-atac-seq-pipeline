@@ -25,12 +25,14 @@
 	{
 		"pattern": "cell_by_gene\\.h5ad",
 		"description": "Cell by gene matrix (sparse, and smoothed with MAGIC), in H5AD format",
-		"edam_ontology_term": "EDAM_1.24.format_3590"
+		"edam_ontology_term": "EDAM_1.24.format_3590",
+		"is_data_product": true
 	},
 	{
 		"pattern": "cell_by_bin\\.h5ad",
 		"description": "Sparse cell by bin matrix, in H5AD format",
-		"edam_ontology_term": "EDAM_1.24.format_3590"
+		"edam_ontology_term": "EDAM_1.24.format_3590",
+		"is_data_product": true
 	},
 	{
 		"pattern": "frags\\.sort\\.bed\\.gz",
@@ -40,7 +42,8 @@
 	{
 		"pattern": "peaks\\.bed",
 		"description": "Peaks called across entire data set",
-		"edam_ontology_term": "EDAM_1.24.format_3003"
+		"edam_ontology_term": "EDAM_1.24.format_3003",
+		"is_data_product": true
 	},
 	{
 		"pattern": "umap_coords_clusters\\.csv",
