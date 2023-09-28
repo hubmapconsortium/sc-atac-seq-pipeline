@@ -306,7 +306,10 @@ archr_proj <- addClusters(input = archr_proj, reducedDims = "IterativeLSI")
 # This function uses the uwot package to perform UMAP.
 
 cell_col_data_df <- getCellColData(archr_proj)
+message(paste("cellNames column from cell_col_data_df: ", cell_col_data_df$cellNames))
+message(paste("index column of cell_col_data_df:", cell_col_data_df$index))
 write.csv(cell_col_data_df, file = "cell_column_data.csv")
+# restricted_barcodes = cell_col_data_df$cellNames
 
 ## Create the cell by gene table MTX and CSVs
 message(paste("Creating cell by gene MTX file"))
