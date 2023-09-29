@@ -306,8 +306,10 @@ archr_proj <- addClusters(input = archr_proj, reducedDims = "IterativeLSI")
 # This function uses the uwot package to perform UMAP.
 
 cell_col_data_df <- getCellColData(archr_proj)
-cat("cell_col_data_df$cellNames: Name = ", deparse(substitute(cell_col_data_df$cellNames)), ", Shape = ", dim(cell_col_data_df$cellNames), "\n")
-cat("cell_col_data_df$index: Name = ", deparse(substitute(cell_col_data_df$index)), ", Shape = ", dim(cell_col_data_df$index), "\n")
+message("cell_col_data_df$cellNames:\n")
+message(cell_col_data_df$cellNames)
+message("Row Indices (rownames):\n")
+message(rownames(cell_col_data_df))
 write.csv(cell_col_data_df, file = "cell_column_data.csv")
 # restricted_barcodes = cell_col_data_df$cellNames
 
