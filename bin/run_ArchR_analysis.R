@@ -275,6 +275,9 @@ plotPDF(pfrag, ptssen, name = "QC-Sample-FragSizes-TSSProfile.pdf",
 # these cells for downstream analysis.
 message(paste("Filtering Doublets"))
 archr_proj <- filterDoublets(ArchRProj = archr_proj)
+#Check nCells
+message(paste("nCells after filtering doublets: \n"))
+nCells(archr_proj)
 
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the
@@ -292,12 +295,15 @@ archr_proj <- addIterativeLSI(
         n.start = 10),
     varFeatures = 25000
     )
-
+message(paste("nCells after dimensionality reduction: \n"))
+nCells(archr_proj)
 # To call clusters in this reduced dimension sub-space, we use the addClusters()
 # function which uses Seurat’s graph clustering as the default clustering
 # method.
 message(paste("Adding Clusters"))
 archr_proj <- addClusters(input = archr_proj, reducedDims = "IterativeLSI")
+message(paste("nCells after adding clusters: \n"))
+nCells(archr_proj)
 
 # Visualizing in a 2D UMAP Embedding
 # We can visualize our scATAC-seq data using a 2-dimensional representation
@@ -306,12 +312,14 @@ archr_proj <- addClusters(input = archr_proj, reducedDims = "IterativeLSI")
 # This function uses the uwot package to perform UMAP.
 
 cell_col_data_df <- getCellColData(archr_proj)
-message("cell_col_data_df$cellNames:\n")
-message(cell_col_data_df$cellNames)
-message("Row Indices (rownames):\n")
-message(rownames(cell_col_data_df))
+restricted_barcodes = rownames(cell_col_data_df)
 write.csv(cell_col_data_df, file = "cell_column_data.csv")
-# restricted_barcodes = cell_col_data_df$cellNames
+
+#Restrict the rest of the project to just use the barcodes conained in cell_col_data_df
+message(paste("Restricting the project to only use the subset of barcodes from cell_col_data_df"))
+subsetCells(ArchRProj = archr_proj, cellNames = restricted_barcodes)
+message(paste("nCells after subsetting cells: \n"))
+nCells(archr_proj)
 
 ## Create the cell by gene table MTX and CSVs
 message(paste("Creating cell by gene MTX file"))
