@@ -316,7 +316,10 @@ write.csv(cell_col_data_df, file = "cell_column_data.csv")
 
 #Restrict the rest of the project to just use the barcodes conained in cell_col_data_df
 message(paste("Restricting the project to only use the subset of barcodes from cell_col_data_df"))
-restricted_barcodes <- rownames(cell_col_data_df)
+archr_proj_embed_w_clusters_df$Clusters <- cell_col_data_df$Clusters[
+     match(row.names(archr_proj_embed_w_clusters_df),
+    row.names(cell_col_data_df))]
+restricted_barcodes <- archr_proj_embed_w_clusters_df$Clusters
 subsetCells(ArchRProj = archr_proj, cellNames = restricted_barcodes)
 message(paste("nCells after subsetting cells: \n"))
 nCells(archr_proj)
