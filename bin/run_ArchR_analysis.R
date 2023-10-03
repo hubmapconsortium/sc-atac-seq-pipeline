@@ -312,7 +312,7 @@ nCells(archr_proj)
 # This function uses the uwot package to perform UMAP.
 
 cell_col_data_df <- getCellColData(archr_proj)
-restricted_barcodes = rownames(cell_col_data_df)
+restricted_barcodes <- rownames(cell_col_data_df)
 write.csv(cell_col_data_df, file = "cell_column_data.csv")
 
 #Restrict the rest of the project to just use the barcodes conained in cell_col_data_df
@@ -389,7 +389,7 @@ message(paste("Adding Clusters column"))
 archr_proj_embed_w_clusters_df$Clusters <- cell_col_data_df$Clusters[
      match(row.names(archr_proj_embed_w_clusters_df),
     row.names(cell_col_data_df))]
-    
+
 # Log the name and shape of archr_proj_embed_w_clusters_df
 cat("archr_proj_embed_w_clusters_df: Name = ", deparse(substitute(archr_proj_embed_w_clusters_df)), ", Shape = ", dim(archr_proj_embed_w_clusters_df), "\n")
 write.csv(archr_proj_embed_w_clusters_df,
