@@ -337,18 +337,12 @@ archr_proj_embed_w_clusters_df$Clusters <- cell_col_data_df$Clusters[
 #Restrict the rest of the project to just use the barcodes conained in cell_col_data_df
 message(paste("Restricting the project to only use the subset of barcodes with Cluster values from cell_col_data_df"))
 
-restricted_barcodes <- c()
-for (i in 1:nrow(cell_col_data_df)) {
-  # Check if the Clusters column is not null for the current row
-  if (!is.null(cell_col_data_df$Clusters[i])) {
-    # If not null, append the row name to the vector
-   restricted_barcodes <- c(restricted_barcodes, rownames(cell_col_data_df)[i])
-  }
-}
-subsetCells(ArchRProj = archr_proj, cellNames = restricted_barcodes)
+restricted_barcodes <- rownames(archr_proj_embed_w_clusters_df)
+archr_proj<-subsetCells(ArchRProj = archr_proj, cellNames = restricted_barcodes)
 message(paste("nCells after subsetting cells: \n"))
 nCells(archr_proj)
 
+cell_col_data_df <- getCellColData(archr_proj)
 write.csv(cell_col_data_df, file = "cell_column_data.csv")
 
 ## Create the cell by gene table MTX and CSVs
