@@ -312,14 +312,36 @@ nCells(archr_proj)
 # This function uses the uwot package to perform UMAP.
 
 cell_col_data_df <- getCellColData(archr_proj)
-restricted_barcodes <- rownames(cell_col_data_df)
-write.csv(cell_col_data_df, file = "cell_column_data.csv")
+
+message(paste("Adding UMAP"))
+archr_proj <- addUMAP(ArchRProj = archr_proj, reducedDims = "IterativeLSI")
+
+message(paste("Getting embedding"))
+archr_proj_embed_w_clusters_df <- getEmbedding(ArchRProj = archr_proj,
+       embedding = "UMAP", returnDF = TRUE)
+
+message(paste("Adding Clusters column"))
+# https://stackoverflow.com/questions/48896190/
+# add-column-to-r-dataframe-based-on-rowname
+# https://intellipaat.com/community/31833/
+# r-add-a-new-column-to-a-dataframe-using-matching-values-of-another-dataframe
+# row.names(archr_proj_embed_w_clusters_df) must be the first argument because
+# cell_col_data_df may have rows that do not exist in
+# archr_proj_embed_w_clusters_df and match in that case will return a larger
+# vector with NAs, which will fail when used as an index to
+# cell_col_data_df$Clusters.
+archr_proj_embed_w_clusters_df$Clusters <- cell_col_data_df$Clusters[
+     match(row.names(archr_proj_embed_w_clusters_df),
+    row.names(cell_col_data_df))]
 
 #Restrict the rest of the project to just use the barcodes conained in cell_col_data_df
 message(paste("Restricting the project to only use the subset of barcodes from cell_col_data_df"))
+restricted_barcodes <- rownames(archr_proj_embed_w_clusters_df)
 subsetCells(ArchRProj = archr_proj, cellNames = restricted_barcodes)
 message(paste("nCells after subsetting cells: \n"))
 nCells(archr_proj)
+
+write.csv(cell_col_data_df, file = "cell_column_data.csv")
 
 ## Create the cell by gene table MTX and CSVs
 message(paste("Creating cell by gene MTX file"))
@@ -368,27 +390,6 @@ cat("tile_row_data_df: Name = ", deparse(substitute(tile_row_data_df)), ", Shape
 write.table(tile_row_data_df, "bins.txt", col.names = FALSE, row.names = FALSE,
             quote = FALSE)
 
-
-message(paste("Adding UMAP"))
-archr_proj <- addUMAP(ArchRProj = archr_proj, reducedDims = "IterativeLSI")
-
-message(paste("Getting embedding"))
-archr_proj_embed_w_clusters_df <- getEmbedding(ArchRProj = archr_proj,
-       embedding = "UMAP", returnDF = TRUE)
-
-message(paste("Adding Clusters column"))
-# https://stackoverflow.com/questions/48896190/
-# add-column-to-r-dataframe-based-on-rowname
-# https://intellipaat.com/community/31833/
-# r-add-a-new-column-to-a-dataframe-using-matching-values-of-another-dataframe
-# row.names(archr_proj_embed_w_clusters_df) must be the first argument because
-# cell_col_data_df may have rows that do not exist in
-# archr_proj_embed_w_clusters_df and match in that case will return a larger
-# vector with NAs, which will fail when used as an index to
-# cell_col_data_df$Clusters.
-archr_proj_embed_w_clusters_df$Clusters <- cell_col_data_df$Clusters[
-     match(row.names(archr_proj_embed_w_clusters_df),
-    row.names(cell_col_data_df))]
 
 # Log the name and shape of archr_proj_embed_w_clusters_df
 cat("archr_proj_embed_w_clusters_df: Name = ", deparse(substitute(archr_proj_embed_w_clusters_df)), ", Shape = ", dim(archr_proj_embed_w_clusters_df), "\n")
