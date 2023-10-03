@@ -114,6 +114,22 @@ archr_proj <- ArchRProject(
 )
 archr_proj
 
+# Visualizing in a 2D UMAP Embedding
+# We can visualize our scATAC-seq data using a 2-dimensional representation
+# such as Uniform Manifold Approximation and Projection (UMAP). To do this, we
+# add a UMAP embedding to our ArchRProject object with the addUMAP() function.
+# This function uses the uwot package to perform UMAP.
+
+cell_col_data_df <- getCellColData(archr_proj)
+write.csv(cell_col_data_df, file = "cell_column_data.csv")
+
+#Restrict the rest of the project to just use the barcodes conained in cell_col_data_df
+message(paste("Restricting the project to only use the subset of barcodes from cell_col_data_df"))
+restricted_barcodes <- rownames(archr_proj_embed_w_clusters_df)
+subsetCells(ArchRProj = archr_proj, cellNames = restricted_barcodes)
+message(paste("nCells after subsetting cells: \n"))
+nCells(archr_proj)
+
 num_cells_pass_filter <- nCells(archr_proj)
 message(paste0("\nNumber of cells in the project that passed filtering = ",
               num_cells_pass_filter, "\n\n"))
@@ -305,17 +321,6 @@ archr_proj <- addClusters(input = archr_proj, reducedDims = "IterativeLSI")
 message(paste("nCells after adding clusters: \n"))
 nCells(archr_proj)
 
-# Visualizing in a 2D UMAP Embedding
-# We can visualize our scATAC-seq data using a 2-dimensional representation
-# such as Uniform Manifold Approximation and Projection (UMAP). To do this, we
-# add a UMAP embedding to our ArchRProject object with the addUMAP() function.
-# This function uses the uwot package to perform UMAP.
-
-cell_col_data_df <- getCellColData(archr_proj)
-write.csv(cell_col_data_df, file = "cell_column_data.csv")
-
-
-
 ## Create the cell by gene table MTX and CSVs
 message(paste("Creating cell by gene MTX file"))
 gene_score_matrix_se <- getMatrixFromProject(
@@ -384,13 +389,6 @@ message(paste("Adding Clusters column"))
 archr_proj_embed_w_clusters_df$Clusters <- cell_col_data_df$Clusters[
      match(row.names(archr_proj_embed_w_clusters_df),
     row.names(cell_col_data_df))]
-
-#Restrict the rest of the project to just use the barcodes conained in cell_col_data_df
-message(paste("Restricting the project to only use the subset of barcodes from cell_col_data_df"))
-restricted_barcodes <- rownames(archr_proj_embed_w_clusters_df)
-subsetCells(ArchRProj = archr_proj, cellNames = restricted_barcodes)
-message(paste("nCells after subsetting cells: \n"))
-nCells(archr_proj)
 
 # Log the name and shape of archr_proj_embed_w_clusters_df
 cat("archr_proj_embed_w_clusters_df: Name = ", deparse(substitute(archr_proj_embed_w_clusters_df)), ", Shape = ", dim(archr_proj_embed_w_clusters_df), "\n")
