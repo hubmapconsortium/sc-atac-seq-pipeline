@@ -9,10 +9,10 @@ requirements:
 
 inputs:
   assay: string
-  concat_fastq_dir: Directory
+  sequence_dir: Directory
 
-  input_fastq1: File
-  input_fastq2: File
+  #input_fastq1: File
+  #input_fastq2: File
   threads: int?
 
 outputs:
@@ -28,25 +28,25 @@ outputs:
     type: File
     outputSource: create_fragment_file/fragment_file
 
-  Fragment_Size_Distribution_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/Fragment_Size_Distribution_pdf
+  #Fragment_Size_Distribution_pdf:
+  #  type: File
+  #  outputSource: analyze_with_ArchR/Fragment_Size_Distribution_pdf
 
-  TSS_by_Unique_Frags_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/TSS_by_Unique_Frags_pdf
+  #TSS_by_Unique_Frags_pdf:
+  #  type: File
+  #  outputSource: analyze_with_ArchR/TSS_by_Unique_Frags_pdf
 
-  QC-Sample-FragSizes-TSSProfile_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/QC-Sample-FragSizes-TSSProfile_pdf
+  #QC-Sample-FragSizes-TSSProfile_pdf:
+  #  type: File
+  #  outputSource: analyze_with_ArchR/QC-Sample-FragSizes-TSSProfile_pdf
 
-  QC-Sample-Statistics_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/QC-Sample-Statistics_pdf
+  #QC-Sample-Statistics_pdf:
+  #  type: File
+  #  outputSource: analyze_with_ArchR/QC-Sample-Statistics_pdf
 
-  TSS-vs-Frags_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/TSS-vs-Frags_pdf
+  #TSS-vs-Frags_pdf:
+  #  type: File
+  #  outputSource: analyze_with_ArchR/TSS-vs-Frags_pdf
 
   cell_column_data_csv:
     type: File
@@ -66,6 +66,25 @@ outputs:
 
 
 steps:
+  fastqc:
+    scatter: [fastq_dir]
+    scatterMethod: dotproduct
+    run: fastqc.cwl
+    in:
+      fastq_dir: sequence_directory
+      threads: threads
+    out:
+      [fastqc_dir]
+
+  concat_fastq:
+    run: concat-fastq.cwl
+    in:
+      sequence_directory: sequence_directory
+      assay: assay
+    out:
+      [output_directory, merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
+
+
   adjust_barcodes:
     run: adjust-barcodes.cwl
     in:
@@ -105,11 +124,11 @@ steps:
       bam_index: align_reads/paired_end_bam_index
       threads: threads
     out:
-      - Fragment_Size_Distribution_pdf
-      - TSS_by_Unique_Frags_pdf
-      - QC-Sample-FragSizes-TSSProfile_pdf
-      - QC-Sample-Statistics_pdf
-      - TSS-vs-Frags_pdf
+      #- Fragment_Size_Distribution_pdf
+      #- TSS_by_Unique_Frags_pdf
+      #- QC-Sample-FragSizes-TSSProfile_pdf
+      #- QC-Sample-Statistics_pdf
+      #- TSS-vs-Frags_pdf
       - cell_column_data_csv
       - gene_row_data_csv
       - cell_by_gene_raw_mtx
@@ -117,6 +136,7 @@ steps:
       - cell_by_bin_mtx
       - cell_by_bin_barcodes
       - cell_by_bin_bins
+      - rdata_file
 
   create_fragment_file:
     run: sc_atac_seq_process_steps/create_fragment_file.cwl

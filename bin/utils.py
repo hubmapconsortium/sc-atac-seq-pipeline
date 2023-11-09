@@ -14,3 +14,4 @@ class Assay(Enum):
     SNARESEQ = "snareseq", 3
     SCISEQ = "sciseq", 2
     SNSEQ = "snseq", 3
+    MULTIOME_10X = "multiome_10x", 3

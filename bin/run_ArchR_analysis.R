@@ -417,7 +417,6 @@ h5write(as.matrix(transposed_smooth_g_score_dm), smooth_cell_by_gene_filename,
 h5write(gene_row_dat_df$name, smooth_cell_by_gene_filename, "genes")
 h5write(archr_proj$cellNames, smooth_cell_by_gene_filename, "barcodes")
 
-
 archr_proj <- addGroupCoverages(ArchRProj = archr_proj, groupBy = "Clusters")
 path_to_macs2 <- findMacs2()
 archr_proj <- addReproduciblePeakSet(
@@ -434,100 +433,6 @@ export.bed(peaks_gr, con = "peaks.bed")
 
 archr_proj <- addPeakMatrix(archr_proj)
 
-message(paste("Cell types:"))
-# First, lets remind ourselves of the cell types that we are working with in the
-# project and their relative proportions.
-table(archr_proj$Clusters)
-
-archr_proj <- saveArchRProject(ArchRProj = archr_proj)
-
-# To identify marker genes based on gene scores, we call the
-# getMarkerFeatures() function with useMatrix = "GeneScoreMatrix".
-# We specify that we want to know the cluster-specific features
-# with groupBy = "Clusters" which tells ArchR to use
-# the “Clusters” column in cellColData to stratify cell groups.
-marker_gs <- getMarkerFeatures(
-       ArchRProj = archr_proj,
-       useMatrix = "GeneScoreMatrix",
-       groupBy = "Clusters",
-       bias = c("TSSEnrichment", "log10(nFrags)"),
-       testMethod = "wilcoxon"
- )
-
-markers_gs_list <- getMarkers(marker_gs,
-             cutOff = "FDR <= 0.01 & Log2FC >= .5")
-markers_gs_list
-
-message(paste("Writing gene markers CSV"))
-write.csv(markers_gs_list, file = "gene_markers.csv")
-  
-if (!isEmpty(markers_gs_list)) {
-    heatmap_gs <- plotMarkerHeatmap(
-         seMarker = marker_gs,
-         cutOff = "FDR <= 0.01 & Log2FC >= .5",
-         transpose = TRUE
-      )
-    draw(heatmap_gs, heatmap_legend_side = "bot",
-            annotation_legend_side = "bot")
-    plotPDF(heatmap_gs, name = "GeneScores-Marker-Heatmap", width = 8,
-              height = 6, ArchRProj = archr_proj, addDOC = FALSE)
-} else {
-    message("No markers found so no marker gene scores heatmap can be created.")
-}
-
-# Often times, we are interested to know which peaks are unique to an individual
-# cluster or a small group of clusters. We can do this in an unsupervised
-# fashion in ArchR using the addMarkerFeatures() function in combination with
-# useMatrix = "PeakMatrix". Now, we are ready to identify marker peaks by
-# calling the addMarkerFeatures() function with useMatrix = "PeakMatrix".
-# Additionally, we tell ArchR to account for differences in data quality amongst
-# the cell groups by setting the bias parameter to account for TSS enrichment
-# and the number of unique fragments per cell.
-markers_peaks <- getMarkerFeatures(
-    ArchRProj = archr_proj,
-    useMatrix = "PeakMatrix",
-    groupBy = "Clusters",
-    bias = c("TSSEnrichment", "log10(nFrags)"),
-    testMethod = "wilcoxon"
-    )
-
-# The object returned by the getMarkerFeatures() function is a
-# SummarizedExperiment that contains a few different assays.
-markers_peaks
-
-# Instead of a list of DataFrame objects, we can use getMarkers() to return a
-# GRangesList object by setting returnGR = TRUE.
-markers_gr <- getMarkers(markers_peaks, cutOff = "FDR <= 0.01 & Log2FC >= .5",
-                          returnGR = TRUE)
-markers_gr
-write.csv(markers_gr, file = "peak_markers.csv")
-
-# ArchR provides multiple plotting functions to interact with the
-# SummarizedExperiment objects returned by getMarkerFeatures().
-# We can visualize these marker peaks (or any features output by
-# getMarkerFeatures()) as a heatmap using the markerHeatmap() function.
-if (!isEmpty(markers_gr)) {
-    heatmap_peaks <- plotMarkerHeatmap(
-      seMarker = markers_peaks,
-      cutOff = "FDR <= 0.01 & Log2FC >= .5",
-      transpose = TRUE
-      )
-    # We can plot this heatmap using draw().
-    draw(heatmap_peaks, heatmap_legend_side = "bot",
-                              annotation_legend_side = "bot")
-    plotPDF(heatmap_peaks, name = "Peak-Marker-Heatmap", width = 8, height = 6,
-            ArchRProj = archr_proj, addDOC = FALSE)
-} else {
-    message("No markers found so no marker peaks heatmap can be created.")
-}
-
-# Saving and Loading an ArchRProject
-# To easily save an ArchRProject for later use or for sharing with
-# collaborators,we use the saveArchRProject() function. This copies the current
-# ArchRProject object and all of the Arrow files to a specified directory. If
-# we don’t specify an output directory (as below), saveArchRProject() uses
-# the output directory that we specified upon creation of our ArchRProject.
-# In this case that is the folder "ArchRProjFiles"
 archr_proj <- saveArchRProject(ArchRProj = archr_proj)
 
 # Session Information

@@ -1,3 +1,4 @@
+
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
@@ -126,4 +127,29 @@ outputs:
     outputBinding:
       glob: "bins.txt"
 
-baseCommand: [Rscript, /opt/run_ArchR_analysis_pt1.R]
+analyze_fundamental_step:
+  run: archr_fundamental.cwl
+  in:
+    bam_file: bam_file
+    bam_index: bam_index
+    threads: threads
+  out:
+    - archR_data_file
+
+analyze_clustering_step:
+  run: archr_clustering.cwl
+  in:
+    archR_data_file: analyze_fundamental_step/archR_data_file
+    minTSS: minTSS
+    minFrags: minFrags
+    minCells: minCells
+  out:
+    - Fragment_Size_Distribution_pdf
+    - TSS_by_Unique_Frags_pdf
+    - QC-Sample-FragSizes-TSSProfile_pdf
+    - QC-Sample-Statistics_pdf
+    - TSS-vs-Frags_pdf
+    - Plot-UMAP-Sample-Clusters_pdf
+    - Peak-Call-Summary_pdf
+    - peaks_csv
+    - peaks_bed
