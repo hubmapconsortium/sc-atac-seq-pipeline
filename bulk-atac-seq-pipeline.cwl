@@ -100,24 +100,12 @@ steps:
 #      num_threads: threads
 #      if_sort: if_sort
 
-#    out: [paired_end_bam]
-    out: [reads_stdout]
-
-
-  add_cell_identifiers_and_sort:
-    scatter: [sam_file]
-    run: steps/add_cell_identifiers_and_sort.cwl
-    in:
-       sam_file: align_paired_end/reads_stdout
-    out: [sorted_BAM_with_cell_ids]
-
-
+    out: [paired_end_bam]
 
   merge_bam:
     run: steps/merge_bam.cwl
     in:
-#      bam_files: align_paired_end/paired_end_bam
-      bam_files: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
+      bam_files: align_paired_end/paired_end_bam
     out: [merged_bam]
 
   bulk_process:
