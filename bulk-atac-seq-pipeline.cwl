@@ -100,7 +100,7 @@ steps:
 #      num_threads: threads
 #      if_sort: if_sort
 
-    out: [paired_end_bam]
+    out: [paired_end_bam, paired_end_bam_index]
 
   merge_bam:
     run: steps/merge_bam.cwl
