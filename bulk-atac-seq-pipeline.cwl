@@ -84,8 +84,8 @@ steps:
       [genome_alignment_index, genome_size_index]
 
   align_paired_end:
-#    scatter: [input_fastq1, input_fastq2]
-    scatter: [Fastq_1, Fastq_2]
+    scatter: [input_fastq1, input_fastq2]
+#    scatter: [Fastq_1, Fastq_2]
     scatterMethod: dotproduct
     run: steps/align_reads.cwl
     in:
@@ -94,8 +94,8 @@ steps:
 #        source: [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
 #        linkMerge: merge_nested
 
-      Fastq_1: gather_sequence_bundles/fastq1_files
-      Fastq_2: gather_sequence_bundles/fastq2_files
+      input_fastq1: gather_sequence_bundles/fastq1_files
+      input_fastq2: gather_sequence_bundles/fastq2_files
 #      tmp_folder: tmp_folder
 #      num_threads: threads
 #      if_sort: if_sort
@@ -133,4 +133,5 @@ steps:
     in:
       bam_file: merge_bam/merged_bam
       peak_file: bulk_analysis/summits_bed
+      bam_index: align_reads/paired_end_bam_index
     out: [qc_report]
