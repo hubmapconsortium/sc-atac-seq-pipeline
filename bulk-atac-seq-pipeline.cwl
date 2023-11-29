@@ -133,5 +133,5 @@ steps:
     in:
       bam_file: merge_bam/merged_bam
       peak_file: bulk_analysis/summits_bed
-      bam_index: align_reads/paired_end_bam_index
+      bam_index: align_paired_end/paired_end_bam_index
     out: [qc_report]
