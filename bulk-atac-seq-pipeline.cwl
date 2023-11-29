@@ -89,7 +89,7 @@ steps:
     scatterMethod: dotproduct
     run: steps/align_reads.cwl
     in:
-      alignment_index: index_ref_genome/genome_alignment_index
+#      alignment_index: index_ref_genome/genome_alignment_index
 #      InputFile: [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
 #        source: [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
 #        linkMerge: merge_nested
