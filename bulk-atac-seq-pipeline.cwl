@@ -111,14 +111,14 @@ steps:
   index_merged_bam:
     run: steps/index_merged_bam.cwl
     in:
-      merged_bam: merge_bam/merged_bam
+      merged_bam_file: merge_bam/merged_bam
     out:
       [sorted_merged_bam, merged_bam_index]
 
   bulk_process:
     run: steps/bulk_process.cwl
     in:
-      merged_bam: index_merged_bam/sorted_merged_bam
+      sorted_merged_bam: index_merged_bam/sorted_merged_bam
       alignment_index: index_ref_genome/genome_alignment_index
       encode_blacklist: encode_blacklist
       threads: threads
