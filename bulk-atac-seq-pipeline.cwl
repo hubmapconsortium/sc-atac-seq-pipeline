@@ -28,7 +28,7 @@ outputs:
 
   bam_file:
     type: File
-    outputSource: bulk_process/bam_file
+    outputSource: bulk_process/sorted_bam_file
 
   peaks_table:
     type: File
