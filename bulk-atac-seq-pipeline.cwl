@@ -100,7 +100,7 @@ steps:
 #      num_threads: threads
 #      if_sort: if_sort
 
-    out: [paired_end_bam, paired_end_bam_index]
+    out: [paired_end_bam]
 
   merge_bam:
     run: steps/merge_bam.cwl
@@ -108,10 +108,17 @@ steps:
       bam_files: align_paired_end/paired_end_bam
     out: [merged_bam]
 
+  index_merged_bam:
+    run: steps/index_merged_bam.cwl
+    in:
+      merged_bam: merge_bam/merged_bam
+    out:
+      [sorted_merged_bam, merged_bam_index]
+
   bulk_process:
     run: steps/bulk_process.cwl
     in:
-      merged_bam: merge_bam/merged_bam
+      merged_bam: index_merged_bam/sorted_merged_bam
       alignment_index: index_ref_genome/genome_alignment_index
       encode_blacklist: encode_blacklist
       threads: threads
@@ -131,7 +138,7 @@ steps:
   qc_measures:
     run: steps/qc_measures.cwl
     in:
-      bam_file: merge_bam/merged_bam
+      bam_file: index_merged_bam/sorted_merged_bam
       peak_file: bulk_analysis/summits_bed
-      bam_index: align_paired_end/paired_end_bam_index
+      bam_index: index_merged_bam/merged_bam_index
     out: [qc_report]
