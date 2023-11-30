@@ -124,7 +124,7 @@ steps:
       threads: threads
 
     out:
-      [bam_file]
+      [sorted_bam_file]
 
 
   bulk_analysis:
