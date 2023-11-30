@@ -130,7 +130,7 @@ steps:
   bulk_analysis:
     run: steps/bulk_analysis.cwl
     in:
-      bam_file: bulk_process/bam_file
+      bam_file: bulk_process/sorted_bam_file
 
     out:
       [peaks_table, narrow_peaks, summits_bed, bed_graphs, r_script]
