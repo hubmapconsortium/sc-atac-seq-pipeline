@@ -74,15 +74,6 @@ steps:
     out:
       [fastq1_files, fastq2_files]
 
-  index_ref_genome:
-    run: steps/sc_atac_seq_process_steps/index_ref_genome_tool.cwl
-    in:
-      input_fasta: reference_genome_fasta
-      alignment_index: alignment_index
-      size_index: size_index
-    out:
-      [genome_alignment_index, genome_size_index]
-
   align_paired_end:
     scatter: [input_fastq1, input_fastq2]
 #    scatter: [Fastq_1, Fastq_2]
@@ -119,7 +110,6 @@ steps:
     run: steps/bulk_process.cwl
     in:
       sorted_merged_bam: index_merged_bam/sorted_merged_bam
-      alignment_index: index_ref_genome/genome_alignment_index
       encode_blacklist: encode_blacklist
       threads: threads
 

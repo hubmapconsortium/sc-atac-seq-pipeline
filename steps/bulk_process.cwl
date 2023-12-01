@@ -9,7 +9,6 @@ requirements:
 
 inputs:
   sorted_merged_bam: File
-  alignment_index: Directory?
   encode_blacklist: File?
   threads: int?
 
