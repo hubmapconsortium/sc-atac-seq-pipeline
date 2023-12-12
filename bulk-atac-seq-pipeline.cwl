@@ -28,7 +28,7 @@ outputs:
 
   bam_file:
     type: File
-    outputSource: bulk_process/bam_file
+    outputSource: bulk_process/sorted_bam_file
 
   peaks_table:
     type: File
@@ -74,68 +74,53 @@ steps:
     out:
       [fastq1_files, fastq2_files]
 
-  index_ref_genome:
-    run: steps/sc_atac_seq_process_steps/index_ref_genome_tool.cwl
-    in:
-      input_fasta: reference_genome_fasta
-      alignment_index: alignment_index
-      size_index: size_index
-    out:
-      [genome_alignment_index, genome_size_index]
-
   align_paired_end:
-#    scatter: [input_fastq1, input_fastq2]
-    scatter: [Fastq_1, Fastq_2]
+    scatter: [input_fastq1, input_fastq2]
+#    scatter: [Fastq_1, Fastq_2]
     scatterMethod: dotproduct
-    run: steps/BWA-Mem.cwl
+    run: steps/align_reads.cwl
     in:
-      alignment_index: index_ref_genome/genome_alignment_index
+#      alignment_index: index_ref_genome/genome_alignment_index
 #      InputFile: [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
 #        source: [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
 #        linkMerge: merge_nested
 
-      Fastq_1: gather_sequence_bundles/fastq1_files
-      Fastq_2: gather_sequence_bundles/fastq2_files
+      input_fastq1: gather_sequence_bundles/fastq1_files
+      input_fastq2: gather_sequence_bundles/fastq2_files
 #      tmp_folder: tmp_folder
 #      num_threads: threads
 #      if_sort: if_sort
 
-#    out: [paired_end_bam]
-    out: [reads_stdout]
-
-
-  add_cell_identifiers_and_sort:
-    scatter: [sam_file]
-    run: steps/add_cell_identifiers_and_sort.cwl
-    in:
-       sam_file: align_paired_end/reads_stdout
-    out: [sorted_BAM_with_cell_ids]
-
-
+    out: [paired_end_bam]
 
   merge_bam:
     run: steps/merge_bam.cwl
     in:
-#      bam_files: align_paired_end/paired_end_bam
-      bam_files: add_cell_identifiers_and_sort/sorted_BAM_with_cell_ids
+      bam_files: align_paired_end/paired_end_bam
     out: [merged_bam]
+
+  index_merged_bam:
+    run: steps/index_merged_bam.cwl
+    in:
+      merged_bam_file: merge_bam/merged_bam
+    out:
+      [sorted_merged_bam, merged_bam_index]
 
   bulk_process:
     run: steps/bulk_process.cwl
     in:
-      merged_bam: merge_bam/merged_bam
-      alignment_index: index_ref_genome/genome_alignment_index
+      sorted_merged_bam: index_merged_bam/sorted_merged_bam
       encode_blacklist: encode_blacklist
       threads: threads
 
     out:
-      [bam_file]
+      [sorted_bam_file]
 
 
   bulk_analysis:
     run: steps/bulk_analysis.cwl
     in:
-      bam_file: bulk_process/bam_file
+      bam_file: bulk_process/sorted_bam_file
 
     out:
       [peaks_table, narrow_peaks, summits_bed, bed_graphs, r_script]
@@ -143,6 +128,7 @@ steps:
   qc_measures:
     run: steps/qc_measures.cwl
     in:
-      bam_file: merge_bam/merged_bam
+      bam_file: index_merged_bam/sorted_merged_bam
       peak_file: bulk_analysis/summits_bed
+      bam_index: index_merged_bam/merged_bam_index
     out: [qc_report]
