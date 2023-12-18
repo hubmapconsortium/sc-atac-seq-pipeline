@@ -10,17 +10,11 @@ requirements:
     dockerPull: hubmap/sc-atac-hisat2-hg38:latest
 
 inputs:
-  input_fastq1:
+  merged_bam_file:
     type: File
     inputBinding:
       position: 3
-    doc: The first paired end fastq file to be aligned.
-
-  input_fastq2:
-    type: File
-    inputBinding:
-      position: 4
-    doc: The second paired end fastq file to be aligned.
+    doc: Merged BAM file
 
   num_threads:
     type: int?
@@ -31,13 +25,13 @@ inputs:
     doc: The number of threads to use.
 
 outputs:
-  paired_end_bam:
+  sorted_merged_bam:
     type: File
     outputBinding:
       glob: alignment.bam
-  paired_end_bam_index:
+  merged_bam_index:
     type: File
     outputBinding:
       glob: alignment.bam.bai
 
-baseCommand: [/opt/align_reads.py]
+baseCommand: [/opt/index_merged_bam.py]
