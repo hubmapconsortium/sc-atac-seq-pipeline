@@ -125,6 +125,8 @@ quantile(archr_proj$TSSEnrichment)
 # Plot QC metrics - log10(Unique Fragments) vs TSS enrichment score
 df <- getCellColData(archr_proj, select = c("log10(nFrags)", "TSSEnrichment"))
 
+#either need to actually plot these or take out of the cwl
+
 # Filter doublets
 message(paste("Filtering Doublets"))
 archr_proj <- filterDoublets(ArchRProj = archr_proj)
