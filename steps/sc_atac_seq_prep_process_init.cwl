@@ -84,4 +84,3 @@ steps:
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
       - fragment_file
-}
