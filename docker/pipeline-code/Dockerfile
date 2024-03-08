@@ -1,6 +1,6 @@
-FROM rocker/tidyverse:4.1.1
+FROM --platform=linux/amd64 rocker/tidyverse:4.1.1
 
-ENV DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=non-interactive
 
 RUN apt-get update \
  && apt-get -y install \
