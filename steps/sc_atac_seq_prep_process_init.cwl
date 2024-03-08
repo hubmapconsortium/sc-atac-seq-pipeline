@@ -65,16 +65,16 @@ steps:
     out:
       [output_directory, merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
 
-   sc_atac_seq_initial_analysis:
-     run: steps/sc_atac_seq_initial_analysis.cwl
-     in:
-       assay: assay
-       concat_fastq_dir: concat_fastq/output_directory
+  sc_atac_seq_initial_analysis:
+    run: steps/sc_atac_seq_initial_analysis.cwl
+    in:
+      assay: assay
+      concat_fastq_dir: concat_fastq/output_directory
 
-       input_fastq1: concat_fastq/merged_fastq_r1
-       input_fastq2: concat_fastq/merged_fastq_r2
+      input_fastq1: concat_fastq/merged_fastq_r1
+      input_fastq2: concat_fastq/merged_fastq_r2
 
-       threads: threads
+      threads: threads
     out:
       - bam_file
       - bam_index
