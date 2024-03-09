@@ -24,7 +24,7 @@ outputs:
 
   bam_index:
     type: File
-    outputSources: sc_atac_seq_initial_analysis/bam_index
+    outputSource: sc_atac_seq_initial_analysis/bam_index
 
   gene_row_data_csv:
     type: File
