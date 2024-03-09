@@ -79,7 +79,7 @@ steps:
       - bam_file
       - bam_index
       - gene_row_data_csv
-      - cell_column_data_css
+      - cell_column_data_csv
       - r_image
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
