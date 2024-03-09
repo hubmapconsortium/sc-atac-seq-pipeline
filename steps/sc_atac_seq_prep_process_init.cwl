@@ -20,7 +20,7 @@ outputs:
 
   bam_file:
     type: File
-    outputSource: sc_atac_seq_initial_analysis/bam_output
+    outputSource: sc_atac_seq_initial_analysis/bam_file
 
   bam_index:
     type: File
