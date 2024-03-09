@@ -28,31 +28,31 @@ outputs:
 
   Fragment_Size_Distribution_pdf:
     type: File
-    outputSource: sc_atac_seq_process_and_analyze/Fragment_Size_Distribution_pdf
+    outputSource: analyze_with_ArchR/Fragment_Size_Distribution_pdf
 
   TSS_by_Unique_Frags_pdf:
     type: File
-    outputSource: sc_atac_seq_process_and_analyze/TSS_by_Unique_Frags_pdf
+    outputSource: analyze_with_ArchR/TSS_by_Unique_Frags_pdf
 
   QC-Sample-FragSizes-TSSProfile_pdf:
     type: File
-    outputSource: sc_atac_seq_process_and_analyze/QC-Sample-FragSizes-TSSProfile_pdf
+    outputSource: analyze_with_ArchR/QC-Sample-FragSizes-TSSProfile_pdf
 
   QC-Sample-Statistics_pdf:
     type: File
-    outputSource: sc_atac_seq_process_and_analyze/QC-Sample-Statistics_pdf
+    outputSource: analyze_with_ArchR/QC-Sample-Statistics_pdf
 
   TSS-vs-Frags_pdf:
     type: File
-    outputSource: sc_atac_seq_process_and_analyze/TSS-vs-Frags_pdf
+    outputSource: analyze_with_ArchR/TSS-vs-Frags_pdf
 
   Peak-Call-Summary_pdf:
     type: File
-    outputSource: sc_atac_seq_process_and_analyze/Peak-Call-Summary_pdf
+    outputSource: analyze_with_ArchR/Peak-Call-Summary_pdf
 
   Plot-UMAP-Sample-Clusters_pdf:
     type: File
-    outputSource: sc_atac_seq_process_and_analyze/Plot-UMAP-Sample-Clusters_pdf
+    outputSource: analyze_with_ArchR/Plot-UMAP-Sample-Clusters_pdf
 
   gene_row_data_csv:
     type: File
@@ -64,7 +64,7 @@ outputs:
 
   umap_coords_clusters_csv:
     type: File
-    outputSource: sc_atac_seq_process_and_analyze/umap_coords_clusters_csv
+    outputSource: analyze_with_ArchR/umap_coords_clusters_csv
 
   cell_by_bin_h5ad:
     type: File
@@ -81,7 +81,7 @@ outputs:
 steps:
 
   sc_atac_seq_prep_process_init:
-    run: steps/sc_prep_process_init.cwl
+    run: steps/sc_atac_seq_prep_process_init.cwl
     in:
      assay: assay
      sequence_directory: sequence_directory
@@ -98,12 +98,11 @@ steps:
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
 
-  sc_atac_seq_process_and_analyze:
-    run: steps/sc_atac_seq_process_and_analyze.cwl
+  analyze_with_ArchR:
+    run: steps/sc_atac_seq_analyze_steps/archr_clustering.cwl
     in:
-      bam_file: sc_atac_seq_prep_process_init/bam_file
-      bam_index: sc_atac_seq_prep_process_init/bam_index
       r_image: sc_atac_seq_prep_process_init/r_image
+      threads: threads
     out:
       - Fragment_Size_Distribution_pdf
       - TSS_by_Unique_Frags_pdf

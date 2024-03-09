@@ -50,7 +50,7 @@ steps:
   fastqc:
     scatter: [fastq_dir]
     scatterMethod: dotproduct
-    run: steps/fastqc.cwl
+    run: fastqc.cwl
     in:
       fastq_dir: sequence_directory
       threads: threads
@@ -58,7 +58,7 @@ steps:
       [fastqc_dir]
 
   concat_fastq:
-    run: steps/concat-fastq.cwl
+    run: concat-fastq.cwl
     in:
       sequence_directory: sequence_directory
       assay: assay
@@ -66,7 +66,7 @@ steps:
       [output_directory, merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
 
   sc_atac_seq_initial_analysis:
-    run: steps/sc_atac_seq_initial_analysis.cwl
+    run: sc_atac_seq_initial_analysis.cwl
     in:
       assay: assay
       concat_fastq_dir: concat_fastq/output_directory
