@@ -102,7 +102,7 @@ outputs:
     outputBinding:
       glob: "*/Plots/Plot-UMAP-Sample-Clusters.pdf"
 
-Peak-Call-Summary_pdf:
+  Peak-Call-Summary_pdf:
     type: File
     outputBinding:
       glob: "*/Plots/Peak-Call-Summary.pdf"
@@ -122,4 +122,4 @@ Peak-Call-Summary_pdf:
     outputBinding:
       glob: "umap_coords_clusters.csv"
 
-}
+baseCommand: [Rscript, /opt/run_ArchR_analysis_pt2.R]
