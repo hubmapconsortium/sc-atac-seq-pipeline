@@ -101,7 +101,9 @@ steps:
   analyze_with_ArchR:
     run: steps/sc_atac_seq_analyze_steps/archr_clustering.cwl
     in:
-      r_image: sc_atac_seq_prep_process_init/r_image
+      bam_file: sc_atac_seq_prep_process_init/bam_file
+      bam_index: sc_atac_seq_prep_process_init/bam_index
+      image_file: sc_atac_seq_prep_process_init/r_image
       threads: threads
     out:
       - Fragment_Size_Distribution_pdf

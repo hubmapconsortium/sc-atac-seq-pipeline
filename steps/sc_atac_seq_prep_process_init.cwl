@@ -46,6 +46,10 @@ outputs:
     type: File
     outputSource: sc_atac_seq_initial_analysis/fragment_file
 
+  r_image:
+    type: File
+    outputSource: sc_atac_seq_initial_analysis/r_image
+
 steps:
   fastqc:
     scatter: [fastq_dir]
