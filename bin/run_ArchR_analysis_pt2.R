@@ -3,8 +3,25 @@ library(optparse)
 library(parallel)
 library(magick)
 
-load("atacSeqStep1.RData") #TODO: get the file from cwl
+option_list <- list(
+  make_option(
+    c("-i", "--image"),
+    type = "character",
+    default =,
+    help = "saved image from ArchR step 1"
+  )
+)
 
+opt_parser <- OptionParser(option_list = option_list)
+opt <- parse_args(opt_parser)
+
+if (is.null(opt$image)) {
+  print_help(opt_parser)
+  stop("--image argument must be supplied (R image from previous ArchR step).", call. = FALSE)
+}
+
+step1_image <- c(opt$image)
+load(step1_image)
 
 library(ArchR)
 
