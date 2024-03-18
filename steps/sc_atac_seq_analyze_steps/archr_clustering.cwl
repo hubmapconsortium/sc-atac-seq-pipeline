@@ -22,6 +22,14 @@ inputs:
       prefix: --image
       valueFrom: $(self.basename)
     doc: "The R image from the previous archR analysis step"
+    
+  threads:
+    type: int?
+    inputBinding:
+      position: 3
+      prefix: --threads
+    default: 2
+    doc: "Number of threads to use."
 
 outputs:
   Fragment_Size_Distribution_pdf:
