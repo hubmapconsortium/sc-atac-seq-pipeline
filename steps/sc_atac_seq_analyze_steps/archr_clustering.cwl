@@ -9,10 +9,6 @@ requirements:
     dockerPull: hubmap/sc-atac-seq-hg38
   NetworkAccess:
     networkAccess: true
-  InitialWorkDirRequirement:
-    listing:
-      - $(inputs.bam_file)
-      - $(inputs.bam_index)
 
 inputs:
   image_file:
@@ -20,7 +16,6 @@ inputs:
     inputBinding:
       position: 3
       prefix: --image
-      valueFrom: $(self.basename)
     doc: "The R image from the previous archR analysis step"
 
 outputs:

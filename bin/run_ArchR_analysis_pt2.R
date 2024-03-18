@@ -5,23 +5,27 @@ library(magick)
 
 option_list <- list(
   make_option(
-    c("-i", "--image"),
+    c("-i", "--image_file"),
     type = "character",
-    default =,
-    help = "saved image from ArchR step 1"
+    help = "Path to the RData image from previous ArchR step"
   )
 )
 
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
 
-if (is.null(opt$image)) {
-  print_help(opt_parser)
+if (is.null(opt$image_file)) {
   stop("--image argument must be supplied (R image from previous ArchR step).", call. = FALSE)
 }
 
-step1_image <- c(opt$image)
-load(step1_image)
+image_path <- opt$image_file
+
+# Print out the received image path for debugging
+print(paste("Received Image Path:", image_path))
+# Check the current working directory
+print(paste("Current Working Directory:", getwd()))
+
+load(image_path)
 
 library(ArchR)
 
