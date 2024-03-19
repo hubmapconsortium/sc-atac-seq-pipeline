@@ -10,7 +10,7 @@ requirements:
 inputs:
   bam_file: File
   bam_index: File
-  r_image: File
+  image_file: File
   threads: int?
 
 outputs:
@@ -56,8 +56,7 @@ steps:
   analyze_with_ArchR:
     run: sc_atac_seq_analyze_steps/archr_clustering.cwl
     in:
-      r_image
-      threads: threads
+      image_file
     out:
       - Fragment_Size_Distribution_pdf
       - TSS_by_Unique_Frags_pdf

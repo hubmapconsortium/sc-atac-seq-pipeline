@@ -94,14 +94,14 @@ steps:
       - gene_row_data_csv
       - cell_column_data_csv
       - fragment_file
-      - r_image
+      - image_file
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
 
   analyze_with_ArchR:
     run: steps/sc_atac_seq_analyze_steps/archr_clustering.cwl
     in:
-      image_file: sc_atac_seq_prep_process_init/r_image
+      image_file: sc_atac_seq_prep_process_init/image_file
     out:
       - Fragment_Size_Distribution_pdf
       - TSS_by_Unique_Frags_pdf

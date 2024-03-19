@@ -46,9 +46,9 @@ outputs:
     type: File
     outputSource: sc_atac_seq_initial_analysis/fragment_file
 
-  r_image:
+  image_file:
     type: File
-    outputSource: sc_atac_seq_initial_analysis/r_image
+    outputSource: sc_atac_seq_initial_analysis/image_file
 
 steps:
   fastqc:
@@ -84,7 +84,7 @@ steps:
       - bam_index
       - gene_row_data_csv
       - cell_column_data_csv
-      - r_image
+      - image_file
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
       - fragment_file

@@ -102,7 +102,7 @@ outputs:
     outputBinding:
       glob: "bins.txt"
 
-  r_image:
+  image_file:
     type: File
     outputBinding:
       glob: "atacSeqStep1.RData"

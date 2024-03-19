@@ -37,7 +37,7 @@ outputs:
     type: File
     outputSource: create_fragment_file/fragment_file
 
-  r_image:
+  image_file:
     type: File
     outputSource: analyze_with_ArchR/r_image
     
@@ -102,7 +102,7 @@ steps:
       - cell_by_bin_mtx
       - cell_by_bin_barcodes
       - cell_by_bin_bins
-      - r_image
+      - image_file
 
   convert_to_h5ad:
     run: convert_to_h5ad.cwl
