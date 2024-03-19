@@ -20,6 +20,11 @@ if (is.null(opt$image_file)) {
 
 image_path <- opt$image_file
 
+# Print out the received image path for debugging
+print(paste("Received Image Path:", image_path))
+# Check the current working directory
+print(paste("Current Working Directory:", getwd()))
+
 load(image_path)
 
 library(ArchR)
