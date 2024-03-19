@@ -39,7 +39,7 @@ outputs:
 
   image_file:
     type: File
-    outputSource: analyze_with_ArchR/r_image
+    outputSource: analyze_with_ArchR/image_file
     
   cell_by_bin_h5ad:
     type: File
