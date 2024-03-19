@@ -3,11 +3,22 @@ library(optparse)
 library(parallel)
 library(magick)
 
-if (length(commandArgs(trailingOnly = TRUE)) < 1) {
-  stop("Usage: Rscript script.R <image_path>")
+option_list <- list(
+  make_option(
+    c("-i", "--image_file"),
+    type = "character",
+    help = "Path to the RData image from previous ArchR step"
+  )
+)
+
+opt_parser <- OptionParser(option_list = option_list)
+opt <- parse_args(opt_parser)
+
+if (is.null(opt$image)) {
+  stop("--image argument must be supplied (R image from previous ArchR step).", call. = FALSE)
 }
 
-image_path <- commandArgs(trailingOnly = TRUE)[1]
+image_path <- opt$image
 
 load(image_path)
 
