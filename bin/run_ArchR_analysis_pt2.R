@@ -20,8 +20,7 @@ if (is.null(opt$image)) {
   stop("--image argument must be supplied (R image from previous ArchR step).", call. = FALSE)
 }
 
-step1_image <- c(opt$image)
-load(step1_image)
+load(c(opt$image))
 
 library(ArchR)
 
