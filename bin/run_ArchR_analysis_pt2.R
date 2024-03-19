@@ -14,11 +14,11 @@ option_list <- list(
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
 
-if (is.null(opt$image)) {
+if (is.null(opt$image_file)) {
   stop("--image argument must be supplied (R image from previous ArchR step).", call. = FALSE)
 }
 
-image_path <- opt$image
+image_path <- opt$image_file
 
 load(image_path)
 
