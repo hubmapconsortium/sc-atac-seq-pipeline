@@ -109,6 +109,6 @@ outputs:
   archr_project:
     type: Directory[]
     outputBinding:
-      glob: "ArchRProject"
+      glob: "ArchRProjFiles"
 
 baseCommand: [Rscript, /opt/run_ArchR_analysis_pt1.R]

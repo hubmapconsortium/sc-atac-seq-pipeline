@@ -22,14 +22,11 @@ if (is.null(opt$image_file)) {
   stop("--image argument must be supplied (R image from previous ArchR step).", call. = FALSE)
 }
 
-image_path <- opt$image_file
-archr_proj_path <- opt$archr_project
-
-load(image_path)
+load(opt$image_file)
 
 library(ArchR)
-
-archr_proj <- loadArchRProject(path = archr_proj_path)
+print(paste("ArchR Project Directory Path:", opt$archr_project))
+archr_proj <- loadArchRProject(opt$archr_project)
 
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the
