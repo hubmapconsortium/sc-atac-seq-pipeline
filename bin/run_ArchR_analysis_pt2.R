@@ -8,13 +8,12 @@ option_list <- list(
     c("-i", "--image_file"),
     type = "character",
     help = "Path to the RData image from previous ArchR step"
-  )
+  ),
   make_option(
     c("-a", "--archr_project"),
     type = "character",
-    help = "Path to the ArchRProj directory from the previous ArchR step"
-  )
-)
+    help = "Path to the ArchR Project directory from previous ArchR step"
+  ))
 
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
