@@ -7,20 +7,27 @@ cwlVersion: v1.2
 requirements:
   DockerRequirement:
     dockerPull: hubmap/sc-atac-seq-hg38
+    dockerOutputDirectory: "/output"
   NetworkAccess:
     networkAccess: true
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.archr_project)
 
 inputs:
   image_file:
     type: File
     inputBinding:
-      prefix: --image
+      position: 1
+      prefix: --image_file
     doc: "The R image from the previous archR analysis step"
 
   archr_project:
-    type: Directory[]
+    type: Directory
     inputBinding:
+      position: 2
       prefix: --archr_project
+      valueFrom: $(self.basename)
     doc: "The ArchRProj directory from the previous step"
 
 outputs:

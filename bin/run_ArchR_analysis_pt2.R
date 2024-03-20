@@ -17,19 +17,14 @@ option_list <- list(
 
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
-
-if (is.null(opt$image_file)) {
-  stop("--image argument must be supplied (R image from previous ArchR step).", call. = FALSE)
-}
-
 image_path <- opt$image_file
-archr_proj_path <- opt$archr_project
-
+archr_path <- opt$archr_project
+copyDirectory(archr_path, "ArchRStep2")
 load(image_path)
 
 library(ArchR)
 
-archr_proj <- loadArchRProject(path = archr_proj_path)
+archr_proj <- loadArchRProject(path = "/output/ArchRStep2")
 
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the
@@ -69,7 +64,7 @@ archr_proj <- addUMAP(ArchRProj = archr_proj, reducedDims = "IterativeLSI")
 
 message(paste("Getting embedding"))
 archr_proj_embed_w_clusters_df <- getEmbedding(ArchRProj = archr_proj,
-                                               embedding = "UMAP", returnDF = TRUE)
+       embedding = "UMAP", returnDF = TRUE)
 
 message(paste("Adding Clusters column"))
 # https://stackoverflow.com/questions/48896190/

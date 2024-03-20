@@ -196,4 +196,4 @@ h5write(gene_row_dat_df$name, smooth_cell_by_gene_filename, "genes")
 h5write(archr_proj$cellNames, smooth_cell_by_gene_filename, "barcodes")
 
 save.image(file="atacSeqStep1.RData")
-saveArchRProject(ArchRProj = archr_proj)
+saveArchRProject(ArchRProj = archr_proj, load = FALSE, outputDirectory = "ArchRStep1")
