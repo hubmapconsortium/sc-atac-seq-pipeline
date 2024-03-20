@@ -103,6 +103,7 @@ steps:
       - cell_by_bin_barcodes
       - cell_by_bin_bins
       - image_file
+      - archr_project
 
   convert_to_h5ad:
     run: convert_to_h5ad.cwl

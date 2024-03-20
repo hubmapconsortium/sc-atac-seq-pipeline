@@ -14,9 +14,14 @@ inputs:
   image_file:
     type: File
     inputBinding:
-      position: 3
       prefix: --image
     doc: "The R image from the previous archR analysis step"
+
+  archr_project:
+    type: Directory[]
+    inputBinding:
+      prefix: --archr_project
+    doc: "The ArchRProj directory from the previous step"
 
 outputs:
   Fragment_Size_Distribution_pdf:

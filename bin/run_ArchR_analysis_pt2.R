@@ -9,6 +9,11 @@ option_list <- list(
     type = "character",
     help = "Path to the RData image from previous ArchR step"
   )
+  make_option(
+    c("-a", "--archr_project"),
+    type = "character",
+    help = "Path to the ArchRProj directory from the previous ArchR step"
+  )
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -19,15 +24,13 @@ if (is.null(opt$image_file)) {
 }
 
 image_path <- opt$image_file
-
-# Print out the received image path for debugging
-print(paste("Received Image Path:", image_path))
-# Check the current working directory
-print(paste("Current Working Directory:", getwd()))
+archr_proj_path <- opt$archr_project
 
 load(image_path)
 
 library(ArchR)
+
+archr_proj <- loadArchRProject(path = archr_proj_path)
 
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the

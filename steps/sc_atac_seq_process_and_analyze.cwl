@@ -8,10 +8,8 @@ requirements:
   InlineJavascriptRequirement: {}
 
 inputs:
-  bam_file: File
-  bam_index: File
   image_file: File
-  threads: int?
+  archr_project
 
 outputs:
 
@@ -57,6 +55,7 @@ steps:
     run: sc_atac_seq_analyze_steps/archr_clustering.cwl
     in:
       image_file
+      archr_project
     out:
       - Fragment_Size_Distribution_pdf
       - TSS_by_Unique_Frags_pdf
