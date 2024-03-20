@@ -106,5 +106,9 @@ outputs:
     type: File
     outputBinding:
       glob: "atacSeqStep1.RData"
+  archr_project:
+    type: Directory[]
+    outputBinding:
+      glob: "ArchRProject"
 
 baseCommand: [Rscript, /opt/run_ArchR_analysis_pt1.R]

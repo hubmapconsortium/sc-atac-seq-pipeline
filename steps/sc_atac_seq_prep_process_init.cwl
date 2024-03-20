@@ -49,6 +49,10 @@ outputs:
   image_file:
     type: File
     outputSource: sc_atac_seq_initial_analysis/image_file
+  
+  archr_project:
+    type: Directory[]
+    outputSource: sc_atac_seq_initial_analysis/archr_project
 
 steps:
   fastqc:
@@ -85,6 +89,7 @@ steps:
       - gene_row_data_csv
       - cell_column_data_csv
       - image_file
+      - archr_project
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
       - fragment_file
