@@ -40,7 +40,11 @@ outputs:
   image_file:
     type: File
     outputSource: analyze_with_ArchR/image_file
-    
+
+  archr_project:
+    type: Directory[]
+    outputSource: analyze_with_ArchR/archr_project
+
   cell_by_bin_h5ad:
     type: File
     outputSource: convert_to_h5ad/cell_by_bin_h5ad
