@@ -16,7 +16,6 @@ inputs:
     inputBinding:
       position: 3
       prefix: --image
-      valueFrom: $(self.basename)
     doc: "The R image from the previous archR analysis step"
 
 outputs:
