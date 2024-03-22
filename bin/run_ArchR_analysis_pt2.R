@@ -17,16 +17,15 @@ option_list <- list(
 
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
+image_path = opt$image_file
+archr_path = opt$archr_project
 
-if (is.null(opt$image_file)) {
-  stop("--image argument must be supplied (R image from previous ArchR step).", call. = FALSE)
-}
-
-load(opt$image_file)
+load(image_path)
 
 library(ArchR)
-print(paste("ArchR Project Directory Path:", opt$archr_project))
-archr_proj <- loadArchRProject(path = opt$archr_project)
+
+print(paste("ArchR Project Directory Path:", archr_path))
+archr_proj <- loadArchRProject(path = archr_path)
 
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the
