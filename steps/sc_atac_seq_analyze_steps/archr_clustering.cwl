@@ -9,10 +9,6 @@ requirements:
     dockerPull: hubmap/sc-atac-seq-hg38
   NetworkAccess:
     networkAccess: true
-  InitialWorkDirRequirement:
-    listing:
-      - $(inputs.image_file)
-      - $(inputs.archr_project)
 
 inputs:
   image_file:
@@ -20,7 +16,6 @@ inputs:
     inputBinding:
       position: 1
       prefix: --image_file
-      valueFrom: $(self.basename)
     doc: "The R image from the previous archR analysis step"
 
   archr_project:
@@ -28,7 +23,6 @@ inputs:
     inputBinding:
       position: 2
       prefix: --archr_project
-      valueFrom: $(self.basename)
     doc: "The ArchRProj directory from the previous step"
 
 outputs:
