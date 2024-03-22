@@ -19,7 +19,7 @@ inputs:
     type: File
     inputBinding:
       position: 1
-      prefix: --image
+      prefix: --image_file
       valueFrom: $(self.basename)
     doc: "The R image from the previous archR analysis step"
 
