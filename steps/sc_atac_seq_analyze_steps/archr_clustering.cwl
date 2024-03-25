@@ -12,6 +12,7 @@ requirements:
   InitialWorkDirRequirement:
     listing:
       - $(inputs.archr_project)
+        writable: true
 
 inputs:
   image_file:
