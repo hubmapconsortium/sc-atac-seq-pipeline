@@ -9,6 +9,9 @@ requirements:
     dockerPull: hubmap/sc-atac-seq-hg38
   NetworkAccess:
     networkAccess: true
+  InitialWorkDirRequirement:
+    listing:
+      - $(inputs.archr_project)
 
 inputs:
   image_file:
