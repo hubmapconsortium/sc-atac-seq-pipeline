@@ -2,6 +2,7 @@
 library(optparse)
 library(parallel)
 library(magick)
+library(R.utils)
 
 option_list <- list(
   make_option(
