@@ -11,7 +11,7 @@ requirements:
     networkAccess: true
   InitialWorkDirRequirement:
     listing:
-      - $(inputs.archr_project)
+      - entry: $(inputs.archr_project)
         writable: true
 
 inputs:
