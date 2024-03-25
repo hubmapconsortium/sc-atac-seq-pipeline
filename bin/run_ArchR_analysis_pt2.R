@@ -26,7 +26,7 @@ load(image_path)
 library(ArchR)
 
 message(paste("ArchR Project Directory Path:", archr_path))
-archr_proj <- loadArchRProject(path = archr_path)
+archr_proj <- loadArchRProject(path = "/output/ArchRStep1")
 
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the
