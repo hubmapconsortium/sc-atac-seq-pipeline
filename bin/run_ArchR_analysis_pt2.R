@@ -19,7 +19,8 @@ opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
 image_path <- opt$image_file
 archr_path <- opt$archr_project
-file.copy(archr_path, "ArchRStep2")
+dir.create("ArchRStep2")
+file.copy(archr_path, "ArchRStep2", recursive=TRUE)
 load(image_path)
 
 library(ArchR)
