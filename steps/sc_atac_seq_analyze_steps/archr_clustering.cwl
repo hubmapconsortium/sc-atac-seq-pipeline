@@ -23,7 +23,7 @@ inputs:
     doc: "The R image from the previous archR analysis step"
 
   archr_project:
-    type: Directory[]
+    type: Directory
     inputBinding:
       position: 2
       prefix: --archr_project
