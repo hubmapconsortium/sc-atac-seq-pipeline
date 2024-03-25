@@ -51,7 +51,7 @@ outputs:
     outputSource: sc_atac_seq_initial_analysis/image_file
   
   archr_project:
-    type: Directory[]
+    type: Directory
     outputSource: sc_atac_seq_initial_analysis/archr_project
 
 steps:
