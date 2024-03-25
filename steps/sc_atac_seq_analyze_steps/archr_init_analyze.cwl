@@ -107,7 +107,7 @@ outputs:
     outputBinding:
       glob: "atacSeqStep1.RData"
   archr_project:
-    type: Directory[]
+    type: Directory
     outputBinding:
       glob: "ArchRStep1"
 
