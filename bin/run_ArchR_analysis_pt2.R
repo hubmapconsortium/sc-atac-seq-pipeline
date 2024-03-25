@@ -65,7 +65,7 @@ archr_proj <- addUMAP(ArchRProj = archr_proj, reducedDims = "IterativeLSI")
 
 message(paste("Getting embedding"))
 archr_proj_embed_w_clusters_df <- getEmbedding(ArchRProj = archr_proj,
-                                               embedding = "UMAP", returnDF = TRUE)
+       embedding = "UMAP", returnDF = TRUE)
 
 message(paste("Adding Clusters column"))
 # https://stackoverflow.com/questions/48896190/
