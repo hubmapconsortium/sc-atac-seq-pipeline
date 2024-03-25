@@ -27,6 +27,7 @@ inputs:
     inputBinding:
       position: 2
       prefix: --archr_project
+      valueFrom: $(self.basename)
     doc: "The ArchRProj directory from the previous step"
 
 outputs:
