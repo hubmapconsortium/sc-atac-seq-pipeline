@@ -18,13 +18,13 @@ option_list <- list(
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
 image_path = opt$image_file
-archr_path = opt$archr_project
+message(paste("current working directory:", getwd()))
 
 load(image_path)
 
 library(ArchR)
 
-print(paste("ArchR Project Directory Path:", archr_path))
+message(paste("ArchR Project Directory Path:", archr_path))
 archr_proj <- loadArchRProject(path = archr_path)
 
 ## Dimensionality Reduction and Clustering
