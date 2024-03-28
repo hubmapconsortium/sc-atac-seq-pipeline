@@ -96,7 +96,7 @@ steps:
 #      input_fastq1: concat_fastq/merged_fastq_r1
 #      input_fastq2: concat_fastq/merged_fastq_r2
 
-      threads: threads
+      #threads: threads
     out:
       - bam_file
       - bam_index
