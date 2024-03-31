@@ -18,7 +18,7 @@ c(
 
 # Then, install BiocManager (for installing bioconductor packages) if it isn’t already installed:
 if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-BiocManager::install(version = "3.13", ask=FALSE)
+BiocManager::install(version = "3.14", ask=FALSE)
 
 tryCatch({
     BiocManager::install("DirichletMultinomial", ask=FALSE)

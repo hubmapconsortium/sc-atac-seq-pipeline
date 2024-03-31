@@ -3,6 +3,7 @@ library(optparse)
 library(parallel)
 library(magick)
 library(R.utils)
+library(BSgenome.Hsapiens.UCSC.hg38)
 
 option_list <- list(
   make_option(
@@ -26,7 +27,7 @@ load(image_path)
 library(ArchR)
 
 archr_proj <- loadArchRProject(path = "/output/ArchRStep2")
-
+addArchRGenome("hg38")
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the
 # addIterativeLSI() function.

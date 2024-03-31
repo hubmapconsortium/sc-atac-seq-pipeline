@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 rocker/tidyverse:4.1.1
+FROM --platform=linux/amd64 rocker/tidyverse:4.1
 
 ENV DEBIAN_FRONTEND=non-interactive
 
