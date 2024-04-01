@@ -32,10 +32,10 @@ outputs:
   gene_row_data_csv:
     type: File
     outputSource: analyze_with_ArchR/gene_row_data_csv
-  
-  fragment_file:
+    
+  Fragment_Size_Distribution_pdf:
     type: File
-    outputSource: create_fragment_file/fragment_file
+    outputSource: analyze_with_ArchR/Fragment_Size_Distribution_pdf
 
   image_file:
     type: File
@@ -44,6 +44,10 @@ outputs:
   archr_project:
     type: Directory
     outputSource: analyze_with_ArchR/archr_project
+
+  fragment_file:
+    type: File
+    outputSource: create_fragment_file/fragment_file
 
   cell_by_bin_h5ad:
     type: File
@@ -106,6 +110,7 @@ steps:
       - cell_by_bin_mtx
       - cell_by_bin_barcodes
       - cell_by_bin_bins
+      - Fragment_Size_Distribution_pdf
       - image_file
       - archr_project
 

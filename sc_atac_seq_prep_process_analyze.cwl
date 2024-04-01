@@ -28,7 +28,7 @@ outputs:
 
   Fragment_Size_Distribution_pdf:
     type: File
-    outputSource: analyze_with_ArchR/Fragment_Size_Distribution_pdf
+    outputSource: sc_atac_seq_prep_process_init/Fragment_Size_Distribution_pdf
 
   TSS_by_Unique_Frags_pdf:
     type: File
@@ -94,6 +94,7 @@ steps:
       - gene_row_data_csv
       - cell_column_data_csv
       - fragment_file
+      - Fragment_Size_Distribution_pdf
       - image_file
       - archr_project
       - cell_by_bin_h5ad
@@ -105,7 +106,6 @@ steps:
       image_file: sc_atac_seq_prep_process_init/image_file
       archr_project: sc_atac_seq_prep_process_init/archr_project
     out:
-      - Fragment_Size_Distribution_pdf
       - TSS_by_Unique_Frags_pdf
       - QC-Sample-FragSizes-TSSProfile_pdf
       - QC-Sample-Statistics_pdf

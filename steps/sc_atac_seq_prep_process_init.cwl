@@ -45,7 +45,11 @@ outputs:
   fragment_file:
     type: File
     outputSource: sc_atac_seq_initial_analysis/fragment_file
-
+ 
+  Fragment_Size_Distribution_pdf:
+    type: File
+    outputSource: sc_atac_seq_initial_analysis/Fragment_Size_Distribution_pdf
+  
   image_file:
     type: File
     outputSource: sc_atac_seq_initial_analysis/image_file
@@ -88,6 +92,7 @@ steps:
       - bam_index
       - gene_row_data_csv
       - cell_column_data_csv
+      - Fragment_Size_Distribution_pdf
       - image_file
       - archr_project
       - cell_by_bin_h5ad

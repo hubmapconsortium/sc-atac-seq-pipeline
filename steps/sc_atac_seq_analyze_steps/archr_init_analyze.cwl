@@ -66,7 +66,6 @@ inputs:
 
 
 outputs:
-
   cell_column_data_csv:
     type: File
     outputBinding:
@@ -101,11 +100,17 @@ outputs:
     type: File
     outputBinding:
       glob: "bins.txt"
+  
+  Fragment_Size_Distribution_pdf:
+    type: File
+    outputBinding:
+      glob: "QualityControl/*/*-Fragment_Size_Distribution.pdf"
 
   image_file:
     type: File
     outputBinding:
       glob: "atacSeqStep1.RData"
+  
   archr_project:
     type: Directory
     outputBinding:

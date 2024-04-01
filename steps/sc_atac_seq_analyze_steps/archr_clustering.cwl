@@ -31,11 +31,6 @@ inputs:
     doc: "The ArchRProj directory from the previous step"
 
 outputs:
-  Fragment_Size_Distribution_pdf:
-    type: File
-    outputBinding:
-      glob: "QualityControl/*/*-Fragment_Size_Distribution.pdf"
-
   TSS_by_Unique_Frags_pdf:
     type: File
     outputBinding:
