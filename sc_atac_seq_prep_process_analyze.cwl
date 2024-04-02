@@ -28,23 +28,35 @@ outputs:
 
   Fragment_Size_Distribution_pdf:
     type: File
-    outputSource: clustering/Fragment_Size_Distribution_pdf
+    outputSource: sc_atac_seq_process_and_analyze/Fragment_Size_Distribution_pdf
 
   TSS_by_Unique_Frags_pdf:
     type: File
-    outputSource: clustering/TSS_by_Unique_Frags_pdf
+    outputSource: sc_atac_seq_process_and_analyze/TSS_by_Unique_Frags_pdf
 
   QC-Sample-FragSizes-TSSProfile_pdf:
     type: File
-    outputSource: clustering/QC-Sample-FragSizes-TSSProfile_pdf
+    outputSource: sc_atac_seq_process_and_analyze/QC-Sample-FragSizes-TSSProfile_pdf
 
   QC-Sample-Statistics_pdf:
     type: File
-    outputSource: clustering/QC-Sample-Statistics_pdf
+    outputSource: sc_atac_seq_process_and_analyze/QC-Sample-Statistics_pdf
 
   TSS-vs-Frags_pdf:
     type: File
-    outputSource: clustering/TSS-vs-Frags_pdf
+    outputSource: sc_atac_seq_process_and_analyze/TSS-vs-Frags_pdf
+
+  Peak-Call-Summary_pdf:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/Peak-Call-Summary_pdf
+
+  Plot-UMAP-Sample-Clusters_pdf:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/Plot-UMAP-Sample-Clusters_pdf
+
+  peaks_bed:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/peaks_bed
 
   gene_row_data_csv:
     type: File
@@ -53,6 +65,10 @@ outputs:
   cell_column_data_csv:
     type: File
     outputSource: sc_atac_seq_process_and_analyze/cell_column_data_csv
+
+  umap_coords_clusters_csv:
+    type: File
+    outputSource: sc_atac_seq_process_and_analyze/umap_coords_clusters_csv
 
   cell_by_bin_h5ad:
     type: File
@@ -67,62 +83,59 @@ outputs:
     outputSource: write_genome_build/genome_build_json
 
 steps:
-#  fastqc:
-#    scatter: [fastq_dir]
-#    scatterMethod: dotproduct
-#    run: steps/fastqc.cwl
-#    in:
-#      fastq_dir: sequence_directory
-#      threads: threads
-#    out:
-#      [fastqc_dir]
+  fastqc:
+    scatter: [fastq_dir]
+    scatterMethod: dotproduct
+    run: steps/fastqc.cwl
+    in:
+      fastq_dir: sequence_directory
+      threads: threads
+    out:
+      [fastqc_dir]
 
-#  concat_fastq:
-#    run: steps/concat-fastq.cwl
-#    in:
-#      sequence_directory: sequence_directory
-#      assay: assay
-#    out:
-#      [output_directory, merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
+  concat_fastq:
+    run: steps/concat-fastq.cwl
+    in:
+      sequence_directory: sequence_directory
+      assay: assay
+    out:
+      [output_directory, merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
 
   sc_atac_seq_process_and_analyze:
     run: steps/sc_atac_seq_process_and_analyze.cwl
     in:
-      sequence_directory: sequence_directory
       assay: assay
-      threads: threads
-#      concat_fastq_dir: concat_fastq/output_directory
+      concat_fastq_dir: concat_fastq/output_directory
+      orig_fastq_dir: sequence_directory
 
-#      input_fastq1: concat_fastq/merged_fastq_r1
-#      input_fastq2: concat_fastq/merged_fastq_r2
+      input_fastq1: concat_fastq/merged_fastq_r1
+      input_fastq2: concat_fastq/merged_fastq_r2
 
       #threads: threads
     out:
       - bam_file
       - bam_index
       - fragment_file
-      - gene_row_data_csv
-      - cell_column_data_csv
-      - cell_by_bin_h5ad
-      - cell_by_gene_h5ad
-      - rdata_file
-
-  clustering:
-    run: steps/sc_atac_seq_analyze_steps/archr_clustering.cwl
-    in:
-      rdata_file: sc_atac_seq_process_and_analyze/rdata_file
-    out:
       - Fragment_Size_Distribution_pdf
       - TSS_by_Unique_Frags_pdf
       - QC-Sample-FragSizes-TSSProfile_pdf
       - QC-Sample-Statistics_pdf
-      - TSS-vs-Frags_pdf 
+      - TSS-vs-Frags_pdf
+      - Peak-Call-Summary_pdf
+      - Plot-UMAP-Sample-Clusters_pdf
+      - peaks_bed
+      - gene_row_data_csv
+      - cell_column_data_csv
+      - umap_coords_clusters_csv
+      - cell_by_bin_h5ad
+      - cell_by_gene_h5ad
 
   qc_measures:
     run: steps/qc_measures.cwl
     in:
       bam_file: sc_atac_seq_process_and_analyze/bam_file
       bam_index: sc_atac_seq_process_and_analyze/bam_index
+      peak_file: sc_atac_seq_process_and_analyze/peaks_bed
       cell_by_bin_h5ad: sc_atac_seq_process_and_analyze/cell_by_bin_h5ad
     out:
       - qc_report
