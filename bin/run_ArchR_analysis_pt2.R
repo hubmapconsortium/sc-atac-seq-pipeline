@@ -28,6 +28,105 @@ library(ArchR)
 
 archr_proj <- loadArchRProject(path = "/output/ArchRStep2")
 addArchRGenome("hg38")
+
+df <- getCellColData(archr_proj, select = c("log10(nFrags)", "TSSEnrichment"))
+
+# Now lets plot the number of unique nuclear fragments (log10) by the TSS
+# enrichment score.
+# This type of plot is key for identifying high quality cells. You’ll notice
+# that the cutoffs that we previously specified when creating the Arrow files
+# (via minTSS and minFrags) have already removed low quality cells.
+# However, if we noticed that the previously applied QC filters were not
+# adequate for this sample, we could further adjust our cutoffs based on this
+# plot or re-generate the Arrow files if needed.
+p <- ggPoint(
+     x = df[, 1],
+     y = df[, 2],
+     colorDensity = TRUE,
+     continuousSet = "sambaNight",
+     xlabel = "Log10 Unique Fragments",
+     ylabel = "TSS Enrichment",
+     xlim = c(log10(500), quantile(df[, 1], probs = 0.99)),
+         ylim = c(0, quantile(df[, 2], probs = 0.99))
+     ) + geom_hline(yintercept = 4, lty = "dashed") +
+           geom_vline(xintercept = 3, lty = "dashed")
+
+#To save an editable vectorized version of this plot, we use plotPDF().
+plotPDF(p, name = "TSS-vs-Frags.pdf", ArchRProj = archr_proj, addDOC = FALSE)
+
+#Make a ridge plot for each sample for the TSS enrichment scores.
+#To make a ridge plot, we set plotAs = "ridges".
+
+p1 <- plotGroups(
+     ArchRProj = archr_proj,
+     groupBy = "Sample",
+     colorBy = "cellColData",
+     name = "TSSEnrichment",
+     plotAs = "ridges"
+        )
+
+# Make a violin plot for each sample for the TSS enrichment scores.
+# To make a violin plot, we set plotAs = "violin". Violin plots in ArchR come
+# with a box-and-whiskers plot in the style of Tukey as implemented by ggplot2.
+# This means that the lower and upper hinges correspond to the 25th and 75th
+# percentiles, respectively, and the middle corresponds to the median.i
+# The lower and upper whiskers extend from the hinge to the lowest or highest
+# value or 1.5 times the interquartile range (the distance between the 25th
+# and 75th percentiles).
+p2 <- plotGroups(
+     ArchRProj = archr_proj,
+     groupBy = "Sample",
+     colorBy = "cellColData",
+     name = "TSSEnrichment",
+     plotAs = "violin",
+         alpha = 0.4,
+         addBoxPlot = TRUE
+    )
+
+# Make a ridge plot for each sample for the log10(unique nuclear fragments).
+p3 <- plotGroups(
+     ArchRProj = archr_proj,
+     groupBy = "Sample",
+     colorBy = "cellColData",
+     name = "log10(nFrags)",
+     plotAs = "ridges"
+        )
+
+# Make a violin plot for each sample for the log10(unique nuclear fragments).
+p4 <- plotGroups(
+     ArchRProj = archr_proj,
+     groupBy = "Sample",
+     colorBy = "cellColData",
+     name = "log10(nFrags)",
+     plotAs = "violin",
+     alpha = 0.4,
+     addBoxPlot = TRUE
+    )
+# To save editable vectorized versions of these plots, we use plotPDF().
+plotPDF(p1, p2, p3, p4, name = "QC-Sample-Statistics.pdf",
+       ArchRProj = archr_proj, addDOC = FALSE, width = 4, height = 4)
+
+# Plot Sample Fragment Size Distribution and TSS Enrichment Profiles.
+# Because of how the data is stored and accessed, ArchR can compute fragment
+# size distributions and TSS enrichment profiles from Arrow files very quickly.
+
+# To plot the fragment size distributions of all samples, we use the
+# plotFragmentSizes() function. Fragment size distributions in ATAC-seq can be
+# quite variable across samples, cell types, and batches. Slight differences
+# like those shown below are common and do not necessarily correlate with
+# differences in data quality.
+pfrag <- plotFragmentSizes(ArchRProj = archr_proj)
+
+# Plot TSS enrichment profiles, We use the plotTSSEnrichment() function. TSS
+# enrichment
+# profiles should show a clear peak in the center and a smaller shoulder peak
+# right-of-center which is caused by the well-positioned +1 nucleosome.
+ptssen <- plotTSSEnrichment(ArchRProj = archr_proj)
+
+#To save editable vectorized versions of these plots, we use plotPDF().
+plotPDF(pfrag, ptssen, name = "QC-Sample-FragSizes-TSSProfile.pdf",
+       ArchRProj = archr_proj, addDOC = FALSE, width = 5, height = 5)
+
 ## Dimensionality Reduction and Clustering
 ## ArchR implements an iterative LSI dimensionality reduction via the
 # addIterativeLSI() function.
@@ -69,6 +168,7 @@ archr_proj_embed_w_clusters_df <- getEmbedding(ArchRProj = archr_proj,
        embedding = "UMAP", returnDF = TRUE)
 
 message(paste("Adding Clusters column"))
+
 # https://stackoverflow.com/questions/48896190/
 # add-column-to-r-dataframe-based-on-rowname
 # https://intellipaat.com/community/31833/
@@ -83,6 +183,7 @@ archr_proj_embed_w_clusters_df$Clusters <- cell_col_data_df$Clusters[
         row.names(cell_col_data_df))]
 write.csv(archr_proj_embed_w_clusters_df,
           file = "umap_coords_clusters.csv")
+
 # Using this UMAP, we can visualize various attributes of our cells which are
 # stored in a matrix called cellColData in our ArchRProject. To do this, we use
 # the plotEmbedding() function and we specify the variable to use for coloration

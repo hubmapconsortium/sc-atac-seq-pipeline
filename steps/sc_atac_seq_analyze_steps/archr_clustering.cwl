@@ -31,11 +31,6 @@ inputs:
     doc: "The ArchRProj directory from the previous step"
 
 outputs:
-  TSS_by_Unique_Frags_pdf:
-    type: File
-    outputBinding:
-      glob: "QualityControl/*/*-TSS_by_Unique_Frags.pdf"
-
   QC-Sample-FragSizes-TSSProfile_pdf:
     type: File
     outputBinding:

@@ -32,10 +32,14 @@ outputs:
   gene_row_data_csv:
     type: File
     outputSource: analyze_with_ArchR/gene_row_data_csv
-    
+
   Fragment_Size_Distribution_pdf:
     type: File
     outputSource: analyze_with_ArchR/Fragment_Size_Distribution_pdf
+  
+  TSS_by_Unique_Frags_pdf:
+    type: File
+    outputSource: analyze_with_ArchR/TSS_by_Unique_Frags_pdf
 
   image_file:
     type: File
@@ -111,6 +115,7 @@ steps:
       - cell_by_bin_barcodes
       - cell_by_bin_bins
       - Fragment_Size_Distribution_pdf
+      - TSS_by_Unique_Frags_pdf
       - image_file
       - archr_project
 

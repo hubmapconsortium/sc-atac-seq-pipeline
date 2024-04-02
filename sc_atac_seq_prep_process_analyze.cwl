@@ -32,7 +32,7 @@ outputs:
 
   TSS_by_Unique_Frags_pdf:
     type: File
-    outputSource: analyze_with_ArchR/TSS_by_Unique_Frags_pdf
+    outputSource: sc_atac_seq_prep_process_init/TSS_by_Unique_Frags_pdf
 
   QC-Sample-FragSizes-TSSProfile_pdf:
     type: File
@@ -94,6 +94,7 @@ steps:
       - gene_row_data_csv
       - cell_column_data_csv
       - fragment_file
+      - TSS_by_Unique_Frags_pdf
       - Fragment_Size_Distribution_pdf
       - image_file
       - archr_project
@@ -106,7 +107,6 @@ steps:
       image_file: sc_atac_seq_prep_process_init/image_file
       archr_project: sc_atac_seq_prep_process_init/archr_project
     out:
-      - TSS_by_Unique_Frags_pdf
       - QC-Sample-FragSizes-TSSProfile_pdf
       - QC-Sample-Statistics_pdf
       - TSS-vs-Frags_pdf

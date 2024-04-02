@@ -100,7 +100,12 @@ outputs:
     type: File
     outputBinding:
       glob: "bins.txt"
-  
+
+  TSS_by_Unique_Frags_pdf:
+    type: File
+    outputBinding:
+      glob: "QualityControl/*/*-TSS_by_Unique_Frags.pdf"
+      
   Fragment_Size_Distribution_pdf:
     type: File
     outputBinding:
