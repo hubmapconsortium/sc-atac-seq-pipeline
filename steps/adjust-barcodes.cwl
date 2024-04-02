@@ -15,6 +15,10 @@ inputs:
     type: Directory[]
     inputBinding:
       position: 1
+  orig_dir:
+    type: Directory[]
+    inputBinding:
+      position: 2
 outputs:
   adj_fastq_dir:
     type: Directory
