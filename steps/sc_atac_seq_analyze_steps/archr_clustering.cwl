@@ -12,12 +12,12 @@ requirements:
     networkAccess: true
 
 inputs:
-rR_data_file:
+  rdata_file:
     type: File
     inputBinding:
       position: 1
-      prefix: --rdata_file:
-  doc: "The R data file produced by the fundamental ArchR step"
+      prefix: --rdata_file
+    doc: "The R data file produced by the fundamental ArchR step"
 
   minTSS:
     type: double?
@@ -49,7 +49,7 @@ outputs:
     outputBinding:
       glob: "QualityControl/*/*-Fragment_Size_Distribution.pdf"
 
-   TSS_by_Unique_Frags_pdf:
+  TSS_by_Unique_Frags_pdf:
     type: File
     outputBinding:
       glob: "QualityControl/*/*-TSS_by_Unique_Frags.pdf"
