@@ -27,6 +27,11 @@ inputs:
       position: 1
       valueFrom: $(self.basename)
 
+  peak_file:
+    type: File
+    inputBinding:
+      position: 1
+
   cell_by_bin_h5ad:
     type: File?
     inputBinding:
