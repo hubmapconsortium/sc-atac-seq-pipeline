@@ -1,3 +1,4 @@
+# This file is just for reference. ArchR is now split into two steps. 
 #!/usr/bin/env Rscript
 library(optparse)
 
