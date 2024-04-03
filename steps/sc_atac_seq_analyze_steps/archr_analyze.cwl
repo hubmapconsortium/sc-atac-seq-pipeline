@@ -91,6 +91,26 @@ outputs:
     outputBinding:
       glob: "*/Plots/TSS-vs-Frags.pdf"
 
+  Plot-UMAP-Sample-Clusters_pdf:
+    type: File
+    outputBinding:
+      glob: "*/Plots/Plot-UMAP-Sample-Clusters.pdf"
+
+  Peak-Call-Summary_pdf:
+    type: File
+    outputBinding:
+      glob: "*/Plots/Peak-Call-Summary.pdf"
+
+  peaks_csv:
+    type: File
+    outputBinding:
+      glob: "peaks.csv"
+
+  peaks_bed:
+    type: File
+    outputBinding:
+      glob: "peaks.bed"
+
   cell_column_data_csv:
     type: File
     outputBinding:
@@ -100,6 +120,11 @@ outputs:
     type: File
     outputBinding:
       glob: "gene_row_data.csv"
+
+  umap_coords_clusters_csv:
+    type: File
+    outputBinding:
+      glob: "umap_coords_clusters.csv"
 
   cell_by_gene_raw_mtx:
     type: File
@@ -126,4 +151,4 @@ outputs:
     outputBinding:
       glob: "bins.txt"
 
-baseCommand: [Rscript, /opt/run_ArchR_analysis_pt1.R]
+baseCommand: [Rscript, /opt/run_ArchR_analysis.R]

@@ -76,7 +76,6 @@ def main(assay: Assay, fastq_dirs: Iterable[Path], output_filename_prefix, outpu
                     umi_seq = bar.seq[UMI_SEGMENT]
                 elif assay == Assay.SNSEQ:
                     barcode_pieces = [bar.seq[SNSEQ_BARCODE_SEGMENT]]
-                    # print("barcode pieces={}".format(barcode_pieces))
                     umi_seq = ""
                 elif assay == Assay.MULTIOME_10X:
                     barcode_pieces = [bar.seq[MULTIOME_10X_BARCODE_SEGMENT]]
