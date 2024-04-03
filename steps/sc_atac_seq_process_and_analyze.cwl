@@ -10,6 +10,7 @@ requirements:
 inputs:
   assay: string
   concat_fastq_dir: Directory
+  orig_fastq_dir: Directory[]
 
   input_fastq1: File
   input_fastq2: File
@@ -85,13 +86,14 @@ steps:
   adjust_barcodes:
     run: adjust-barcodes.cwl
     in:
-     assay: assay
-     directory:
-       # https://www.commonwl.org/user_guide/misc/ Connect a solo value to an input that expects an array of that type
-       source: [ concat_fastq_dir ]
-       linkMerge: merge_nested
+      assay: assay
+      directory:
+        # https://www.commonwl.org/user_guide/misc/ Connect a solo value to an input that expects an array of that type
+        source: [ concat_fastq_dir ]
+        linkMerge: merge_nested
+      orig_dir: orig_fastq_dir
     out:
-     [adj_fastq_dir]
+      [adj_fastq_dir]
 
   align_reads:
     run: align_reads.cwl
@@ -138,6 +140,7 @@ steps:
       - cell_by_bin_mtx
       - cell_by_bin_barcodes
       - cell_by_bin_bins
+      #- rdata_file
 
   create_fragment_file:
     run: sc_atac_seq_process_steps/create_fragment_file.cwl
@@ -148,7 +151,7 @@ steps:
   convert_to_h5ad:
     run: convert_to_h5ad.cwl
     in:
-      umap_coords_csv: analyze_with_ArchR/umap_coords_clusters_csv
+      cell_column_data: analyze_with_ArchR/cell_column_data_csv
       cell_by_gene_raw_mtx: analyze_with_ArchR/cell_by_gene_raw_mtx
       cell_by_gene_smoothed_hdf5: analyze_with_ArchR/cell_by_gene_smoothed_hdf5
       cell_by_bin_mtx: analyze_with_ArchR/cell_by_bin_mtx

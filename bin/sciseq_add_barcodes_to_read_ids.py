@@ -33,7 +33,13 @@ def convert_fastq(input_path: Path, output_path: Union[str, Path]):
             print(new_read.serialize(), file=f)
 
 
-def main(assay: Assay, fastq_dirs: Iterable[Path], output_filename_prefix: str, output_dir: Path):
+def main(
+    assay: Assay,
+    fastq_dirs: Iterable[Path],
+    orig_dir: Path,
+    output_filename_prefix: str,
+    output_dir: Path,
+):
     all_fastqs = chain.from_iterable(
         find_grouped_fastq_files(fastq_dir, assay.fastq_count) for fastq_dir in fastq_dirs
     )
