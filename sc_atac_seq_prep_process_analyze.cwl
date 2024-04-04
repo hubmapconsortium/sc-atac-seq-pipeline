@@ -100,13 +100,14 @@ steps:
   sc_atac_seq_process_and_analyze:
     run: steps/sc_atac_seq_process_and_analyze.cwl
     in:
-     assay: assay
-     concat_fastq_dir: concat_fastq/output_directory
+      assay: assay
+      concat_fastq_dir: concat_fastq/output_directory
+      orig_fastq_dir: sequence_directory
 
-     input_fastq1: concat_fastq/merged_fastq_r1
-     input_fastq2: concat_fastq/merged_fastq_r2
+      input_fastq1: concat_fastq/merged_fastq_r1
+      input_fastq2: concat_fastq/merged_fastq_r2
 
-     threads: threads
+      #threads: threads
     out:
       - bam_file
       - bam_index
@@ -135,12 +136,13 @@ steps:
     out:
       - qc_report
 
+
   write_genome_build:
     run: steps/write_genome_build.cwl
     in: {}
     out: [genome_build_json]
 
-  # thanks to @pvanheus in the CWL gitter instance
+  #thanks to @pvanheus in the CWL gitter instance
   maybe_save_bam_file:
     in:
       bam_input: sc_atac_seq_process_and_analyze/bam_file

@@ -3,11 +3,11 @@ class: CommandLineTool
 label: Assay-specific adjustment of cell barcodes
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38:2.0.6
+    dockerPull: hubmap/sc-atac-seq-hg38:latest
 baseCommand: /opt/convert_to_h5ad.py
 
 inputs:
-  umap_coords_csv:
+  cell_column_data:
     type: File
     inputBinding:
       position: 0

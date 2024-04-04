@@ -11,7 +11,7 @@ import scipy.sparse
 
 
 def main(
-    umap_coords_csv: Path,
+    cell_column_data: Path,
     cell_by_gene_raw_mtx: Path,
     cell_by_gene_smoothed_hdf5: Path,
     cell_by_bin_mtx: Path,
@@ -19,15 +19,6 @@ def main(
     cell_by_bin_bins: Path,
     bin_size: int,
 ):
-    # UMAP file looks like this:
-    # "","IterativeLSI#UMAP_Dimension_1","IterativeLSI#UMAP_Dimension_2","Clusters"
-    # "BAM_data#GTCTGTCAAATCCGTCATGCCTAA",0.434770387764986,1.39683189432798,"C8"
-    # With assay name as prefix to barcode
-    umap_coords_df = pd.read_csv(umap_coords_csv, index_col=0)
-    umap_coords_df.loc[:, "Clusters"] = umap_coords_df.loc[:, "Clusters"].astype("category")
-    umap_coords = umap_coords_df.loc[
-        :, ["IterativeLSI#UMAP_Dimension_1", "IterativeLSI#UMAP_Dimension_2"]
-    ].to_numpy()
 
     cell_by_bin_mat = scipy.io.mmread(cell_by_bin_mtx).astype(bool).tocsr()
     # Barcode file looks like this:
@@ -41,10 +32,7 @@ def main(
     with open(cell_by_bin_bins) as f:
         bins = [line.strip() for line in f]
 
-    assert barcodes == list(umap_coords_df.index)
-
-    obs = umap_coords_df.loc[:, ["Clusters"]].copy()
-    obsm = {"X_umap": umap_coords}
+    obs = pd.read_csv(cell_column_data, index_col=0)
 
     chroms = []
     bin_start = []
@@ -75,15 +63,12 @@ def main(
         index=bins,
     )
 
-    print("umap coords:{}".format(umap_coords))
-    print("obsm:{}".format(obsm))
     print("obs:{}".format(obs))
     print("var:{}".format(var))
 
     cell_by_bin = anndata.AnnData(
         cell_by_bin_mat,
         obs=obs,
-        obsm=obsm,
         var=var,
         dtype=bool,
     )
@@ -103,7 +88,6 @@ def main(
     cell_by_gene = anndata.AnnData(
         cell_by_gene_raw,
         obs=obs,
-        obsm=obsm,
         var=pd.DataFrame(index=genes),
         layers={"smoothed": cell_by_gene_smoothed},
     )
@@ -114,7 +98,7 @@ def main(
 
 if __name__ == "__main__":
     p = ArgumentParser()
-    p.add_argument("umap_coords_csv", type=Path)
+    p.add_argument("cell_column_data", type=Path)
     p.add_argument("cell_by_gene_raw_mtx", type=Path)
     p.add_argument("cell_by_gene_smoothed_hdf5", type=Path)
     p.add_argument("cell_by_bin_mtx", type=Path)
@@ -124,7 +108,7 @@ if __name__ == "__main__":
     args = p.parse_args()
 
     main(
-        umap_coords_csv=args.umap_coords_csv,
+        cell_column_data=args.cell_column_data,
         cell_by_gene_raw_mtx=args.cell_by_gene_raw_mtx,
         cell_by_gene_smoothed_hdf5=args.cell_by_gene_smoothed_hdf5,
         cell_by_bin_mtx=args.cell_by_bin_mtx,
