@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-hisat2-hg38:latest
+    dockerPull: hubmap/sc-atac-hisat2-hg38:2.1
 
 inputs:
   merged_bam_file:
