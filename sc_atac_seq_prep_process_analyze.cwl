@@ -118,9 +118,10 @@ steps:
   qc_measures:
     run: steps/qc_measures.cwl
     in:
-      bam_file: sc_atac_seq_prep_process_init/bam_file
-      bam_index: sc_atac_seq_prep_process_init/bam_index
-      cell_by_bin_h5ad: sc_atac_seq_prep_process_init/cell_by_bin_h5ad
+      bam_file: sc_atac_seq_process_and_analyze/bam_file
+      bam_index: sc_atac_seq_process_and_analyze/bam_index
+      peak_file: sc_atac_seq_process_and_analyze/peaks_bed
+      cell_by_bin_h5ad: sc_atac_seq_process_and_analyze/cell_by_bin_h5ad
     out:
       - qc_report
 
