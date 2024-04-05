@@ -110,6 +110,9 @@ steps:
       - cell_column_data_csv
       - TSS_by_Unique_Frags_pdf
       - Fragment_Size_Distribution_pdf
+      - QC-Sample-FragSizes-TSSProfile_pdf
+      - QC-Sample-Statistics_pdf
+      - TSS-vs-Frags_pdf
       - image_file
       - archr_project
       - cell_by_bin_h5ad
