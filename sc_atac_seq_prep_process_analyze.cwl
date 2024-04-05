@@ -85,7 +85,7 @@ steps:
     run: steps/sc_atac_seq_prep_process_init.cwl
     in:
      assay: assay
-     fastq_dir: sequence_directory
+     sequence_directory: sequence_directory
      threads: threads
     out:
       - fastqc_dir
