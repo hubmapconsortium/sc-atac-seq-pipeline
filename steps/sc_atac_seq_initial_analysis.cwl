@@ -99,7 +99,7 @@ steps:
     out: [paired_end_bam, paired_end_bam_index]
 
   analyze_with_ArchR:
-    run: sc_atac_seq_analyze_steps/archr_analyze.cwl
+    run: sc_atac_seq_analyze_steps/archr_init_analyze.cwl
     in:
       bam_file: align_reads/paired_end_bam
       bam_index: align_reads/paired_end_bam_index
