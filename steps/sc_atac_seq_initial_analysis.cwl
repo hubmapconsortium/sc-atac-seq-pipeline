@@ -10,11 +10,12 @@ requirements:
 inputs:
   assay: string
   concat_fastq_dir: Directory
+  orig_fastq_dir: Directory[]
 
   input_fastq1: File
   input_fastq2: File
   threads: int?
-
+  
 outputs:
   bam_file:
     type: File
@@ -69,11 +70,12 @@ steps:
   adjust_barcodes:
     run: adjust-barcodes.cwl
     in:
-     assay: assay
-     orig_dir:
-       # https://www.commonwl.org/user_guide/misc/ Connect a solo value to an input that expects an array of that type
-       source: [ concat_fastq_dir ]
-       linkMerge: merge_nested
+      assay: assay
+      directory:
+        # https://www.commonwl.org/user_guide/misc/ Connect a solo value to an input that expects an array of that type
+        source: [ concat_fastq_dir ]
+        linkMerge: merge_nested
+      orig_dir: orig_fastq_dir
     out:
      [adj_fastq_dir]
 

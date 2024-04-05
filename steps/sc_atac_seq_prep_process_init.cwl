@@ -98,7 +98,7 @@ steps:
     in:
       assay: assay
       concat_fastq_dir: concat_fastq/output_directory
-
+      orig_fastq_dir: Directory[]
       input_fastq1: concat_fastq/merged_fastq_r1
       input_fastq2: concat_fastq/merged_fastq_r2
 
