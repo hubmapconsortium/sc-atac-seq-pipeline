@@ -6,5 +6,6 @@ RUN pip3 install -r /opt/requirements.txt \
  && rm -rf /root/.cache/pip
 
 COPY bin /opt
+COPY data/* /opt/
 
 WORKDIR /opt

@@ -66,6 +66,7 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/umap_coords_clusters_csv
 
+
   cell_by_bin_h5ad:
     type: File
     outputSource: sc_atac_seq_prep_process_init/cell_by_bin_h5ad
@@ -84,7 +85,10 @@ steps:
     run: steps/sc_atac_seq_prep_process_init.cwl
     in:
      assay: assay
-     sequence_directory: sequence_directory
+      concat_fastq_dir: concat_fastq/output_directory
+      orig_fastq_dir: sequence_directory
+     input_fastq1: concat_fastq/merged_fastq_r1
+     input_fastq2: concat_fastq/merged_fastq_r2
 
      threads: threads
     out:
@@ -125,12 +129,13 @@ steps:
     out:
       - qc_report
 
+
   write_genome_build:
     run: steps/write_genome_build.cwl
     in: {}
     out: [genome_build_json]
 
-  # thanks to @pvanheus in the CWL gitter instance
+  #thanks to @pvanheus in the CWL gitter instance
   maybe_save_bam_file:
     in:
       bam_input: sc_atac_seq_prep_process_init/bam_file
