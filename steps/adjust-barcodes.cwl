@@ -19,6 +19,10 @@ inputs:
     type: Directory[]
     inputBinding:
       position: 2
+  metadata_file:
+    type: File?
+    inputBinding:
+      position: 3
 outputs:
   adj_fastq_dir:
     type: Directory
