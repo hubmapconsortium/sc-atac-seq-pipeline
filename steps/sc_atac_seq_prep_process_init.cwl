@@ -53,7 +53,19 @@ outputs:
   TSS_by_Unique_Frags_pdf:
     type: File
     outputSource: sc_atac_seq_initial_analysis/TSS_by_Unique_Frags_pdf
-    
+
+  QC-Sample-FragSizes-TSSProfile_pdf:
+    type: File
+    outputSource: sc_atac_seq_initial_analysis/QC-Sample-FragSizes-TSSProfile_pdf
+
+  QC-Sample-Statistics_pdf:
+    type: File
+    outputSource: sc_atac_seq_initial_analysis/QC-Sample-Statistics_pdf
+
+  TSS-vs-Frags_pdf:
+    type: File
+    outputSource: sc_atac_seq_initial_analysis/TSS-vs-Frags_pdf
+
   image_file:
     type: File
     outputSource: sc_atac_seq_initial_analysis/image_file

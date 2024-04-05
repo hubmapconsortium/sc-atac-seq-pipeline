@@ -31,21 +31,6 @@ inputs:
     doc: "The ArchRProj directory from the previous step"
 
 outputs:
-  QC-Sample-FragSizes-TSSProfile_pdf:
-    type: File
-    outputBinding:
-      glob: "*/Plots/QC-Sample-FragSizes-TSSProfile.pdf"
-
-  QC-Sample-Statistics_pdf:
-    type: File
-    outputBinding:
-      glob: "*/Plots/QC-Sample-Statistics.pdf"
-
-  TSS-vs-Frags_pdf:
-    type: File
-    outputBinding:
-      glob: "*/Plots/TSS-vs-Frags.pdf"
-
   Plot-UMAP-Sample-Clusters_pdf:
     type: File
     outputBinding:

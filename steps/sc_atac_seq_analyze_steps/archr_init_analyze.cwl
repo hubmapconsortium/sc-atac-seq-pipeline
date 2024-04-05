@@ -111,6 +111,21 @@ outputs:
     outputBinding:
       glob: "QualityControl/*/*-Fragment_Size_Distribution.pdf"
 
+  TSS-vs-Frags_pdf:
+    type: File
+    outputBinding:
+      glob: "*/Plots/TSS-vs-Frags.pdf"
+
+  QC-Sample-Statistics_pdf:
+    type: File
+    outputBinding:
+      glob: "*/Plots/QC-Sample-Statistics.pdf"
+ 
+  QC-Sample-FragSizes-TSSProfile_pdf:
+    type: File
+    outputBinding:
+      glob: "*/Plots/QC-Sample-FragSizes-TSSProfile.pdf"
+
   image_file:
     type: File
     outputBinding:

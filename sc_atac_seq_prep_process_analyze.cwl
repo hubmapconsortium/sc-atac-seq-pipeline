@@ -36,15 +36,15 @@ outputs:
 
   QC-Sample-FragSizes-TSSProfile_pdf:
     type: File
-    outputSource: analyze_with_ArchR/QC-Sample-FragSizes-TSSProfile_pdf
+    outputSource: sc_atac_seq_prep_process_init/QC-Sample-FragSizes-TSSProfile_pdf
 
   QC-Sample-Statistics_pdf:
     type: File
-    outputSource: analyze_with_ArchR/QC-Sample-Statistics_pdf
+    outputSource: sc_atac_seq_prep_process_init/QC-Sample-Statistics_pdf
 
   TSS-vs-Frags_pdf:
     type: File
-    outputSource: analyze_with_ArchR/TSS-vs-Frags_pdf
+    outputSource: sc_atac_seq_prep_process_init/TSS-vs-Frags_pdf
 
   Peak-Call-Summary_pdf:
     type: File
@@ -104,6 +104,9 @@ steps:
       - archr_project
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
+      - QC-Sample-FragSizes-TSSProfile_pdf
+      - QC-Sample-Statistics_pdf
+      - TSS-vs-Frags_pdf
 
   analyze_with_ArchR:
     run: steps/sc_atac_seq_analyze_steps/archr_clustering.cwl
@@ -111,9 +114,6 @@ steps:
       image_file: sc_atac_seq_prep_process_init/image_file
       archr_project: sc_atac_seq_prep_process_init/archr_project
     out:
-      - QC-Sample-FragSizes-TSSProfile_pdf
-      - QC-Sample-Statistics_pdf
-      - TSS-vs-Frags_pdf
       - Peak-Call-Summary_pdf
       - Plot-UMAP-Sample-Clusters_pdf
       - peaks_bed

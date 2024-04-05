@@ -48,18 +48,6 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/TSS-vs-Frags_pdf
 
-  Peak-Call-Summary_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/Peak-Call-Summary_pdf
-
-  Plot-UMAP-Sample-Clusters_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/Plot-UMAP-Sample-Clusters_pdf
-
-  peaks_bed:
-    type: File
-    outputSource: analyze_with_ArchR/peaks_bed
-
   cell_column_data_csv:
     type: File
     outputSource: analyze_with_ArchR/cell_column_data_csv
@@ -122,13 +110,6 @@ steps:
       - QC-Sample-FragSizes-TSSProfile_pdf
       - QC-Sample-Statistics_pdf
       - TSS-vs-Frags_pdf
-<<<<<<<<< Temporary merge branch 1
-=========
-      - Peak-Call-Summary_pdf
-      - Plot-UMAP-Sample-Clusters_pdf
-      - peaks_csv
-      - peaks_bed
->>>>>>>>> Temporary merge branch 2
       - cell_column_data_csv
       - gene_row_data_csv
       - cell_by_gene_raw_mtx
