@@ -85,11 +85,7 @@ steps:
     run: steps/sc_atac_seq_prep_process_init.cwl
     in:
      assay: assay
-     concat_fastq_dir: concat_fastq/output_directory
-     orig_fastq_dir: sequence_directory
-     input_fastq1: concat_fastq/merged_fastq_r1
-     input_fastq2: concat_fastq/merged_fastq_r2
-
+     fastq_dir: sequence_directory
      threads: threads
     out:
       - fastqc_dir
