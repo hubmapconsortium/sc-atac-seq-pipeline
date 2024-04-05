@@ -70,7 +70,7 @@ steps:
     run: adjust-barcodes.cwl
     in:
      assay: assay
-     directory:
+     orig_dir:
        # https://www.commonwl.org/user_guide/misc/ Connect a solo value to an input that expects an array of that type
        source: [ concat_fastq_dir ]
        linkMerge: merge_nested
