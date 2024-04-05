@@ -59,11 +59,11 @@ outputs:
 
   image_file:
     type: File
-    output_source: analyze_with_ArchR/image_file
+    outputSource: analyze_with_ArchR/image_file
 
   archr_project:
     type: Directory[]
-    output_source: analyze_with_ArchR/archr_project
+    outputSource: analyze_with_ArchR/archr_project
 
   cell_by_bin_h5ad:
     type: File
