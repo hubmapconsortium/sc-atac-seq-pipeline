@@ -56,6 +56,13 @@ outputs:
   gene_row_data_csv:
     type: File
     outputSource: analyze_with_ArchR/gene_row_data_csv
+  image_file:
+    type: Directory
+    output_source: analyze_with_ArchR/image_file
+
+  archr_project:
+    type: Directory
+    output_source: analyze_with_ArchR/archr_project
 
   cell_by_bin_h5ad:
     type: File
