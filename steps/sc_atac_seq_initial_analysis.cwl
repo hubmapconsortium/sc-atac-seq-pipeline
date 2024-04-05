@@ -62,7 +62,7 @@ outputs:
     outputSource: analyze_with_ArchR/image_file
 
   archr_project:
-    type: Directory[]
+    type: Directory
     outputSource: analyze_with_ArchR/archr_project
 
   cell_by_bin_h5ad:
