@@ -15,7 +15,7 @@ inputs:
   input_fastq1: File
   input_fastq2: File
   threads: int?
-  
+
 outputs:
   bam_file:
     type: File
@@ -119,6 +119,8 @@ steps:
       - cell_by_bin_mtx
       - cell_by_bin_barcodes
       - cell_by_bin_bins
+      - archr_project
+      - image_file
 
   create_fragment_file:
     run: sc_atac_seq_process_steps/create_fragment_file.cwl
