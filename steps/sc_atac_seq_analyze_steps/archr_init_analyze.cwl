@@ -114,17 +114,17 @@ outputs:
   TSS-vs-Frags_pdf:
     type: File
     outputBinding:
-      glob: "*/Plots/TSS-vs-Frags.pdf"
+      glob: "ArchRStep1/Plots/TSS-vs-Frags.pdf"
 
   QC-Sample-Statistics_pdf:
     type: File
     outputBinding:
-      glob: "*/Plots/QC-Sample-Statistics.pdf"
+      glob: "ArchRStep1/Plots/QC-Sample-Statistics.pdf"
  
   QC-Sample-FragSizes-TSSProfile_pdf:
     type: File
     outputBinding:
-      glob: "*/Plots/QC-Sample-FragSizes-TSSProfile.pdf"
+      glob: "ArchRStep1/Plots/QC-Sample-FragSizes-TSSProfile.pdf"
 
   image_file:
     type: File
