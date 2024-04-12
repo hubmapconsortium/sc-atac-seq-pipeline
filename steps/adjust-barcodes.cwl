@@ -14,15 +14,15 @@ inputs:
   directory:
     type: Directory[]
     inputBinding:
-      position: 1
+      prefix: --directory
   orig_dir:
     type: Directory[]
     inputBinding:
-      position: 2
+      prefix: --orig_dir
   metadata_file:
     type: File?
     inputBinding:
-      position: 3
+      prefix: --metadata_file
 outputs:
   adj_fastq_dir:
     type: Directory

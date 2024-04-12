@@ -74,7 +74,7 @@ def main(
     orig_fastq_dir: Path,
     output_filename_prefix,
     output_dir: Path,
-    metadata_file: Path,
+    metadata_file: Optional[Path]=None,
 ):
     baraddedf1 = output_dir / f"{output_filename_prefix}_R1.fastq"
     baraddedf2 = output_dir / f"{output_filename_prefix}_R2.fastq"
@@ -87,7 +87,7 @@ def main(
     )
 
     metadata_file = metadata_file if metadata_file else find_metadata_file(orig_fastq_dir)
-
+    
     if metadata_file is None:
         print("no metadata file found")
     else:
@@ -165,11 +165,11 @@ def main(
 
 if __name__ == "__main__":
     p = ArgumentParser()
-    p.add_argument("assay", type=Assay)
+    p.add_argument("assay", type=Assay, nargs="+")
     p.add_argument("fastq_dirs", type=Path, nargs="+")
-    p.add_argument("orig_fastq_dir", type=Path)
-    p.add_argument("output_filename_prefix")
-    p.add_argument("output_dir", type=Path)
+    p.add_argument("orig_fastq_dir", type=Path, nargs="+")
+    p.add_argument("output_filename_prefix", nargs="+")
+    p.add_argument("output_dir", type=Path, nargs="+")
     p.add_argument("metadata_file", type=Path, nargs="?")
 
     args = p.parse_args()
