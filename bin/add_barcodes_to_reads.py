@@ -112,8 +112,16 @@ def main(
                     ):
                         offset = int(metadata["cell_barcode_offset"])
                         print(f"offset is {offset}")
+                    if (
+                        "barcode_offset" in metadata and metadata["barcode_offset"].isdigit()
+                    ):
+                        offset = int(metadata["barcode_offset"])
+                        print(f"offset is {offset}")
                     if "cell_barcode_size" in metadata and metadata["cell_barcode_size"].isdigit():
                         length = int(metadata["cell_barcode_size"])
+                        print(f"length is {length}")
+                    if "barcode_size" in metadata and metadata["barcode_size"].isdigit():
+                        length = int(metadata["barcode_size"])
                         print(f"length is {length}")
                     multiome_seg = slice(offset, offset + length)
 
@@ -165,7 +173,7 @@ def main(
 
 if __name__ == "__main__":
     p = ArgumentParser()
-    p.add_argument("assay", type=Assay, nargs="+")
+    p.add_argument("assay", type=Assay)
     p.add_argument("fastq_dirs", type=Iterable[Path], nargs="+")
     p.add_argument("orig_fastq_dir", type=Path, nargs="+")
     p.add_argument("output_filename_prefix", nargs="+")
