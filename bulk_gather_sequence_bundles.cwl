@@ -17,7 +17,7 @@ $schemas:
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38:2.1
+    dockerPull: hubmap/sc-atac-seq-hg38
   ResourceRequirement:
     coresMin: 1
     ramMin: 1024

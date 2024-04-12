@@ -3,7 +3,7 @@ class: CommandLineTool
 label: Assay-specific adjustment of cell barcodes
 hints:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-barcode-adj:2.1
+    dockerPull: hubmap/sc-atac-barcode-adj:latest
 baseCommand: /opt/adjust_barcodes.py
 
 inputs:
@@ -14,11 +14,16 @@ inputs:
   directory:
     type: Directory[]
     inputBinding:
+      prefix: --directory
       position: 1
   orig_dir:
     type: Directory[]
     inputBinding:
-      position: 2
+      prefix: --orig_dir
+  metadata_file:
+    type: File?
+    inputBinding:
+      prefix: --metadata_file
 outputs:
   adj_fastq_dir:
     type: Directory

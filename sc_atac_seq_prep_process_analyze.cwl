@@ -13,6 +13,8 @@ inputs:
   threads: int?
   exclude_bam: boolean?
 
+  metadata_file: File?
+
 outputs:
   fastqc_dir:
     type: Directory[]
@@ -106,6 +108,8 @@ steps:
 
       input_fastq1: concat_fastq/merged_fastq_r1
       input_fastq2: concat_fastq/merged_fastq_r2
+
+      metadata_file: metadata_file
 
       #threads: threads
     out:
