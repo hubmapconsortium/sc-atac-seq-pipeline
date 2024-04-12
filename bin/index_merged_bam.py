@@ -36,9 +36,11 @@ def print_command(command: List[str]):
 
 
 def main(processes: int, merged_bam_file: Path):
-
     sort_and_index_commands = [
-        [piece.format(processes=processes, merged_bam=merged_bam_file) for piece in samtools_sort_command_template],
+        [
+            piece.format(processes=processes, merged_bam=merged_bam_file)
+            for piece in samtools_sort_command_template
+        ],
         [piece.format(processes=processes) for piece in samtools_index_command_template],
     ]
     for command in sort_and_index_commands:

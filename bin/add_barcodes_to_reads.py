@@ -74,7 +74,7 @@ def main(
     orig_fastq_dir: Path,
     output_filename_prefix,
     output_dir: Path,
-    metadata_file: Optional[Path]=None,
+    metadata_file: Optional[Path] = None,
 ):
     baraddedf1 = output_dir / f"{output_filename_prefix}_R1.fastq"
     baraddedf2 = output_dir / f"{output_filename_prefix}_R2.fastq"
@@ -87,7 +87,7 @@ def main(
     )
 
     metadata_file = metadata_file if metadata_file else find_metadata_file(orig_fastq_dir)
-    
+
     if metadata_file is None:
         print("no metadata file found")
     else:
@@ -112,9 +112,7 @@ def main(
                     ):
                         offset = int(metadata["cell_barcode_offset"])
                         print(f"offset is {offset}")
-                    if (
-                        "barcode_offset" in metadata and metadata["barcode_offset"].isdigit()
-                    ):
+                    if "barcode_offset" in metadata and metadata["barcode_offset"].isdigit():
                         offset = int(metadata["barcode_offset"])
                         print(f"offset is {offset}")
                     if "cell_barcode_size" in metadata and metadata["cell_barcode_size"].isdigit():
