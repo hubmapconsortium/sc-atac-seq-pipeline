@@ -19,14 +19,10 @@ adj_funcs_special = {
 def main(
         assay: Assay, input_dirs: Iterable[Path], orig_dir: Path, output_filename_prefix, output_dir, metadata_file: Path
 ):
-    #print(f"orig_dir: {orig_dir}, assay: {assay}, input_dirs: {input_dirs}, metadata_file: {metadata_file}")
     ADJ_OUTPUT_DIR.mkdir(exist_ok=True, parents=True)
     func = adj_funcs_special.get(assay, adj_func_default)
     print("Calling function", func, "to add barcodes")
     if assay == assay.MULTIOME_10X:
-        #print("input_dirs: ", input_dirs)
-        #print("orig_dir: ", orig_dir)
-        #print("metadata_file: ", metadata_file)
         func(assay, input_dirs, orig_dir, output_filename_prefix, output_dir, metadata_file)
     else:
         func(assay, input_dirs, orig_dir, output_filename_prefix, output_dir)
@@ -34,7 +30,7 @@ def main(
 if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("assay", choices=list(Assay), type=Assay)
-    p.add_argument("--directory", type=Path)
+    p.add_argument("--directory", type=Path, nargs="+")
     p.add_argument("--orig_dir", type=Path)
     p.add_argument("output_filename_prefix", nargs="?", default=OUTPUT_FILENAME_PREFIX)
     p.add_argument("output_dir", type=Path, nargs="?", default=ADJ_OUTPUT_DIR)

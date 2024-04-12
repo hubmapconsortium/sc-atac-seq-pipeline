@@ -166,7 +166,7 @@ def main(
 if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("assay", type=Assay, nargs="+")
-    p.add_argument("fastq_dirs", type=Path, nargs="+")
+    p.add_argument("fastq_dirs", type=Iterable[Path], nargs="+")
     p.add_argument("orig_fastq_dir", type=Path, nargs="+")
     p.add_argument("output_filename_prefix", nargs="+")
     p.add_argument("output_dir", type=Path, nargs="+")

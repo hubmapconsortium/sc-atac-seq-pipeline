@@ -15,6 +15,7 @@ inputs:
     type: Directory[]
     inputBinding:
       prefix: --directory
+      position: 1
   orig_dir:
     type: Directory[]
     inputBinding:
