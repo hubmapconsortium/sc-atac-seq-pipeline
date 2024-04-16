@@ -111,7 +111,7 @@ steps:
 
       metadata_file: metadata_file
 
-      #threads: threads
+      threads: threads
     out:
       - bam_file
       - bam_index
