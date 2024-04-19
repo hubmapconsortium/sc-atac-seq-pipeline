@@ -74,7 +74,7 @@ outputs:
     type: Directory
     outputSource: sc_atac_seq_initial_analysis/archr_project
   
-  genome_build_json
+  genome_build_json:
     type: File
     outputSource: write_genome_build/genome_build_json
 
