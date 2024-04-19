@@ -123,7 +123,7 @@ steps:
       - cell_by_gene_h5ad
       - fragment_file
 
-  write_genome_build
+  write_genome_build:
     run: write_genome_build.cwl
     in: []
     out: [genome_build_json]
