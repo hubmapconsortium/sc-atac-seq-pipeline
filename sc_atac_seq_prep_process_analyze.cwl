@@ -66,7 +66,6 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/umap_coords_clusters_csv
 
-
   cell_by_bin_h5ad:
     type: File
     outputSource: sc_atac_seq_prep_process_init/cell_by_bin_h5ad
@@ -77,7 +76,7 @@ outputs:
 
   genome_build_json:
     type: File
-    outputSource: write_genome_build/genome_build_json
+    outputSource: sc_atac_seq_prep_process_init/genome_build_json
 
 steps:
 
@@ -103,6 +102,7 @@ steps:
       - QC-Sample-FragSizes-TSSProfile_pdf
       - QC-Sample-Statistics_pdf
       - TSS-vs-Frags_pdf
+      - genome_build_json
 
   analyze_with_ArchR:
     run: steps/sc_atac_seq_analyze_steps/archr_clustering.cwl
@@ -124,12 +124,6 @@ steps:
       cell_by_bin_h5ad: sc_atac_seq_prep_process_init/cell_by_bin_h5ad
     out:
       - qc_report
-
-
-  write_genome_build:
-    run: steps/write_genome_build.cwl
-    in: {}
-    out: [genome_build_json]
 
   #thanks to @pvanheus in the CWL gitter instance
   maybe_save_bam_file:

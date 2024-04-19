@@ -73,6 +73,10 @@ outputs:
   archr_project:
     type: Directory
     outputSource: sc_atac_seq_initial_analysis/archr_project
+  
+  genome_build_json
+    type: File
+    outputSource: write_genome_build/genome_build_json
 
 steps:
   fastqc:
@@ -118,3 +122,8 @@ steps:
       - cell_by_bin_h5ad
       - cell_by_gene_h5ad
       - fragment_file
+
+  write_genome_build
+    run: write_genome_build.cwl
+    in: []
+    out: [genome_build_json]
