@@ -15,6 +15,7 @@ inputs:
   input_fastq1: File
   input_fastq2: File
   threads: int?
+  metadata_file: File?
 
 outputs:
   bam_file:
@@ -84,6 +85,7 @@ steps:
         source: [ concat_fastq_dir ]
         linkMerge: merge_nested
       orig_dir: orig_fastq_dir
+      metadata_file: metadata_file
     out:
      [adj_fastq_dir]
 

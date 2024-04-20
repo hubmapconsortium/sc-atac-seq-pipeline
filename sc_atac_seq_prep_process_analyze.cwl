@@ -13,6 +13,8 @@ inputs:
   threads: int?
   exclude_bam: boolean?
 
+  metadata_file: File?
+
 outputs:
   fastqc_dir:
     type: Directory[]

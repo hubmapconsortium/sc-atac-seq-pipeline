@@ -74,6 +74,7 @@ def main(
     orig_fastq_dir: Path,
     output_filename_prefix,
     output_dir: Path,
+    metadata_file: Optional[Path] = None,
 ):
     baraddedf1 = output_dir / f"{output_filename_prefix}_R1.fastq"
     baraddedf2 = output_dir / f"{output_filename_prefix}_R2.fastq"
@@ -85,7 +86,8 @@ def main(
         find_grouped_fastq_files(fastq_dir, assay.fastq_count) for fastq_dir in fastq_dirs
     )
 
-    metadata_file = find_metadata_file(orig_fastq_dir)
+    metadata_file = metadata_file if metadata_file else find_metadata_file(orig_fastq_dir)
+
     if metadata_file is None:
         print("no metadata file found")
     else:
@@ -110,8 +112,14 @@ def main(
                     ):
                         offset = int(metadata["cell_barcode_offset"])
                         print(f"offset is {offset}")
+                    if "barcode_offset" in metadata and metadata["barcode_offset"].isdigit():
+                        offset = int(metadata["barcode_offset"])
+                        print(f"offset is {offset}")
                     if "cell_barcode_size" in metadata and metadata["cell_barcode_size"].isdigit():
                         length = int(metadata["cell_barcode_size"])
+                        print(f"length is {length}")
+                    if "barcode_size" in metadata and metadata["barcode_size"].isdigit():
+                        length = int(metadata["barcode_size"])
                         print(f"length is {length}")
                     multiome_seg = slice(offset, offset + length)
 
@@ -164,10 +172,11 @@ def main(
 if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("assay", type=Assay)
-    p.add_argument("fastq_dirs", type=Path, nargs="+")
-    p.add_argument("orig_fastq_dir", type=Path)
-    p.add_argument("output_filename_prefix")
-    p.add_argument("output_dir", type=Path)
+    p.add_argument("fastq_dirs", type=Iterable[Path], nargs="+")
+    p.add_argument("orig_fastq_dir", type=Path, nargs="+")
+    p.add_argument("output_filename_prefix", nargs="+")
+    p.add_argument("output_dir", type=Path, nargs="+")
+    p.add_argument("metadata_file", type=Path, nargs="?")
 
     args = p.parse_args()
 
@@ -177,4 +186,5 @@ if __name__ == "__main__":
         args.orig_fastq_dir,
         args.output_filename_prefix,
         args.output_dir,
+        args.metadata_file,
     )
