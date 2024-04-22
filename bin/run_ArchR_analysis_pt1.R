@@ -224,6 +224,23 @@ plotPDF(pfrag, ptssen, name = "QC-Sample-FragSizes-TSSProfile.pdf",
 message(paste("Filtering Doublets"))
 archr_proj <- filterDoublets(ArchRProj = archr_proj)
 
+message(paste("Doing Dimensionality Reduction"))
+archr_proj <- addIterativeLSI(
+  ArchRProj = archr_proj,
+  useMatrix = "TileMatrix",
+  name = "IterativeLSI",
+  iterations = 5,
+  clusterParams = list(
+    resolution = c(2),
+    sampleCells = 10000,
+    maxClusters = 6,
+    n.start = 10),
+  varFeatures = 25000
+ )
+
+message(paste("Adding Clusters"))
+archr_proj <- addClusters(input = archr_proj, reducedDims = "IterativeLSI")
+
 cell_col_data_df <- getCellColData(archr_proj)
 write.csv(cell_col_data_df, file = "cell_column_data.csv")
 
@@ -287,39 +304,6 @@ h5write(as.matrix(transposed_smooth_g_score_dm), smooth_cell_by_gene_filename,
         "cell_by_gene_smoothed", level = 0)
 h5write(gene_row_dat_df$name, smooth_cell_by_gene_filename, "genes")
 h5write(archr_proj$cellNames, smooth_cell_by_gene_filename, "barcodes")
-
-## Dimensionality Reduction and Clustering
-## ArchR implements an iterative LSI dimensionality reduction via the
-# addIterativeLSI() function.
-message(paste("Doing Dimensionality Reduction"))
-archr_proj <- addIterativeLSI(
-  ArchRProj = archr_proj,
-  useMatrix = "TileMatrix",
-  name = "IterativeLSI",
-  iterations = 5,
-  clusterParams = list(
-    resolution = c(2),
-    sampleCells = 10000,
-    maxClusters = 6,
-    n.start = 10),
-  varFeatures = 25000
- )
-
-# To call clusters in this reduced dimension sub-space, we use the addClusters()
-# function which uses Seurat’s graph clustering as the default clustering
-# method.
-message(paste("Adding Clusters"))
-archr_proj <- addClusters(input = archr_proj, reducedDims = "IterativeLSI")
-
-#write a version of the cell column data table with clusters
-#and a version of cell by bin column data with clusters
-#other files do not get cluster info
-cell_col_data_df <- getCellColData(archr_proj)
-write.csv(cell_col_data_df, "cell_column_data_with_clusters.csv")
-
-message(paste("Creating cell by bin column data CSV file"))
-tile_col_data_df <- colData(tile_matrix_se)
-write.csv(tile_col_data_df, file = "cell_by_bin_col_data_with_clusters.csv")
 
 save.image(file="atacSeqStep1.RData")
 saveArchRProject(ArchRProj = archr_proj, load = FALSE, outputDirectory = "ArchRStep1")
