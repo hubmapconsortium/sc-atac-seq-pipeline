@@ -82,7 +82,7 @@ steps:
   fastqc:
     scatter: [fastq_dir]
     scatterMethod: dotproduct
-    run: steps/fastqc.cwl
+    run: steps/common/fastqc.cwl
     in:
       fastq_dir: sequence_directory
       threads: threads
@@ -90,7 +90,7 @@ steps:
       [fastqc_dir]
 
   concat_fastq:
-    run: steps/concat-fastq.cwl
+    run: steps/sc/concat_fastq.cwl
     in:
       sequence_directory: sequence_directory
       assay: assay
@@ -98,7 +98,7 @@ steps:
       [output_directory, merged_fastq_r1, merged_fastq_r2, merged_fastq_barcode]
 
   sc_atac_seq_process_and_analyze:
-    run: steps/sc_atac_seq_process_and_analyze.cwl
+    run: steps/sc/sc_atac_seq_process_and_analyze.cwl
     in:
      assay: assay
      concat_fastq_dir: concat_fastq/output_directory
@@ -126,7 +126,7 @@ steps:
       - cell_by_gene_h5ad
 
   qc_measures:
-    run: steps/qc_measures.cwl
+    run: steps/common/qc_measures.cwl
     in:
       bam_file: sc_atac_seq_process_and_analyze/bam_file
       bam_index: sc_atac_seq_process_and_analyze/bam_index
@@ -136,7 +136,7 @@ steps:
       - qc_report
 
   write_genome_build:
-    run: steps/write_genome_build.cwl
+    run: steps/sc/write_genome_build.cwl
     in: {}
     out: [genome_build_json]
 

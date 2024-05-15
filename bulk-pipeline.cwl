@@ -60,7 +60,7 @@ steps:
   fastqc:
     scatter: [fastq_dir]
     scatterMethod: dotproduct
-    run: steps/fastqc.cwl
+    run: steps/common/fastqc.cwl
     in:
       fastq_dir: sequence_directory
       threads: threads
@@ -68,7 +68,7 @@ steps:
       [fastqc_dir]
 
   gather_sequence_bundles:
-    run: bulk_gather_sequence_bundles.cwl
+    run: steps/bulk/bulk_gather_sequence_bundles.cwl
     in:
       sequence_directory: sequence_directory
     out:
@@ -78,7 +78,7 @@ steps:
     scatter: [input_fastq1, input_fastq2]
 #    scatter: [Fastq_1, Fastq_2]
     scatterMethod: dotproduct
-    run: steps/align_reads.cwl
+    run: steps/common/align_reads.cwl
     in:
 #      alignment_index: index_ref_genome/genome_alignment_index
 #      InputFile: [gather_sequence_bundles/fastq1_files, gather_sequence_bundles/fastq2_files]
@@ -94,20 +94,20 @@ steps:
     out: [paired_end_bam]
 
   merge_bam:
-    run: steps/merge_bam.cwl
+    run: steps/bulk/merge_bam.cwl
     in:
       bam_files: align_paired_end/paired_end_bam
     out: [merged_bam]
 
   index_merged_bam:
-    run: steps/index_merged_bam.cwl
+    run: steps/bulk/index_merged_bam.cwl
     in:
       merged_bam_file: merge_bam/merged_bam
     out:
       [sorted_merged_bam, merged_bam_index]
 
   bulk_process:
-    run: steps/bulk_process.cwl
+    run: steps/bulk/bulk_process.cwl
     in:
       sorted_merged_bam: index_merged_bam/sorted_merged_bam
       encode_blacklist: encode_blacklist
@@ -118,7 +118,7 @@ steps:
 
 
   bulk_analysis:
-    run: steps/bulk_analysis.cwl
+    run: steps/bulk/bulk_analysis.cwl
     in:
       bam_file: bulk_process/sorted_bam_file
 
@@ -126,7 +126,7 @@ steps:
       [peaks_table, narrow_peaks, summits_bed, bed_graphs, r_script]
 
   qc_measures:
-    run: steps/qc_measures.cwl
+    run: steps/common/qc_measures.cwl
     in:
       bam_file: index_merged_bam/sorted_merged_bam
       peak_file: bulk_analysis/summits_bed

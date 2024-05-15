@@ -83,7 +83,7 @@ outputs:
 
 steps:
   adjust_barcodes:
-    run: adjust-barcodes.cwl
+    run: adjust_barcodes.cwl
     in:
      assay: assay
      directory:
@@ -94,7 +94,7 @@ steps:
      [adj_fastq_dir]
 
   align_reads:
-    run: align_reads.cwl
+    run: ../common/align_reads.cwl
     in:
       num_threads: threads
 
@@ -115,7 +115,7 @@ steps:
     out: [paired_end_bam, paired_end_bam_index]
 
   analyze_with_ArchR:
-    run: sc_atac_seq_analyze_steps/archr_analyze.cwl
+    run: archr_analyze.cwl
     in:
       bam_file: align_reads/paired_end_bam
       bam_index: align_reads/paired_end_bam_index
@@ -140,7 +140,7 @@ steps:
       - cell_by_bin_bins
 
   create_fragment_file:
-    run: sc_atac_seq_process_steps/create_fragment_file.cwl
+    run: create_fragment_file.cwl
     in:
       input_bam: align_reads/paired_end_bam
     out: [fragment_file]

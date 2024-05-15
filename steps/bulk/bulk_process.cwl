@@ -20,7 +20,7 @@ outputs:
 steps:
 
   remove_blacklist:
-    run: sc_atac_seq_process_steps/remove_blacklist.cwl
+    run: remove_blacklist.cwl
     in:
       bam_file: sorted_merged_bam
       bed_file: encode_blacklist
