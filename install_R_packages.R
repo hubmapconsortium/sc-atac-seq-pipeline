@@ -18,7 +18,7 @@ c(
 
 # Then, install BiocManager (for installing bioconductor packages) if it isn’t already installed:
 if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-BiocManager::install(version = "3.13", ask=FALSE)
+BiocManager::install(version = "3.14", ask=FALSE)
 
 tryCatch({
     BiocManager::install("DirichletMultinomial", ask=FALSE)
@@ -32,7 +32,7 @@ tryCatch({
 
 # Then, install ArchR:
 tryCatch({
-    devtools::install_github("GreenleafLab/ArchR@b9ee2663d9ba7d58c6737a7a8bf2b3614bf26866", repos = BiocManager::repositories())
+    devtools::install_github("GreenleafLab/ArchR", ref="master", repos = BiocManager::repositories())
 },
     error = function(e) {
     message("Error installing GreenleafLab/ArchR")

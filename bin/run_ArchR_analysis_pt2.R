@@ -2,53 +2,42 @@
 library(optparse)
 library(parallel)
 library(magick)
+library(R.utils)
+library(BSgenome.Hsapiens.UCSC.hg38)
 
-load("atacSeqStep1.RData") #TODO: get the file from cwl
+option_list <- list(
+  make_option(
+    c("-i", "--image_file"),
+    type = "character",
+    help = "Path to the RData image from previous ArchR step"
+  ),
+  make_option(
+    c("-a", "--archr_project"),
+    type = "character",
+    help = "Path to the ArchR Project directory from previous ArchR step"
+  ))
 
+opt_parser <- OptionParser(option_list = option_list)
+opt <- parse_args(opt_parser)
+image_path <- opt$image_file
+archr_path <- opt$archr_project
+copyDirectory(archr_path, "ArchRStep2")
+load(image_path)
 
 library(ArchR)
 
-## Dimensionality Reduction and Clustering
-## ArchR implements an iterative LSI dimensionality reduction via the
-# addIterativeLSI() function.
-message(paste("Doing Dimensionality Reduction"))
-archr_proj <- addIterativeLSI(
-  ArchRProj = archr_proj,
-  useMatrix = "TileMatrix",
-  name = "IterativeLSI",
-  iterations = 5,
-  clusterParams = list(
-    resolution = c(2),
-    sampleCells = 10000,
-    maxClusters = 6,
-    n.start = 10),
-  varFeatures = 25000
- )
-
-# To call clusters in this reduced dimension sub-space, we use the addClusters()
-# function which uses Seurat’s graph clustering as the default clustering
-# method.
-message(paste("Adding Clusters"))
-archr_proj <- addClusters(input = archr_proj, reducedDims = "IterativeLSI")
-
-#write a version of the cell column data table with clusters
-#and a version of cell by bin column data with clusters
-#other files do not get cluster info
-cell_col_data_df <- getCellColData(archr_proj)
-write.csv(cell_col_data_df, "cell_column_data_with_clusters.csv")
-
-message(paste("Creating cell by bin column data CSV file"))
-tile_col_data_df <- colData(tile_matrix_se)
-write.csv(tile_col_data_df, file = "cell_by_bin_col_data_with_clusters.csv")
+archr_proj <- loadArchRProject(path = "/output/ArchRStep2")
+addArchRGenome("hg38")
 
 message(paste("Adding UMAP"))
 archr_proj <- addUMAP(ArchRProj = archr_proj, reducedDims = "IterativeLSI")
 
 message(paste("Getting embedding"))
 archr_proj_embed_w_clusters_df <- getEmbedding(ArchRProj = archr_proj,
-                                               embedding = "UMAP", returnDF = TRUE)
+       embedding = "UMAP", returnDF = TRUE)
 
 message(paste("Adding Clusters column"))
+
 # https://stackoverflow.com/questions/48896190/
 # add-column-to-r-dataframe-based-on-rowname
 # https://intellipaat.com/community/31833/
@@ -63,6 +52,7 @@ archr_proj_embed_w_clusters_df$Clusters <- cell_col_data_df$Clusters[
         row.names(cell_col_data_df))]
 write.csv(archr_proj_embed_w_clusters_df,
           file = "umap_coords_clusters.csv")
+
 # Using this UMAP, we can visualize various attributes of our cells which are
 # stored in a matrix called cellColData in our ArchRProject. To do this, we use
 # the plotEmbedding() function and we specify the variable to use for coloration

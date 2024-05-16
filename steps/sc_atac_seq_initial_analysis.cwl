@@ -50,18 +50,6 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/TSS-vs-Frags_pdf
 
-  Peak-Call-Summary_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/Peak-Call-Summary_pdf
-
-  Plot-UMAP-Sample-Clusters_pdf:
-    type: File
-    outputSource: analyze_with_ArchR/Plot-UMAP-Sample-Clusters_pdf
-
-  peaks_bed:
-    type: File
-    outputSource: analyze_with_ArchR/peaks_bed
-
   cell_column_data_csv:
     type: File
     outputSource: analyze_with_ArchR/cell_column_data_csv
@@ -70,9 +58,13 @@ outputs:
     type: File
     outputSource: analyze_with_ArchR/gene_row_data_csv
 
-  umap_coords_clusters_csv:
+  image_file:
     type: File
-    outputSource: analyze_with_ArchR/umap_coords_clusters_csv
+    outputSource: analyze_with_ArchR/image_file
+
+  archr_project:
+    type: Directory
+    outputSource: analyze_with_ArchR/archr_project
 
   cell_by_bin_h5ad:
     type: File
@@ -95,7 +87,7 @@ steps:
       orig_dir: orig_fastq_dir
       metadata_file: metadata_file
     out:
-      [adj_fastq_dir]
+     [adj_fastq_dir]
 
   align_reads:
     run: align_reads.cwl
@@ -119,7 +111,7 @@ steps:
     out: [paired_end_bam, paired_end_bam_index]
 
   analyze_with_ArchR:
-    run: sc_atac_seq_analyze_steps/archr_analyze.cwl
+    run: sc_atac_seq_analyze_steps/archr_init_analyze.cwl
     in:
       bam_file: align_reads/paired_end_bam
       bam_index: align_reads/paired_end_bam_index
@@ -130,19 +122,15 @@ steps:
       - QC-Sample-FragSizes-TSSProfile_pdf
       - QC-Sample-Statistics_pdf
       - TSS-vs-Frags_pdf
-      - Peak-Call-Summary_pdf
-      - Plot-UMAP-Sample-Clusters_pdf
-      - peaks_csv
-      - peaks_bed
       - cell_column_data_csv
       - gene_row_data_csv
-      - umap_coords_clusters_csv
       - cell_by_gene_raw_mtx
       - cell_by_gene_smoothed_hdf5
       - cell_by_bin_mtx
       - cell_by_bin_barcodes
       - cell_by_bin_bins
-      #- rdata_file
+      - archr_project
+      - image_file
 
   create_fragment_file:
     run: sc_atac_seq_process_steps/create_fragment_file.cwl

@@ -19,7 +19,7 @@ adj_funcs_special = {
 def main(
     assay: Assay,
     input_dirs: Iterable[Path],
-    orig_dir: Path,
+    orig_dir: Iterable[Path],
     output_filename_prefix,
     output_dir,
     metadata_file: Path,
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument("assay", choices=list(Assay), type=Assay)
     p.add_argument("--directory", type=Path, nargs="+")
-    p.add_argument("--orig_dir", type=Path)
+    p.add_argument("--orig_dir", type=Path, nargs="+")
     p.add_argument("output_filename_prefix", nargs="?", default=OUTPUT_FILENAME_PREFIX)
     p.add_argument("output_dir", type=Path, nargs="?", default=ADJ_OUTPUT_DIR)
     p.add_argument("--metadata_file", type=Path, default=None)

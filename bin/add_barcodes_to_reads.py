@@ -71,7 +71,7 @@ def find_metadata_file(directory: Path) -> Optional[Path]:
 def main(
     assay: Assay,
     fastq_dirs: Iterable[Path],
-    orig_fastq_dir: Path,
+    orig_fastq_dir: Iterable[Path],
     output_filename_prefix,
     output_dir: Path,
     metadata_file: Optional[Path] = None,
@@ -86,7 +86,7 @@ def main(
         find_grouped_fastq_files(fastq_dir, assay.fastq_count) for fastq_dir in fastq_dirs
     )
 
-    metadata_file = metadata_file if metadata_file else find_metadata_file(orig_fastq_dir)
+    metadata_file = metadata_file if metadata_file else find_metadata_file(orig_fastq_dir[0])
 
     if metadata_file is None:
         print("no metadata file found")
