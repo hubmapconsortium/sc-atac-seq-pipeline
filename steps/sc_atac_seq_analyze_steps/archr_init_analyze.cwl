@@ -1,8 +1,8 @@
 #!/usr/bin/env cwl-runner
 
 class: CommandLineTool
-id: archr_analyze
-label: ArchR analysis
+id: archr_init_analyze
+label: ArchR initial analysis
 cwlVersion: v1.2
 
 requirements:
@@ -66,51 +66,6 @@ inputs:
 
 
 outputs:
-  Fragment_Size_Distribution_pdf:
-    type: File
-    outputBinding:
-      glob: "QualityControl/*/*-Fragment_Size_Distribution.pdf"
-
-  TSS_by_Unique_Frags_pdf:
-    type: File
-    outputBinding:
-      glob: "QualityControl/*/*-TSS_by_Unique_Frags.pdf"
-
-  QC-Sample-FragSizes-TSSProfile_pdf:
-    type: File
-    outputBinding:
-      glob: "*/Plots/QC-Sample-FragSizes-TSSProfile.pdf"
-
-  QC-Sample-Statistics_pdf:
-    type: File
-    outputBinding:
-      glob: "*/Plots/QC-Sample-Statistics.pdf"
-
-  TSS-vs-Frags_pdf:
-    type: File
-    outputBinding:
-      glob: "*/Plots/TSS-vs-Frags.pdf"
-
-  Plot-UMAP-Sample-Clusters_pdf:
-    type: File
-    outputBinding:
-      glob: "*/Plots/Plot-UMAP-Sample-Clusters.pdf"
-
-  Peak-Call-Summary_pdf:
-    type: File
-    outputBinding:
-      glob: "*/Plots/Peak-Call-Summary.pdf"
-
-  peaks_csv:
-    type: File
-    outputBinding:
-      glob: "peaks.csv"
-
-  peaks_bed:
-    type: File
-    outputBinding:
-      glob: "peaks.bed"
-
   cell_column_data_csv:
     type: File
     outputBinding:
@@ -120,11 +75,6 @@ outputs:
     type: File
     outputBinding:
       glob: "gene_row_data.csv"
-
-  umap_coords_clusters_csv:
-    type: File
-    outputBinding:
-      glob: "umap_coords_clusters.csv"
 
   cell_by_gene_raw_mtx:
     type: File
@@ -151,4 +101,39 @@ outputs:
     outputBinding:
       glob: "bins.txt"
 
-baseCommand: [Rscript, /opt/run_ArchR_analysis.R]
+  TSS_by_Unique_Frags_pdf:
+    type: File
+    outputBinding:
+      glob: "QualityControl/*/*-TSS_by_Unique_Frags.pdf"
+      
+  Fragment_Size_Distribution_pdf:
+    type: File
+    outputBinding:
+      glob: "QualityControl/*/*-Fragment_Size_Distribution.pdf"
+
+  TSS-vs-Frags_pdf:
+    type: File
+    outputBinding:
+      glob: "ArchRStep1/Plots/TSS-vs-Frags.pdf"
+
+  QC-Sample-Statistics_pdf:
+    type: File
+    outputBinding:
+      glob: "ArchRStep1/Plots/QC-Sample-Statistics.pdf"
+ 
+  QC-Sample-FragSizes-TSSProfile_pdf:
+    type: File
+    outputBinding:
+      glob: "ArchRStep1/Plots/QC-Sample-FragSizes-TSSProfile.pdf"
+
+  image_file:
+    type: File
+    outputBinding:
+      glob: "atacSeqStep1.RData"
+  
+  archr_project:
+    type: Directory
+    outputBinding:
+      glob: "ArchRStep1"
+
+baseCommand: [Rscript, /opt/run_ArchR_analysis_pt1.R]
