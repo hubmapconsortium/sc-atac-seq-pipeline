@@ -12,7 +12,7 @@ inputs:
 
   threads: int?
   exclude_bam: boolean?
-  
+
 outputs:
   fastqc_dir:
     type: Directory[]
@@ -45,11 +45,11 @@ outputs:
   fragment_file:
     type: File
     outputSource: sc_atac_seq_initial_analysis/fragment_file
- 
+
   Fragment_Size_Distribution_pdf:
     type: File
     outputSource: sc_atac_seq_initial_analysis/Fragment_Size_Distribution_pdf
-  
+
   TSS_by_Unique_Frags_pdf:
     type: File
     outputSource: sc_atac_seq_initial_analysis/TSS_by_Unique_Frags_pdf
@@ -69,11 +69,11 @@ outputs:
   image_file:
     type: File
     outputSource: sc_atac_seq_initial_analysis/image_file
-  
+
   archr_project:
     type: Directory
     outputSource: sc_atac_seq_initial_analysis/archr_project
-  
+
   genome_build_json:
     type: File
     outputSource: write_genome_build/genome_build_json
