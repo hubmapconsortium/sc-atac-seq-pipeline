@@ -12,6 +12,7 @@ inputs:
 
   threads: int?
   exclude_bam: boolean?
+  metadata_file: File?
   
 outputs:
   fastqc_dir:
@@ -107,6 +108,7 @@ steps:
       input_fastq2: concat_fastq/merged_fastq_r2
 
       threads: threads
+      metadata_file: metadata_file
     out:
       - bam_file
       - bam_index
