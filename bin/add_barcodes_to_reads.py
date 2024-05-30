@@ -96,9 +96,9 @@ def main(
     with open(baraddedf1, "w") as barf1addedout, open(baraddedf2, "w") as barf2addedout:
         if assay == Assay.MULTIOME_10X:
             multiome_seg = MULTIOME_10X_BARCODE_SEGMENT
-            barcode_filename = "/opt/atac_barcodes_rev.txt"
-            barcode_allowlist = read_barcode_allowlist(barcode_filename)
-            correcter = bu.BarcodeCorrecter(barcode_allowlist, edit_distance=1)
+            barcode_filename = "/opt/atac_barcodes.txt"
+            revcomp_barcode_filename = "/opt/atac_barcodes_rev.txt"
+
             if metadata_file is not None and metadata_file.is_file():
                 with open(metadata_file, newline="") as f:
                     r = csv.DictReader(f, delimiter="\t")
@@ -122,6 +122,27 @@ def main(
                         length = int(metadata["barcode_size"])
                         print(f"length is {length}")
                     multiome_seg = slice(offset, offset + length)
+
+            barcode_allowlist = read_barcode_allowlist(barcode_filename)
+            revcomp_barcode_allowlist = read_barcode_allowlist(revcomp_barcode_filename)
+            first_thousand_barcodes = set({})
+
+            for fastq1_file, fastq2_file, barcode_file in all_fastqs:
+                print("Adding barcodes to", fastq1_file, "and", fastq2_file, "using", barcode_file)
+                barcode_reader = fastq_reader(barcode_file)
+                for read in barcode_reader:
+                    first_thousand_barcodes.add(read.seq[multiome_seg])
+                    if len(first_thousand_barcodes) >= 1000:
+                        break
+
+                if len(first_thousand_barcodes) >= 1000:
+                    break
+
+            revcomp = (revcomp_barcode_allowlist & first_thousand_barcodes) > (
+                        barcode_allowlist & first_thousand_barcodes)
+            barcode_allowlist = revcomp_barcode_allowlist if revcomp else barcode_allowlist
+
+            correcter = bu.BarcodeCorrecter(barcode_allowlist, edit_distance=1)
 
         for fastq1_file, fastq2_file, barcode_file in all_fastqs:
             i = 0
