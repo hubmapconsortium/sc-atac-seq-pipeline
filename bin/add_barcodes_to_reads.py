@@ -86,6 +86,8 @@ def main(
         find_grouped_fastq_files(fastq_dir, assay.fastq_count) for fastq_dir in fastq_dirs
     )
 
+    all_fastqs_list = list(all_fastqs)
+
     metadata_file = metadata_file if metadata_file else find_metadata_file(orig_fastq_dir[0])
 
     if metadata_file is None:
@@ -127,7 +129,7 @@ def main(
             revcomp_barcode_allowlist = read_barcode_allowlist(revcomp_barcode_filename)
             first_thousand_barcodes = set({})
 
-            for fastq1_file, fastq2_file, barcode_file in all_fastqs:
+            for fastq1_file, fastq2_file, barcode_file in all_fastqs_list:
                 print("Adding barcodes to", fastq1_file, "and", fastq2_file, "using", barcode_file)
                 barcode_reader = fastq_reader(barcode_file)
                 for read in barcode_reader:
@@ -138,13 +140,18 @@ def main(
                 if len(first_thousand_barcodes) >= 1000:
                     break
 
+            print(f"Matches to forward allowlist: {len(barcode_allowlist & first_thousand_barcodes)}")
+            print(f"Matches to backward allowlist: {len(revcomp_barcode_allowlist & first_thousand_barcodes)}")
+
+
             revcomp = (revcomp_barcode_allowlist & first_thousand_barcodes) > (
                         barcode_allowlist & first_thousand_barcodes)
+
             barcode_allowlist = revcomp_barcode_allowlist if revcomp else barcode_allowlist
 
             correcter = bu.BarcodeCorrecter(barcode_allowlist, edit_distance=1)
 
-        for fastq1_file, fastq2_file, barcode_file in all_fastqs:
+        for fastq1_file, fastq2_file, barcode_file in all_fastqs_list:
             i = 0
             print("Adding barcodes to", fastq1_file, "and", fastq2_file, "using", barcode_file)
             fastq1_reader = fastq_reader(fastq1_file)
@@ -166,6 +173,7 @@ def main(
                     umi_seq = ""
                 elif assay == Assay.MULTIOME_10X:
                     barcode_pieces = [bar.seq[multiome_seg]]
+                    
                     barcode_pieces = [correcter.correct(barcode) for barcode in barcode_pieces]
 
                     if barcode_pieces[0] is None:
