@@ -87,6 +87,7 @@ def main(
     )
 
     all_fastqs_list = list(all_fastqs)
+    print(all_fastqs_list)
 
     metadata_file = metadata_file if metadata_file else find_metadata_file(orig_fastq_dir[0])
 
