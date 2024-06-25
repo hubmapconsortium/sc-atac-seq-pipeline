@@ -88,6 +88,7 @@ steps:
      assay: assay
      sequence_directory: sequence_directory
      threads: threads
+     metadata_file: metadata_file
     out:
       - fastqc_dir
       - bam_file
