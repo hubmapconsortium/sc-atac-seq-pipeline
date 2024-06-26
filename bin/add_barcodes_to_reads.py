@@ -86,6 +86,9 @@ def main(
         find_grouped_fastq_files(fastq_dir, assay.fastq_count) for fastq_dir in fastq_dirs
     )
 
+    all_fastqs_list = list(all_fastqs)
+    print(all_fastqs_list)
+
     metadata_file = metadata_file if metadata_file else find_metadata_file(orig_fastq_dir[0])
 
     if metadata_file is None:
@@ -96,9 +99,9 @@ def main(
     with open(baraddedf1, "w") as barf1addedout, open(baraddedf2, "w") as barf2addedout:
         if assay == Assay.MULTIOME_10X:
             multiome_seg = MULTIOME_10X_BARCODE_SEGMENT
-            barcode_filename = "/opt/atac_barcodes_rev.txt"
-            barcode_allowlist = read_barcode_allowlist(barcode_filename)
-            correcter = bu.BarcodeCorrecter(barcode_allowlist, edit_distance=1)
+            barcode_filename = "/opt/atac_barcodes.txt"
+            revcomp_barcode_filename = "/opt/atac_barcodes_rev.txt"
+
             if metadata_file is not None and metadata_file.is_file():
                 with open(metadata_file, newline="") as f:
                     r = csv.DictReader(f, delimiter="\t")
@@ -123,7 +126,33 @@ def main(
                         print(f"length is {length}")
                     multiome_seg = slice(offset, offset + length)
 
-        for fastq1_file, fastq2_file, barcode_file in all_fastqs:
+            barcode_allowlist = read_barcode_allowlist(barcode_filename)
+            revcomp_barcode_allowlist = read_barcode_allowlist(revcomp_barcode_filename)
+            first_thousand_barcodes = set({})
+
+            for fastq1_file, fastq2_file, barcode_file in all_fastqs_list:
+                print("Adding barcodes to", fastq1_file, "and", fastq2_file, "using", barcode_file)
+                barcode_reader = fastq_reader(barcode_file)
+                for read in barcode_reader:
+                    first_thousand_barcodes.add(read.seq[multiome_seg])
+                    if len(first_thousand_barcodes) >= 1000:
+                        break
+
+                if len(first_thousand_barcodes) >= 1000:
+                    break
+
+            print(f"Matches to forward allowlist: {len(barcode_allowlist & first_thousand_barcodes)}")
+            print(f"Matches to backward allowlist: {len(revcomp_barcode_allowlist & first_thousand_barcodes)}")
+
+
+            revcomp = (revcomp_barcode_allowlist & first_thousand_barcodes) > (
+                        barcode_allowlist & first_thousand_barcodes)
+
+            barcode_allowlist = revcomp_barcode_allowlist if revcomp else barcode_allowlist
+
+            correcter = bu.BarcodeCorrecter(barcode_allowlist, edit_distance=1)
+
+        for fastq1_file, fastq2_file, barcode_file in all_fastqs_list:
             i = 0
             print("Adding barcodes to", fastq1_file, "and", fastq2_file, "using", barcode_file)
             fastq1_reader = fastq_reader(fastq1_file)
@@ -145,6 +174,7 @@ def main(
                     umi_seq = ""
                 elif assay == Assay.MULTIOME_10X:
                     barcode_pieces = [bar.seq[multiome_seg]]
+                    
                     barcode_pieces = [correcter.correct(barcode) for barcode in barcode_pieces]
 
                     if barcode_pieces[0] is None:
