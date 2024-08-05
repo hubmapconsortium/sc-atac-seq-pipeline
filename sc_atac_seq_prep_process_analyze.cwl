@@ -80,6 +80,18 @@ outputs:
     type: File
     outputSource: sc_atac_seq_prep_process_init/genome_build_json
 
+  peaks_csv:
+    type: File
+    outputSource: analyze_with_ArchR/peaks_csv
+
+  peaks_bed:
+    type: File
+    outputSource: analyze_with_ArchR/peaks_bed
+
+  qc_report:
+    type: File
+    outputSource: qc_measures/qc_report
+
 steps:
 
   sc_atac_seq_prep_process_init:
@@ -116,6 +128,7 @@ steps:
       - Peak-Call-Summary_pdf
       - Plot-UMAP-Sample-Clusters_pdf
       - peaks_bed
+      - peaks_csv
       - umap_coords_clusters_csv
 
   qc_measures:
