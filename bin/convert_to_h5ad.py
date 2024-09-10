@@ -72,9 +72,7 @@ def main(
         var=var,
         dtype=bool,
     )
-    cbb_cells_with_clusters = cell_by_bin.obs.dropna()
-    cbb_valid_indices = cbb_cells_with_clusters.index.intersection(cell_by_bin.obs_names)
-    cell_by_bin = cell_by_bin[:, cbb_valid_indices]
+    cell_by_bin = cell_by_bin[cell_by_bin.obs['Clusters'].notna()]
     print("Saving cell by bin matrix")
     cell_by_bin.write_h5ad("cell_by_bin.h5ad")
 
@@ -93,9 +91,7 @@ def main(
         var=pd.DataFrame(index=genes),
         layers={"smoothed": cell_by_gene_smoothed},
     )
-    cbg_cells_with_clusters = cell_by_gene.obs.dropna()
-    cbg_valid_indices = cbg_cells_with_clusters.index.intersection(cell_by_gene.obs_names)
-    cell_by_gene = cell_by_gene[:, cbg_valid_indices]    
+    cell_by_gene = cell_by_gene[cell_by_gene.obs['Clusters'].notna()]
     print("Saving cell by gene matrix")
     cell_by_gene.write_h5ad("cell_by_gene.h5ad")
 
