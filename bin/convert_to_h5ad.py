@@ -91,7 +91,7 @@ def main(
         var=pd.DataFrame(index=genes),
         layers={"smoothed": cell_by_gene_smoothed},
     )
-    cell_by_gene.obs.dropna() = cell_by_gene.obs.dropna()
+    cell_by_gene.obs = cell_by_gene.obs.dropna()
     print("Saving cell by gene matrix")
     cell_by_gene.write_h5ad("cell_by_gene.h5ad")
 
