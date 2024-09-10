@@ -73,7 +73,7 @@ def main(
         dtype=bool,
     )
     cbb_cells_with_clusters = cell_by_bin.obs.dropna()
-    cell_by_bin = cell_by_bin[:, cbb_cells_with_clusters.index]
+    cell_by_bin = cell_by_bin[:, cbb_cells_with_clusters.index.to_frame()]
     print("Saving cell by bin matrix")
     cell_by_bin.write_h5ad("cell_by_bin.h5ad")
 
@@ -93,7 +93,7 @@ def main(
         layers={"smoothed": cell_by_gene_smoothed},
     )
     cbg_cells_with_clusters = cell_by_gene.obs.dropna()
-    cell_by_gene = cell_by_gene[:, cbg_cells_with_clusters.index]
+    cell_by_gene = cell_by_gene[:, cbg_cells_with_clusters.index.to_frame()]
     print("Saving cell by gene matrix")
     cell_by_gene.write_h5ad("cell_by_gene.h5ad")
 
