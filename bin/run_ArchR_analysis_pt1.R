@@ -242,7 +242,23 @@ message(paste("Adding Clusters"))
 archr_proj <- addClusters(input = archr_proj, reducedDims = "IterativeLSI")
 
 cell_col_data_df <- getCellColData(archr_proj)
+cells_without_clusters <- cell_col_data_df[apply(
+  cell_col_data_df,
+  1,
+  function(x) any(is.na(x))
+), ]
 write.csv(cell_col_data_df, file = "cell_column_data.csv")
+# Logging to see where NAs are being introduced
+message(paste("Cells without cluster assignments: "))
+print(cells_without_clusters)
+
+# Attempt to remove the cells without cluster assignments
+message(paste("Removing cells without Cluster assignments, if any"))
+cell_col_data_df <- na.omit(cell_col_data_df)
+archr_proj <- subsetArchRProject(
+  ArchRProj = archr_proj,
+  cells = row.names(cell_col_data_df)
+)
 
 ## Create the cell by gene table MTX and CSVs
 message(paste("Creating cell by gene MTX file"))
