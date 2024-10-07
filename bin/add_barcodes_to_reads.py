@@ -145,10 +145,10 @@ def main(
             print(f"Matches to backward allowlist: {len(revcomp_barcode_allowlist & first_thousand_barcodes)}")
 
 
-            revcomp = (revcomp_barcode_allowlist & first_thousand_barcodes) > (
+            reverse_complement = (revcomp_barcode_allowlist & first_thousand_barcodes) > (
                         barcode_allowlist & first_thousand_barcodes)
 
-            barcode_allowlist = revcomp_barcode_allowlist if revcomp else barcode_allowlist
+            barcode_allowlist = revcomp_barcode_allowlist if reverse_complement else barcode_allowlist
 
             correcter = bu.BarcodeCorrecter(barcode_allowlist, edit_distance=1)
 
