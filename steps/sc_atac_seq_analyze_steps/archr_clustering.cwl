@@ -6,7 +6,7 @@ cwlVersion: v1.2
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38:latest
+    dockerPull: hubmap/sc-atac-seq-hg38:2.2.0
     dockerOutputDirectory: "/output"
   NetworkAccess:
     networkAccess: true
