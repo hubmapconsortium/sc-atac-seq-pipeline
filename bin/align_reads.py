@@ -7,6 +7,7 @@ from subprocess import PIPE, Popen, check_call
 from typing import List
 
 ALIGNED_BAM_FILENAME = "alignment.bam"
+SANITIZED_BAM_FILENAME = "sanitized.bam"
 
 align_command_template = [
     "hisat2",
@@ -45,6 +46,16 @@ samtools_index_command_template = [
     ALIGNED_BAM_FILENAME,
 ]
 
+bamboozle_command_template = [
+    "BAMboozle",
+    "--bam",
+    ALIGNED_BAM_FILENAME,
+    "--out",
+    SANITIZED_BAM_FILENAME,
+    "--fa",
+    "-p",
+    "{processes}",
+]
 
 def adjust_sam_line(line: bytes) -> bytes:
     barcode = line.split(b":")[0]
@@ -83,7 +94,9 @@ def main(processes: int, fastq_1: Path, fastq_2: Path):
     remaining_commands = [
         [piece.format(processes=processes) for piece in samtools_sort_command_template],
         [piece.format(processes=processes) for piece in samtools_index_command_template],
+        [piece.format(processes=processes) for piece in bamboozle_command_template],
     ]
+
     for command in remaining_commands:
         print_command(command)
         check_call(command)

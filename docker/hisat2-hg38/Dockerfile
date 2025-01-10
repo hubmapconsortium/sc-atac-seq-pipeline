@@ -20,6 +20,8 @@ RUN wget https://github.com/samtools/samtools/releases/download/${SAMTOOLS_VERSI
  && make install \
  && rm -rf /opt/samtools-${SAMTOOLS_VERSION} /opt/samtools-${SAMTOOLS_VERSION}.tar.bz2
 
+RUN pip3 install bamboozle
+
 COPY bin /opt
 
 CMD ["/bin/bash"]

@@ -39,5 +39,9 @@ outputs:
     type: File
     outputBinding:
       glob: alignment.bam.bai
+  sanitized_bam:
+    type: File
+    outputBinding:
+      glob: sanitized.bam
 
 baseCommand: [/opt/align_reads.py]
