@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 rocker/tidyverse:4.1
+FROM greenleaflab/archr:1.0.3-base-r4.4
 
 ENV DEBIAN_FRONTEND=non-interactive
 
