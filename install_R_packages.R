@@ -12,59 +12,15 @@ c(
 # of GitHub and Bioconductor packages. Run the following commands to install the
 # various dependencies used by ArchR:
 
-# Docker image rocker/tidyverse includes devtools so no need to install it
-# First, install devtools (for installing GitHub packages) if it isn’t already installed:
-#if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
+# Docker image greenleaflab/archr:1.0.3-base-r4.4 includes devtools, BiocManager, and ArchR so no need to install them
 
-# Then, install BiocManager (for installing bioconductor packages) if it isn’t already installed:
-if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-BiocManager::install(version = "3.14", ask=FALSE)
-
-tryCatch({
-    BiocManager::install("DirichletMultinomial", ask=FALSE)
-},
-    error = function(e) {
-    message("Error installing DirichletMultinomial")
-    message(e$message)
-    quit("no", -1)
-  }
-)
-
-# Then, install ArchR:
-tryCatch({
-    devtools::install_github("GreenleafLab/ArchR", ref="master", repos = BiocManager::repositories())
-},
-    error = function(e) {
-    message("Error installing GreenleafLab/ArchR")
-    message(e$message)
-    quit("no", -1)
-  }
-)
-
-## Lastly, install all of the ArchR dependencies that arent installed by default:
-library(ArchR)
-
-tryCatch({
-    ArchR::installExtraPackages()
-},
-    error = function(e) {
-    message("Error installing ArchR extra packages")
-    message(e$message)
-    quit("no", -1)
-  }
-)
-
-#
-## If any of these steps fails, you should identify the offending package and
-## troubleshoot that individual installation before proceeding. The one exception
-## is Cairo (see below) which is installed by the ArchR::installExtraPackages()
-## function. Cairo is not required but is highly recommended.
+# If any of these steps fails, you should identify the offending package and
+# troubleshoot that individual installation before proceeding. The one exception
+# is Cairo (see below) which is installed by the ArchR::installExtraPackages()
+# function. Cairo is not required but is highly recommended.
 
 # We installed MACS2 using python and requirements.txt
-## It is also highly recommended that you install MACS2, which requires python,
-## and have the macs2 executable in your PATH variable. This will allow ArchR to call peaks using MACS2.
-##pip install MACS2
-#
+
 tryCatch({
     devtools::install_github("GreenleafLab/chromVARmotifs")
 },

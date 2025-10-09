@@ -173,9 +173,6 @@ if (!isEmpty(markers_gr)) {
     cutOff = "FDR <= 0.01 & Log2FC >= .5",
     transpose = TRUE
   )
-  # We can plot this heatmap using draw().
-  draw(heatmap_peaks, heatmap_legend_side = "bot",
-       annotation_legend_side = "bot")
   plotPDF(heatmap_peaks, name = "Peak-Marker-Heatmap", width = 8, height = 6,
           ArchRProj = archr_proj, addDOC = FALSE)
 } else {
