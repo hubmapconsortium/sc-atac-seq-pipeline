@@ -14,6 +14,7 @@ inputs:
   exclude_bam: boolean?
 
   metadata_file: File?
+  organism: string?
 
 outputs:
   fastqc_dir:
@@ -101,6 +102,7 @@ steps:
      sequence_directory: sequence_directory
      threads: threads
      metadata_file: metadata_file
+     organism: organism
     out:
       - fastqc_dir
       - bam_file

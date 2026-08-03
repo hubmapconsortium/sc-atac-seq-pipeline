@@ -11,7 +11,7 @@ ALIGNED_BAM_FILENAME = "alignment.bam"
 align_command_template = [
     "hisat2",
     "-x",
-    "/opt/supplementary-data/hisat2-index/hg38/genome",
+    "{genome_path}",
     "-p",
     "{processes}",
     "-1",
@@ -55,9 +55,11 @@ def print_command(command: List[str]):
     print("Running", " ".join(shlex.quote(c) for c in command))
 
 
-def main(processes: int, fastq_1: Path, fastq_2: Path):
+def main(processes: int, fastq_1: Path, fastq_2: Path, organism: str = "human"):
+    genome_path = "/opt/supplementary-data/hisat2-index/hg38/genome" if organism == "human" else \
+        "/opt/supplementary-data/hisat2-index/grcm38/"
     align_command = [
-        piece.format(processes=processes, fastq_1=fastq_1, fastq_2=fastq_2)
+        piece.format(processes=processes, fastq_1=fastq_1, fastq_2=fastq_2, genome_path=genome_path)
         for piece in align_command_template
     ]
     print_command(align_command)
@@ -94,6 +96,7 @@ if __name__ == "__main__":
     p.add_argument("-p", "--processes", type=int, default=1)
     p.add_argument("fastq_1", type=Path)
     p.add_argument("fastq_2", type=Path)
+    p.add_argument("organism", nargs='?', choices=["human", "mouse"])
     args = p.parse_args()
 
     main(args.processes, args.fastq_1, args.fastq_2)
