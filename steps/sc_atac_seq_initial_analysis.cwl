@@ -153,6 +153,7 @@ steps:
         source: [align_reads/paired_end_bam_index, align_reads_mouse/paired_end_bam_index]
         pickValue: first_non_null
       threads: threads
+      organism: organism
     out:
       - Fragment_Size_Distribution_pdf
       - TSS_by_Unique_Frags_pdf

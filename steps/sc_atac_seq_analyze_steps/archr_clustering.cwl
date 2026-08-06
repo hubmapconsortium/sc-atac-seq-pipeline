@@ -29,6 +29,13 @@ inputs:
       prefix: --archr_project
       valueFrom: $(self.basename)
     doc: "The ArchRProj directory from the previous step"
+  organism:
+    type: string?
+    inputBinding:
+      position: 3
+      prefix: --organism
+    default: human
+    doc: mouse or human
 
 outputs:
   Plot-UMAP-Sample-Clusters_pdf:

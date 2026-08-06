@@ -35,7 +35,7 @@ inputs:
     inputBinding:
       position: 5
       prefix: --organism
-    default: "human"
+    default: "mouse"
     doc: The organism to use the reference genome for
 
 outputs:

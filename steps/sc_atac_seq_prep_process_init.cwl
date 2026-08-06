@@ -13,7 +13,9 @@ inputs:
   threads: int?
   exclude_bam: boolean?
   metadata_file: File?
-  organism: string?
+  organism:
+    type: string?
+    default: human
   
 outputs:
   fastqc_dir:

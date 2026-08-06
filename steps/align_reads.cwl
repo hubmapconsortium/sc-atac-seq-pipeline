@@ -30,6 +30,14 @@ inputs:
     default: 16
     doc: The number of threads to use.
 
+  organism:
+    type: string?
+    inputBinding:
+      position: 5
+      prefix: --organism
+    default: human
+    doc: mouse or human
+
 outputs:
   paired_end_bam:
     type: File

@@ -15,7 +15,14 @@ option_list <- list(
     c("-a", "--archr_project"),
     type = "character",
     help = "Path to the ArchR Project directory from previous ArchR step"
-  ))
+  ),
+  make_option(
+    c("-o", "--organism"),
+    type = "character",
+    default = "human",
+    help <- paste("mouse or human", sep = "")
+  )
+  )
 
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
@@ -27,7 +34,14 @@ load(image_path)
 library(ArchR)
 
 archr_proj <- loadArchRProject(path = "/output/ArchRStep2")
-addArchRGenome("hg38")
+
+if (opt$organism == "mouse")
+  {
+    addArchRGenome("mm10")
+  } else
+  {
+    addArchRGenome("hg38")
+  }
 
 message(paste("Adding UMAP"))
 archr_proj <- addUMAP(ArchRProj = archr_proj, reducedDims = "IterativeLSI")

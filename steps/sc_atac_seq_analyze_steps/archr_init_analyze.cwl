@@ -63,6 +63,14 @@ inputs:
       prefix: --minCells
     default: 1000
     doc: "The minimum number of cells in the ArchR project that must pass filtering before a warning message is printed. E.g. 1000"
+  organism:
+    type: string?
+    default: human
+    inputBinding:
+      position: 7
+      prefix: --organism
+    doc: "mouse or human"
+
 
 
 outputs:

@@ -44,6 +44,12 @@ option_list <- list(
     default = 1000,
     help <- paste("The minimum number of cells in the ArchR project that must",
                   " pass filtering before a warning message is printed. E.g. 1000", sep = "")
+  ),
+  make_option(
+    c("-o", "--organism"),
+    type = "character",
+    default = "human",
+    help <- paste("mouse or human", sep = "")
   )
 )
 
@@ -67,7 +73,13 @@ message(paste0("\n\nNames of input files: ", input_files, "\n\n"))
 
 names(input_files) <- c("BAM_data")
 
-addArchRGenome("hg38")
+if (opt$organism == "mouse")
+  {
+    addArchRGenome("mm10")
+  } else
+  {
+    addArchRGenome("hg38")
+  }
 
 # Create Arrow Files
 arrow_files <- createArrowFiles(

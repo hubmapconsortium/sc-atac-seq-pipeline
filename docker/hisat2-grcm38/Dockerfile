@@ -1,13 +1,14 @@
 FROM pypy:3
 
 WORKDIR /opt/supplementary-data/hisat2-index
-RUN curl -s https://genome-idx.s3.amazonaws.com/hisat/hg38_genome.tar.gz | tar -xzf -
+# mouse genome
+RUN curl -s https://cloud.biohpc.swmed.edu/index.php/s/grcm38/download | tar -xzf -
 
 WORKDIR /opt
-
-RUN curl -o hisat2.tar.gz https://cloud.biohpc.swmed.edu/index.php/s/oTtGWbWjaxsQ2Ho/download \
- && tar -xvzf hisat2.tar.gz \
- && rm hisat2.tar.gz
+# hisat2 source code
+RUN curl -o hisat2.zip https://cloud.biohpc.swmed.edu/index.php/s/oTtGWbWjaxsQ2Ho/download \
+ && unzip hisat2.zip \
+ && rm hisat2.zip
 
 ENV PATH="/opt/hisat2-2.2.1:${PATH}"
 

@@ -57,7 +57,7 @@ def print_command(command: List[str]):
 
 def main(processes: int, fastq_1: Path, fastq_2: Path, organism: str = "human"):
     genome_path = "/opt/supplementary-data/hisat2-index/hg38/genome" if organism == "human" else \
-        "/opt/supplementary-data/hisat2-index/grcm38/"
+        "/opt/supplementary-data/hisat2-index/grcm38/genome"
     align_command = [
         piece.format(processes=processes, fastq_1=fastq_1, fastq_2=fastq_2, genome_path=genome_path)
         for piece in align_command_template
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     p.add_argument("-p", "--processes", type=int, default=1)
     p.add_argument("fastq_1", type=Path)
     p.add_argument("fastq_2", type=Path)
-    p.add_argument("organism", nargs='?', choices=["human", "mouse"])
+    p.add_argument("--organism", nargs='?', type=str)
     args = p.parse_args()
 
-    main(args.processes, args.fastq_1, args.fastq_2)
+    main(args.processes, args.fastq_1, args.fastq_2, args.organism)
