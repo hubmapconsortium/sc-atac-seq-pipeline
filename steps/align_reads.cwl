@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-hisat2-hg38:2.2.2
+    dockerPull: hubmap/sc-atac-hisat2-hg38:latest
 
 inputs:
   input_fastq1:
@@ -29,6 +29,14 @@ inputs:
       prefix: --processes
     default: 16
     doc: The number of threads to use.
+
+  organism:
+    type: string?
+    inputBinding:
+      position: 5
+      prefix: --organism
+    default: human
+    doc: mouse or human
 
 outputs:
   paired_end_bam:

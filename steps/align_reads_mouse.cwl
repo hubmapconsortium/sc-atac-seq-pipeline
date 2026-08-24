@@ -7,14 +7,20 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-hisat2-hg38:latest
+    dockerPull: hubmap/sc-atac-hisat2-grcm38:latest
 
 inputs:
-  merged_bam_file:
+  input_fastq1:
     type: File
     inputBinding:
       position: 3
-    doc: Merged BAM file
+    doc: The first paired end fastq file to be aligned.
+
+  input_fastq2:
+    type: File
+    inputBinding:
+      position: 4
+    doc: The second paired end fastq file to be aligned.
 
   num_threads:
     type: int?
@@ -24,14 +30,22 @@ inputs:
     default: 16
     doc: The number of threads to use.
 
+  organism:
+    type: string?
+    inputBinding:
+      position: 5
+      prefix: --organism
+    default: "mouse"
+    doc: The organism to use the reference genome for
+
 outputs:
-  sorted_merged_bam:
+  paired_end_bam:
     type: File
     outputBinding:
       glob: alignment.bam
-  merged_bam_index:
+  paired_end_bam_index:
     type: File
     outputBinding:
       glob: alignment.bam.bai
 
-baseCommand: [/opt/index_merged_bam.py]
+baseCommand: [/opt/align_reads.py]

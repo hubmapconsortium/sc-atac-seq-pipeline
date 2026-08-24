@@ -59,6 +59,7 @@ RUN ./configure \
 WORKDIR /opt
 
 RUN wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/gencode.v39.annotation.gff3.gz
+RUN wget https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M39/gencode.vM39.annotation.gff3.gz
 
 COPY requirements.txt /opt
 RUN python3 -m pip install -r /opt/requirements.txt \

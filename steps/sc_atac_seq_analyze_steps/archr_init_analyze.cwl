@@ -7,7 +7,7 @@ cwlVersion: v1.2
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38:2.2.2
+    dockerPull: hubmap/sc-atac-seq-hg38
   NetworkAccess:
     networkAccess: true
   InitialWorkDirRequirement:
@@ -63,6 +63,14 @@ inputs:
       prefix: --minCells
     default: 1000
     doc: "The minimum number of cells in the ArchR project that must pass filtering before a warning message is printed. E.g. 1000"
+  organism:
+    type: string?
+    default: human
+    inputBinding:
+      position: 7
+      prefix: --organism
+    doc: "mouse or human"
+
 
 
 outputs:
@@ -105,7 +113,7 @@ outputs:
     type: File
     outputBinding:
       glob: "QualityControl/*/*-TSS_by_Unique_Frags.pdf"
-
+      
   Fragment_Size_Distribution_pdf:
     type: File
     outputBinding:
@@ -120,7 +128,7 @@ outputs:
     type: File
     outputBinding:
       glob: "ArchRStep1/Plots/QC-Sample-Statistics.pdf"
-
+ 
   QC-Sample-FragSizes-TSSProfile_pdf:
     type: File
     outputBinding:
@@ -130,7 +138,7 @@ outputs:
     type: File
     outputBinding:
       glob: "atacSeqStep1.RData"
-
+  
   archr_project:
     type: Directory
     outputBinding:

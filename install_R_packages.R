@@ -50,3 +50,13 @@ tryCatch({
     quit("no", -1)
   }
 )
+
+tryCatch({
+    BiocManager::install("BSgenome.Mmusculus.UCSC.mm10", ask=FALSE)
+},
+    error = function(e) {
+    message("Error installing UCSC mm10")
+    message(e$message)
+    quit("no", -1)
+  }
+)

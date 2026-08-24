@@ -6,7 +6,7 @@ cwlVersion: v1.2
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38:2.2.2
+    dockerPull: hubmap/sc-atac-seq-hg38:latest
     dockerOutputDirectory: "/output"
   NetworkAccess:
     networkAccess: true
@@ -29,6 +29,13 @@ inputs:
       prefix: --archr_project
       valueFrom: $(self.basename)
     doc: "The ArchRProj directory from the previous step"
+  organism:
+    type: string?
+    inputBinding:
+      position: 3
+      prefix: --organism
+    default: human
+    doc: mouse or human
 
 outputs:
   Plot-UMAP-Sample-Clusters_pdf:
