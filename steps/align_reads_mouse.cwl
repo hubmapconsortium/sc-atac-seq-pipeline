@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-hisat2-hg38:latest
+    dockerPull: hubmap/sc-atac-hisat2-grcm38:latest
 
 inputs:
   input_fastq1:
@@ -35,8 +35,8 @@ inputs:
     inputBinding:
       position: 5
       prefix: --organism
-    default: human
-    doc: mouse or human
+    default: "mouse"
+    doc: The organism to use the reference genome for
 
 outputs:
   paired_end_bam:

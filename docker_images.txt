@@ -2,3 +2,4 @@
 hubmap/sc-atac-seq-hg38   docker/pipeline-code/Dockerfile   base_directory_build
 hubmap/sc-atac-barcode-adj  docker/barcode-adj/Dockerfile     base_directory_build
 hubmap/sc-atac-hisat2-hg38	docker/hisat2-hg38/Dockerfile	base_directory_build
+hubmap/sc-atac-hisat2-grcm38    docker/hisat2-grcm38/Dockerfile base_directory_build

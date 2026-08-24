@@ -7,13 +7,18 @@ requirements:
   InlineJavascriptRequirement: {}
 
 inputs:
-  assay: string
-  sequence_directory: Directory[]
-
+  assay:
+    type: string
+  sequence_directory:
+    type: Directory[]
   threads: int?
-  exclude_bam: boolean?
-
-  metadata_file: File?
+  exclude_bam:
+    type: boolean?
+  metadata_file:
+    type: File?
+  organism:
+    type: string?
+    default: human
 
 outputs:
   fastqc_dir:
@@ -101,6 +106,7 @@ steps:
      sequence_directory: sequence_directory
      threads: threads
      metadata_file: metadata_file
+     organism: organism
     out:
       - fastqc_dir
       - bam_file
@@ -124,6 +130,7 @@ steps:
     in:
       image_file: sc_atac_seq_prep_process_init/image_file
       archr_project: sc_atac_seq_prep_process_init/archr_project
+      organism: organism
     out:
       - Peak-Call-Summary_pdf
       - Plot-UMAP-Sample-Clusters_pdf

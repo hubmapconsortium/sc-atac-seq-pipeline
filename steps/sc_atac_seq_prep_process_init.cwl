@@ -13,6 +13,9 @@ inputs:
   threads: int?
   exclude_bam: boolean?
   metadata_file: File?
+  organism:
+    type: string?
+    default: human
   
 outputs:
   fastqc_dir:
@@ -106,6 +109,7 @@ steps:
       orig_fastq_dir: sequence_directory
       input_fastq1: concat_fastq/merged_fastq_r1
       input_fastq2: concat_fastq/merged_fastq_r2
+      organism: organism
 
       threads: threads
       metadata_file: metadata_file

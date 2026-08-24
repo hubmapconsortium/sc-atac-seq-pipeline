@@ -16,15 +16,20 @@ inputs:
   input_fastq2: File
   threads: int?
   metadata_file: File?
+  organism:
+    type: string?
+    default: human
 
 outputs:
   bam_file:
     type: File
-    outputSource: align_reads/paired_end_bam
+    outputSource: [align_reads/paired_end_bam, align_reads_mouse/paired_end_bam]
+    pickValue: first_non_null
 
   bam_index:
     type: File
-    outputSource: align_reads/paired_end_bam_index
+    outputSource: [align_reads/paired_end_bam_index, align_reads_mouse/paired_end_bam_index]
+    pickValue: first_non_null
 
   fragment_file:
     type: File
@@ -91,6 +96,31 @@ steps:
 
   align_reads:
     run: align_reads.cwl
+    when: $(inputs.organism == 'human')
+    in:
+      num_threads: threads
+
+      input_fastq1:
+        source: adjust_barcodes/adj_fastq_dir
+        valueFrom: |
+          ${
+            return {"class": "File", "location": self.location + "/barcode_added_R1.fastq"}
+          }
+
+      input_fastq2:
+        source: adjust_barcodes/adj_fastq_dir
+        valueFrom: |
+          ${
+            return {"class": "File", "location": self.location + "/barcode_added_R2.fastq"}
+          }
+      organism:
+        source: organism
+
+    out: [paired_end_bam, paired_end_bam_index]
+
+  align_reads_mouse:
+    run: align_reads_mouse.cwl
+    when: $(inputs.organism == 'mouse')
     in:
       num_threads: threads
 
@@ -108,14 +138,22 @@ steps:
             return {"class": "File", "location": self.location + "/barcode_added_R2.fastq"}
           }
 
+      organism:
+        source: organism
+
     out: [paired_end_bam, paired_end_bam_index]
 
   analyze_with_ArchR:
     run: sc_atac_seq_analyze_steps/archr_init_analyze.cwl
     in:
-      bam_file: align_reads/paired_end_bam
-      bam_index: align_reads/paired_end_bam_index
+      bam_file:
+        source: [align_reads/paired_end_bam, align_reads_mouse/paired_end_bam]
+        pickValue: first_non_null
+      bam_index:
+        source: [align_reads/paired_end_bam_index, align_reads_mouse/paired_end_bam_index]
+        pickValue: first_non_null
       threads: threads
+      organism: organism
     out:
       - Fragment_Size_Distribution_pdf
       - TSS_by_Unique_Frags_pdf
@@ -135,7 +173,9 @@ steps:
   create_fragment_file:
     run: sc_atac_seq_process_steps/create_fragment_file.cwl
     in:
-      input_bam: align_reads/paired_end_bam
+      input_bam:
+        source: [align_reads/paired_end_bam, align_reads_mouse/paired_end_bam]
+        pickValue: first_non_null
     out: [fragment_file]
 
   convert_to_h5ad:
