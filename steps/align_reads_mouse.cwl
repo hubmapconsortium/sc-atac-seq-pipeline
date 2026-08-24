@@ -7,7 +7,7 @@ cwlVersion: v1.1
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-hisat2-grcm38:latest
+    dockerPull: hubmap/sc-atac-hisat2-grcm38:2.2.3
 
 inputs:
   input_fastq1:
