@@ -4,6 +4,7 @@ library(parallel)
 library(magick)
 library(R.utils)
 library(BSgenome.Hsapiens.UCSC.hg38)
+library(BSgenome.Mmusculus.UCSC.mm10)
 
 option_list <- list(
   make_option(
