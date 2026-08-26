@@ -7,7 +7,7 @@ cwlVersion: v1.2
 
 requirements:
   DockerRequirement:
-    dockerPull: hubmap/sc-atac-seq-hg38
+    dockerPull: hubmap/sc-atac-seq-hg38:2.2.4
   NetworkAccess:
     networkAccess: true
   InitialWorkDirRequirement:
@@ -113,7 +113,7 @@ outputs:
     type: File
     outputBinding:
       glob: "QualityControl/*/*-TSS_by_Unique_Frags.pdf"
-      
+
   Fragment_Size_Distribution_pdf:
     type: File
     outputBinding:
@@ -128,7 +128,7 @@ outputs:
     type: File
     outputBinding:
       glob: "ArchRStep1/Plots/QC-Sample-Statistics.pdf"
- 
+
   QC-Sample-FragSizes-TSSProfile_pdf:
     type: File
     outputBinding:
@@ -138,7 +138,7 @@ outputs:
     type: File
     outputBinding:
       glob: "atacSeqStep1.RData"
-  
+
   archr_project:
     type: Directory
     outputBinding:
